@@ -14,7 +14,7 @@ export const RESUME_DATA = {
     </>
   ),
   avatarUrl: "https://avatars.githubusercontent.com/u/70500374?v=4",
-  // personalWebsiteUrl: "https://jarocki.me",
+  personalWebsiteUrl: null,
   contact: {
     email: "leqtrungit@gmail.com",
     tel: "+84 908103573",

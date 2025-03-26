@@ -1,4 +1,4 @@
-import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/icons";
+import { GitHubIcon, LinkedInIcon, XIcon, SubstackIcon } from "@/components/icons";
 import { MediumIcon } from "@/components/icons/MediumIcon";
 
 export const RESUME_DATA = {
@@ -38,6 +38,11 @@ export const RESUME_DATA = {
         name: "Medium",
         url: "https://leqtrungit.medium.com/",
         icon: MediumIcon,
+      },
+      {
+        name: "Substack",
+        url: "https://substack.com/@leqtrungit",
+        icon: SubstackIcon,
       },
     ],
   },

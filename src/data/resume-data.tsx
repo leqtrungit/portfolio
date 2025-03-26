@@ -1,240 +1,153 @@
-import {
-  ClevertechLogo,
-  ConsultlyLogo,
-  JojoMobileLogo,
-  MonitoLogo,
-  NSNLogo,
-  ParabolLogo,
-} from "@/images/logos";
 import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/icons";
+import { MediumIcon } from "@/components/icons/MediumIcon";
 
 export const RESUME_DATA = {
-  name: "Bartosz Jarocki",
-  initials: "BJ",
-  location: "Wrocław, Poland, CET",
-  locationLink: "https://www.google.com/maps/place/Wrocław",
+  name: "Trung Le",
+  initials: "TL",
+  location: "Ho Chi Minh City, Vietnam",
+  locationLink: "https://www.google.com/maps/place/Ho+Chi+Minh+City",
   about:
-    "Detail-oriented Full Stack Engineer dedicated to building high-quality products.",
+    "A Software Engineer passionate about creativity, technology, and finding solutions to make everyday life more convenient.",
   summary: (
     <>
-      Frontend-focused Full Stack Engineer specializing in high-performance
-      React applications, scalable Node.js services, and real-time collaboration
-      systems. Experienced in technical architecture design and remote team
-      leadership.
+      Software Engineer with 3+ years of experience delivering end-to-end solutions, from client discussions to deployment. Passionate about tech, project management, finance, and self-hosted innovations that improve everyday life.
     </>
   ),
-  avatarUrl: "https://avatars.githubusercontent.com/u/1017620?v=4",
-  personalWebsiteUrl: "https://jarocki.me",
+  avatarUrl: "https://avatars.githubusercontent.com/u/70500374?v=4",
+  // personalWebsiteUrl: "https://jarocki.me",
   contact: {
-    email: "bartosz.jarocki@hey.com",
-    tel: "+48530213401",
+    email: "leqtrungit@gmail.com",
+    tel: "+84 908103573",
     social: [
       {
         name: "GitHub",
-        url: "https://github.com/BartoszJarocki",
+        url: "https://github.com/lequoctrung-it",
         icon: GitHubIcon,
       },
       {
         name: "LinkedIn",
-        url: "https://www.linkedin.com/in/bjarocki/",
+        url: "https://www.linkedin.com/in/leqtrungit/",
         icon: LinkedInIcon,
       },
       {
         name: "X",
-        url: "https://x.com/BartoszJarocki",
+        url: "https://x.com/leqtrungit",
         icon: XIcon,
+      },
+      {
+        name: "Medium",
+        url: "https://leqtrungit.medium.com/",
+        icon: MediumIcon,
       },
     ],
   },
   education: [
     {
-      school: "Wrocław University of Technology",
-      degree: "Bachelor's Degree in Control systems engineering and Robotics",
-      start: "2007",
-      end: "2010",
+      school: "Ton Duc Thang University",
+      degree: "Bachelor's Degree in Computer Networks and Data Communications",
+      start: "Sep 2019",
+      end: "Sep 2024",
     },
   ],
   work: [
     {
-      company: "Film.io",
-      link: "https://film.io",
-      badges: ["Remote", "React", "Next.js", "TypeScript", "Node.js"],
-      title: "Software Architect",
-      logo: ConsultlyLogo,
-      start: "2024",
+      company: "Bosch Global Software Technologies Vietnam",
+      link: "https://www.bosch.com.vn/our-company/bosch-in-vietnam/ho-chi-minh-city-rbvh/",
+      badges: ["On Site", "Angular", "Spring Boot", "Oracle DB", "OpenShift"],
+      title: "Software Engineer",
+      // logo: BoschLogo,
+      start: "Dec 2022",
       end: null,
       description: (
         <>
-          Leading technical architecture of a blockchain-based film funding
-          platform.
+          Led a full lifecycle web application project for German internal clients, from requirement gathering to release.
           <ul className="list-inside list-disc">
-            <li>
-              Architecting migration from CRA to Next.js for improved
-              performance, SEO, and DX
-            </li>
-            <li>
-              Established release process enabling faster deployments and
-              reliable rollbacks
-            </li>
-            <li>
-              Implementing system-wide monitoring and security improvements
-            </li>
+            <li>Reduced critical API response time from 5s to 1–2s by optimizing backend performance</li>
+            <li>Integrated third-party APIs and streamlined cross-project data processing</li>
+            <li>Enhanced UI with scalable columns and Excel-like filtering after 2 years of backlog</li>
+            <li>Improved CI/CD with optimized Dockerfiles, GitHub Actions, and local/dev containers</li>
+            <li>Demonstrated strong end-to-end delivery and problem-solving in a global environment</li>
           </ul>
         </>
       ),
     },
     {
-      company: "Parabol",
-      link: "https://parabol.co",
-      badges: [
-        "Remote",
-        "React",
-        "TypeScript",
-        "Node.js",
-        "GraphQL",
-        "Tailwind CSS",
-      ],
-      title: "Senior Full Stack Developer",
-      logo: ParabolLogo,
-      start: "2021",
-      end: "2024",
+      company: "Bosch Global Software Technologies Vietnam",
+      link: "https://www.bosch.com.vn/our-company/bosch-in-vietnam/ho-chi-minh-city-rbvh/",
+      badges: ["On Site", "Angular", "Spring Boot", "Agile"],
+      title: "Frontend Developer Intern",
+      // logo: BoschLogo,
+      start: "Jun 2022",
+      end: "Dec 2022",
       description: (
         <>
-          Senior developer and squad leader for an enterprise agile meeting
-          platform.
+          Internship focused on developing internal tools and dashboards with Angular and Power BI.
           <ul className="list-inside list-disc">
-            <li>
-              Built design system with Tailwind CSS, improving development speed
-              and time to market
-            </li>
-            <li>
-              Implemented engineering practices: PR automation, code review
-              guidelines, and workflows
-            </li>
-            <li>
-              Open source contributions to Relay DevTools and React i18n tooling
-            </li>
+            <li>Embedded Microsoft Power BI into a web app for enhanced data visualization</li>
+            <li>Built a logging and job scheduling system from scratch</li>
+            <li>Followed Scrum process and collaborated with customers to refine requirements</li>
+            <li>Improved teamwork, communication, and requirement analysis skills</li>
           </ul>
         </>
       ),
     },
-    {
-      company: "Clevertech",
-      link: "https://clevertech.biz",
-      badges: ["Remote", "React", "TypeScript", "Node.js", "Android", "Kotlin"],
-      title: "Lead Android Developer → Full Stack Developer",
-      logo: ClevertechLogo,
-      start: "2015",
-      end: "2021",
-      description: (
-        <>
-          Successfully transitioned from mobile to full-stack development while
-          leading distributed teams.
-          <ul className="list-inside list-disc">
-            <li>
-              Led frontend team at Evercast, building real-time platform
-              supporting 30+ users per room with HD streaming and collaboration
-              tools
-            </li>
-            <li>
-              Developed offline-first Android app for DKMS, improving donor
-              registration process
-            </li>
-            <li>
-              Led development teams across multiple successful client projects
-            </li>
-          </ul>
-        </>
-      ),
-    },
-    {
-      company: "Jojo Mobile",
-      link: "https://bsgroup.eu/",
-      badges: ["On Site", "Android", "Java", "Kotlin"],
-      title: "Android Developer → Lead Android Developer",
-      logo: JojoMobileLogo,
-      start: "2012",
-      end: "2015",
-      description: (
-        <>
-          First Android developer, grew and led a team of 15+ engineers while
-          establishing engineering culture.
-          <ul className="list-inside list-disc">
-            <li>
-              Developed apps for major Polish companies including LOT, Polskie
-              Radio, and Agora
-            </li>
-            <li>Built and mentored high-performing mobile development team</li>
-          </ul>
-        </>
-      ),
-    },
-    {
-      company: "Nokia Siemens Networks",
-      link: "https://www.nokia.com",
-      badges: ["On Site", "C/C++", "LTE", "Agile"],
-      title: "C/C++ Developer",
-      logo: NSNLogo,
-      start: "2010",
-      end: "2012",
-      description:
-        "Developed software for LTE base stations at enterprise scale, gaining strong fundamentals in software architecture, testing practices, and cross-team collaboration.",
-    },
-  ],
+  ],  
   skills: [
-    "React/Next.js/Remix",
-    "TypeScript",
-    "Tailwind CSS",
-    "Design Systems",
-    "WebRTC",
-    "WebSockets",
-    "Node.js",
-    "GraphQL",
-    "Relay",
+    // 🧠 Industry Knowledge
+    "Software Development",
+    "Agile Methodologies",
+    "Project Management",
+    "End-to-End Project Delivery",
+    "Cross-Functional Collaboration",
+    "Independent Problem-Solving",
+    "Leadership and Management",
+    "Strategy and Operations",
+    "Business Communication",
+    "Entrepreneurship",
+  
+    // 🛠️ Tools & Technologies
+    "Angular",
+    "React.js",
+    "Angular Material",
+    "PrimeNG",
+    "Spring Boot",
+    "Oracle Database",
+    "Microsoft Entra ID",
+    "Docker",
+    "OpenShift",
+    "GitHub Actions",
+    "DevOps",
+    "Power BI",
+    "Unix Shell",
+  
+    // ⚙️ General Engineering
     "System Architecture",
-    "Remote Team Leadership",
-  ],
+    "Scrum",
+    "Problem Solving",
+    "Communication",
+    "Collaboration",
+  ],  
   projects: [
     {
-      title: "Monito",
-      techStack: ["TypeScript", "Next.js", "Browser Extension", "PostgreSQL"],
+      title: "HGM Orders",
+      techStack: ["Hasura", "NestJS", "PostgreSQL", "GraphQL"],
       description:
-        "Browser extension for debugging web applications. Includes taking screenshots, screen recording, E2E tests generation and generating bug reports",
-      logo: MonitoLogo,
+        "Business Process Management application for tracking and managing workflows in a media outsourcing company. Covers order tracking, task assignments, and production monitoring.",
+      logo: null,
       link: {
-        label: "monito.dev",
-        href: "https://monito.dev/",
+        label: "Internal Project",
+        href: null,
       },
     },
     {
-      title: "Consultly",
-      techStack: [
-        "TypeScript",
-        "Next.js",
-        "Vite",
-        "GraphQL",
-        "WebRTC",
-        "Tailwind CSS",
-        "PostgreSQL",
-        "Redis",
-      ],
+      title: "HomeLab",
+      techStack: ["Docker", "Linux", "Prometheus", "Grafana", "n8n", "Cloudflare"],
       description:
-        "Platform for online consultations with real-time video meetings and scheduling",
-      logo: ConsultlyLogo,
+        "Self-hosted home infrastructure project for automating and enhancing daily life. Includes AI Agent, Home Assistant, workflow automation, monitoring, and secure remote access.",
+      logo: null,
       link: {
-        label: "consultly.com",
-        href: "https://consultly.com/",
-      },
-    },
-    {
-      title: "Minimalist CV",
-      techStack: ["TypeScript", "Next.js", "Tailwind CSS"],
-      description:
-        "An open source minimalist, print friendly CV template with a focus on readability and clean design. >9k stars on GitHub",
-      logo: MonitoLogo,
-      link: {
-        label: "Minimalist CV",
-        href: "https://github.com/BartoszJarocki/cv",
+        label: "homelab.local",
+        href: null,
       },
     },
   ],

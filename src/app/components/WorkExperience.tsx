@@ -96,10 +96,7 @@ function WorkExperienceItem({ work }: WorkExperienceItemProps) {
         <div className="flex items-center justify-between gap-x-2 text-base">
           <h3 className="inline-flex items-center justify-center gap-x-1 font-semibold leading-none print:text-sm">
             <CompanyLink company={company} link={link} />
-            <BadgeList
-              className="hidden gap-x-1 sm:inline-flex"
-              badges={badges}
-            />
+            
           </h3>
           <WorkPeriod start={start} end={end} />
         </div>
@@ -107,6 +104,11 @@ function WorkExperienceItem({ work }: WorkExperienceItemProps) {
         <h4 className="font-mono text-sm font-semibold leading-none print:text-[12px]">
           {title}
         </h4>
+
+        <BadgeList
+              className="hidden gap-x-1 sm:inline-flex"
+              badges={badges}
+            />
       </CardHeader>
 
       <CardContent>

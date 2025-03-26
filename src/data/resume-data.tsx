@@ -14,7 +14,7 @@ export const RESUME_DATA = {
     </>
   ),
   avatarUrl: "https://avatars.githubusercontent.com/u/70500374?v=4",
-  personalWebsiteUrl: null,
+  personalWebsiteUrl: undefined,
   contact: {
     email: "leqtrungit@gmail.com",
     tel: "+84 908103573",
@@ -141,7 +141,7 @@ export const RESUME_DATA = {
       logo: null,
       link: {
         label: "Internal Project",
-        href: null,
+        href: undefined,
       },
     },
     {
@@ -152,7 +152,7 @@ export const RESUME_DATA = {
       logo: null,
       link: {
         label: "homelab.local",
-        href: null,
+        href: undefined,
       },
     },
   ],

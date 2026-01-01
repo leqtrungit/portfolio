@@ -56,7 +56,7 @@ export const RESUME_DATA = {
         <>
           <ul className="list-inside list-disc">
             <li>Gained a strong foundation in software development and network systems, contributing to hands-on projects during coursework</li>
-            <li>Contributed to a team project that won 2nd place in a website design competition celebrating Vietnamese Teachers' Day, showcasing creativity and technical skills in web development</li>
+            <li>Contributed to a team project that won 2nd place in a website design competition celebrating Vietnamese Teachers&apos; Day, showcasing creativity and technical skills in web development</li>
           </ul>
         </>
       ),
@@ -93,7 +93,7 @@ export const RESUME_DATA = {
           Independently led an acquisition process web application project from Feb 2023, managing the full lifecycle.
           <ul className="list-inside list-disc">
             <li>Gathered requirements with German internal clients, designed solutions, developed using Angular, Spring Boot, Oracle DB, and deployed on OpenShift with Azure Entra ID authentication (migrated from WAM)</li>
-            <li>Optimized performance of multiple APIs, with a standout achievement of reducing one critical API's response time from 5 minutes to 1-2 seconds</li>
+            <li>Optimized performance of multiple APIs, with a standout achievement of reducing one critical API&apos;s response time from 5 minutes to 1-2 seconds</li>
             <li>Integrated third-party APIs for data fetching, handled cross-project business logic, and streamlined data processing</li>
             <li>Enhanced UI with scalable columns and Excel-like filters (unachieved by previous developers for over 2 years), earning high praise from clients who had awaited these features</li>
             <li>Successfully migrated a mid-sized project from Angular v10 and PrimeNG v11 to Angular v18 and PrimeNG v18, significantly enhancing performance and maintainability</li>

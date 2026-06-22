@@ -59,6 +59,16 @@
       "tags": ["Angular", "Spring Boot", "Agile"]
     }
   ],
+  "volunteer": [
+    {
+      "organization": "Local Political Organization",
+      "position": "Residential Group Leader",
+      "startDate": "2021-07",
+      "endDate": "2024-04",
+      "summary": "Community engagement, technology deployment, government digital initiatives",
+      "highlights": []
+    }
+  ],
   "education": [
     {
       "institution": "Ton Duc Thang University",
@@ -68,6 +78,12 @@
       "endDate": "2024-09",
       "courses": []
     }
+  ],
+  "certificates": [
+    { "name": "Google Project Management: Professional Certificate", "date": "2024-11", "issuer": "Google" },
+    { "name": "B1 Preliminary", "date": "2023-03", "issuer": "Cambridge University" },
+    { "name": "CCNA: Introduction to Networks", "date": "2020-06", "issuer": "Cisco" },
+    { "name": "Starter Programming Scholarship", "date": "2020-06", "issuer": "INTEK Training" }
   ],
   "skills": [
     {

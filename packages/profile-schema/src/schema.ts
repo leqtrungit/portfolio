@@ -80,10 +80,29 @@ export const languageSchema = z.object({
   fluency: z.string().optional(),
 });
 
+export const volunteerSchema = z.object({
+  organization: z.string(),
+  position: z.string().optional(),
+  url: z.string().url().optional(),
+  startDate: iso8601.optional(),
+  endDate: iso8601.optional(),
+  summary: z.string().optional(),
+  highlights: z.array(z.string()).default([]),
+});
+
+export const certificateSchema = z.object({
+  name: z.string(),
+  date: iso8601.optional(),
+  issuer: z.string().optional(),
+  url: z.string().url().optional(),
+});
+
 export const profileSchema = z.object({
   basics: basicsSchema,
   work: z.array(workSchema).default([]),
+  volunteer: z.array(volunteerSchema).default([]),
   education: z.array(educationSchema).default([]),
+  certificates: z.array(certificateSchema).default([]),
   skills: z.array(skillSchema).default([]),
   projects: z.array(projectSchema).default([]),
   languages: z.array(languageSchema).default([]),
@@ -102,3 +121,5 @@ export type Education = z.infer<typeof educationSchema>;
 export type Skill = z.infer<typeof skillSchema>;
 export type Project = z.infer<typeof projectSchema>;
 export type Language = z.infer<typeof languageSchema>;
+export type Volunteer = z.infer<typeof volunteerSchema>;
+export type Certificate = z.infer<typeof certificateSchema>;

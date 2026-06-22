@@ -3,19 +3,132 @@
     "name": "Le Quoc Trung",
     "label": "Software Engineer",
     "email": "leqtrungit@gmail.com",
+    "phone": "+84 908 103 573",
     "url": "https://lequoctrung.vn",
-    "summary": "",
+    "summary": "Results-driven Software Engineer with 3+ years of experience in delivering scalable web applications and leading end-to-end project development in cross-functional teams.",
     "location": {
+      "city": "Ho Chi Minh City",
       "countryCode": "VN"
     },
-    "profiles": []
+    "profiles": [
+      { "network": "LinkedIn", "username": "leqtrungit", "url": "https://www.linkedin.com/in/leqtrungit/" },
+      { "network": "GitHub", "username": "leqtrungit", "url": "https://github.com/leqtrungit" },
+      { "network": "X", "username": "leqtrungit", "url": "https://x.com/leqtrungit" },
+      { "network": "Medium", "username": "leqtrungit", "url": "https://leqtrungit.medium.com/" },
+      { "network": "Blog", "username": "lequoctrung", "url": "https://blog.lequoctrung.id.vn" }
+    ]
   },
-  "work": [],
-  "education": [],
-  "skills": [],
-  "projects": [],
-  "languages": [],
+  "work": [
+    {
+      "name": "DAT Software Solutions",
+      "position": "Co-Founder & Tech Lead",
+      "startDate": "2025-03",
+      "summary": "Remote",
+      "highlights": [
+        "Led technology strategy",
+        "Managed requirements analysis",
+        "Architected scalable systems",
+        "Recruited and mentored engineering talent"
+      ],
+      "tags": []
+    },
+    {
+      "name": "Bosch Global Software Technologies Vietnam",
+      "position": "Software Engineer",
+      "startDate": "2022-12",
+      "summary": "On Site",
+      "highlights": [
+        "Led acquisition web application project",
+        "Reduced API response time from 5 minutes to 1-2 seconds",
+        "Migrated Angular v10 to v18",
+        "Enhanced UI with Excel-like filters"
+      ],
+      "tags": ["Angular", "Spring Boot", "Oracle DB", "OpenShift"]
+    },
+    {
+      "name": "Bosch Global Software Technologies Vietnam",
+      "position": "Frontend Developer Intern",
+      "startDate": "2022-06",
+      "endDate": "2022-12",
+      "summary": "On Site",
+      "highlights": [
+        "Integrated Power BI",
+        "Developed logging project",
+        "Followed Scrum methodology"
+      ],
+      "tags": ["Angular", "Spring Boot", "Agile"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Ton Duc Thang University",
+      "area": "Computer Networks and Data Communications",
+      "studyType": "Bachelor's Degree",
+      "startDate": "2019-09",
+      "endDate": "2024-09",
+      "courses": []
+    }
+  ],
+  "skills": [
+    {
+      "name": "Soft Skills",
+      "keywords": [
+        "Software Development",
+        "Agile Methodologies",
+        "Project Management",
+        "End-to-End Project Delivery",
+        "Cross-Functional Collaboration",
+        "Leadership and Management",
+        "Entrepreneurship"
+      ]
+    },
+    {
+      "name": "Technical Skills",
+      "keywords": [
+        "Angular",
+        "React.js",
+        "Spring Boot",
+        "Oracle Database",
+        "Docker",
+        "OpenShift",
+        "GitHub Actions",
+        "Power BI",
+        "Unix Shell",
+        "System Architecture"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Media AI Automation Pipeline",
+      "description": "Led 3-person team producing 1,500 videos daily with zero manual edits",
+      "highlights": [],
+      "tags": ["n8n", "Microservices", "OpenAI", "YouTube API", "Docker"]
+    },
+    {
+      "name": "HGM Orders – BPM Platform",
+      "description": "Delivered 3 customized platforms; reduced order cycle by 60%",
+      "highlights": [],
+      "tags": ["React", "Hasura", "PostgreSQL", "GraphQL", "Docker"]
+    },
+    {
+      "name": "D365 AI Agent PoC",
+      "description": "Solo-built RAG-powered AI agent enabling instant documentation answers",
+      "highlights": [],
+      "tags": ["AutoGen", "LLM", "Docker", "Python"]
+    },
+    {
+      "name": "HomeLab",
+      "description": "Self-built AI-powered infrastructure with 99.9% uptime",
+      "highlights": [],
+      "tags": ["Docker", "Home Assistant", "Prometheus", "Grafana", "Linux"]
+    }
+  ],
+  "languages": [
+    { "language": "Vietnamese", "fluency": "Native" },
+    { "language": "English", "fluency": "B1 (Cambridge certified)" }
+  ],
   "meta": {
-    "version": "0.0.1"
+    "version": "0.1.0"
   }
 }

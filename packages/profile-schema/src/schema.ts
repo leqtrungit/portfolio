@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 /**
- * Based on the JSON Resume schema (https://jsonresume.org/schema/) with
- * minor extensions (highlights ordering, tags for tailoring) used across
+ * Implements the full JSON Resume schema (https://jsonresume.org/schema/),
+ * plus a `tags` extension on work/projects used for tailoring. Used across
  * the website, master CV, and AI-tailored CV.
  */
 
@@ -97,15 +97,44 @@ export const certificateSchema = z.object({
   url: z.string().url().optional(),
 });
 
+export const awardSchema = z.object({
+  title: z.string(),
+  date: iso8601.optional(),
+  awarder: z.string().optional(),
+  summary: z.string().optional(),
+});
+
+export const publicationSchema = z.object({
+  name: z.string(),
+  publisher: z.string().optional(),
+  releaseDate: iso8601.optional(),
+  url: z.string().url().optional(),
+  summary: z.string().optional(),
+});
+
+export const interestSchema = z.object({
+  name: z.string(),
+  keywords: z.array(z.string()).default([]),
+});
+
+export const referenceSchema = z.object({
+  name: z.string(),
+  reference: z.string().optional(),
+});
+
 export const profileSchema = z.object({
   basics: basicsSchema,
   work: z.array(workSchema).default([]),
   volunteer: z.array(volunteerSchema).default([]),
   education: z.array(educationSchema).default([]),
+  awards: z.array(awardSchema).default([]),
   certificates: z.array(certificateSchema).default([]),
+  publications: z.array(publicationSchema).default([]),
   skills: z.array(skillSchema).default([]),
-  projects: z.array(projectSchema).default([]),
   languages: z.array(languageSchema).default([]),
+  interests: z.array(interestSchema).default([]),
+  references: z.array(referenceSchema).default([]),
+  projects: z.array(projectSchema).default([]),
   meta: z
     .object({
       lastModified: z.string().optional(),
@@ -123,3 +152,7 @@ export type Project = z.infer<typeof projectSchema>;
 export type Language = z.infer<typeof languageSchema>;
 export type Volunteer = z.infer<typeof volunteerSchema>;
 export type Certificate = z.infer<typeof certificateSchema>;
+export type Award = z.infer<typeof awardSchema>;
+export type Publication = z.infer<typeof publicationSchema>;
+export type Interest = z.infer<typeof interestSchema>;
+export type Reference = z.infer<typeof referenceSchema>;

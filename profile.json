@@ -79,12 +79,14 @@
       "courses": []
     }
   ],
+  "awards": [],
   "certificates": [
     { "name": "Google Project Management: Professional Certificate", "date": "2024-11", "issuer": "Google" },
     { "name": "B1 Preliminary", "date": "2023-03", "issuer": "Cambridge University" },
     { "name": "CCNA: Introduction to Networks", "date": "2020-06", "issuer": "Cisco" },
     { "name": "Starter Programming Scholarship", "date": "2020-06", "issuer": "INTEK Training" }
   ],
+  "publications": [],
   "skills": [
     {
       "name": "Soft Skills",
@@ -144,6 +146,8 @@
     { "language": "Vietnamese", "fluency": "Native" },
     { "language": "English", "fluency": "B1 (Cambridge certified)" }
   ],
+  "interests": [],
+  "references": [],
   "meta": {
     "version": "0.1.0"
   }

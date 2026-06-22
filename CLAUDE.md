@@ -1,0 +1,70 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Architecture
+
+`profile.json` (root) is the single source of truth for all personal/career data, modeled on the
+[JSON Resume](https://jsonresume.org/schema/) schema with light extensions (`highlights`/`tags` on
+work and projects, for tailoring). Everything else derives from it:
+
+```
+profile.json (root, JSON Resume schema)
+    │
+    ├── packages/profile-schema  — zod schema + TS types + validator, imported by both apps
+    ├── apps/website             — Next.js portfolio (lequoctrung.vn), reads profile.json at build time
+    └── apps/cv-renderer         — react-pdf renderer, turns profile.json (or a tailored variant) into PDF
+```
+
+- `packages/profile-schema/src/schema.ts` defines `profileSchema` (zod) and the inferred `Profile` type.
+  Both apps import this package as `@new-portfolio/profile-schema` — never duplicate the type/shape elsewhere.
+- `apps/website/lib/profile.ts` loads and validates `profile.json` via `profileSchema.parse(...)`.
+- `apps/cv-renderer/src/MasterCV.tsx` is the react-pdf document component; `src/render.tsx` is the CLI
+  entry that validates an input JSON file and writes a PDF.
+- **Tailored CV workflow**: there is no AI script in this repo. To produce a tailored CV, ask Claude Code
+  (interactively, in this session) to read a job description plus `profile.json` and write a tailored
+  profile JSON into `tailored/` (gitignored), then render it with the cv-renderer (see commands below).
+  Keep the same `profileSchema` shape — only reorder/trim/reword content, don't invent facts.
+
+This is a pnpm workspace monorepo (`pnpm-workspace.yaml`: `apps/*`, `packages/*`).
+
+## Commands
+
+Install once at the root:
+```bash
+pnpm install
+```
+
+Validate `profile.json` against the schema:
+```bash
+pnpm --filter @new-portfolio/profile-schema validate
+```
+
+Website (Next.js):
+```bash
+pnpm dev                 # next dev, from root (alias for --filter website dev)
+pnpm --filter website build
+pnpm --filter website lint
+pnpm --filter website typecheck
+```
+
+CV renderer (react-pdf → PDF):
+```bash
+# Master CV: profile.json -> apps/cv-renderer/out/master-cv.pdf
+pnpm --filter cv-renderer build:master
+
+# Tailored CV: pass an explicit input/output path
+cd apps/cv-renderer && pnpm tsx src/render.tsx ../../tailored/<name>.json out/<name>.pdf
+```
+
+Root-level scripts run across all workspace packages: `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
+
+## Conventions
+
+- Never hand-edit data inside `apps/website` or `apps/cv-renderer` — all resume content lives in
+  `profile.json` (or a `tailored/*.json` variant), edited directly or through Claude Code.
+- `tailored/*.json` files are gitignored — they are generated, per-application artifacts, not source of truth.
+- Dates in `profile.json` follow `YYYY`, `YYYY-MM`, or `YYYY-MM-DD` (enforced by `profileSchema`).
+- The website app uses `transpilePackages: ["@new-portfolio/profile-schema"]` in `next.config.mjs` since
+  the schema package ships TypeScript source directly (no build step) — keep this in sync if the package
+  is renamed or moved.

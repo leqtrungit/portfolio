@@ -1,0 +1,22 @@
+{
+  "name": "cv-renderer",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:master": "tsx src/render.tsx ../../profile.json out/master-cv.pdf",
+    "build:tailored": "tsx src/render.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@new-portfolio/profile-schema": "workspace:*",
+    "@react-pdf/renderer": "^4.5.1",
+    "react": "^19.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.0",
+    "@types/react": "^19.2.17",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}

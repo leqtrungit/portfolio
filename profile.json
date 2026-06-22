@@ -1,0 +1,21 @@
+{
+  "basics": {
+    "name": "Le Quoc Trung",
+    "label": "Software Engineer",
+    "email": "leqtrungit@gmail.com",
+    "url": "https://lequoctrung.vn",
+    "summary": "",
+    "location": {
+      "countryCode": "VN"
+    },
+    "profiles": []
+  },
+  "work": [],
+  "education": [],
+  "skills": [],
+  "projects": [],
+  "languages": [],
+  "meta": {
+    "version": "0.0.1"
+  }
+}

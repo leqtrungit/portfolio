@@ -97,7 +97,7 @@ export function HeroSection({ basics }: HeroSectionProps) {
         </div>
       </div>
 
-      <Portrait name={basics.name} />
+      <Portrait name={basics.name} src="/portrait.png" />
     </section>
   );
 }

@@ -6,12 +6,11 @@ interface Transformation {
   tag: string;
 }
 
-// Hardcoded placeholder copy from the design handoff — user will supply final content.
 const transformations: Transformation[] = [
-  { from: "5-minute API call", to: "1–2 second response", tag: "BOSCH" },
+  { from: "manual 1st-level support", to: "AI agent, 60% less dev effort", tag: "BOSCH" },
   { from: "manual video edits", to: "1,500 auto-shipped / day", tag: "MEDIA AI" },
-  { from: "a 60-step order cycle", to: "60% faster, 0 errors", tag: "HGM BPM" },
-  { from: "siloed engineers", to: "independent problem-solvers", tag: "EVERY TEAM" },
+  { from: "60-step order cycle", to: "60% faster, 0 errors", tag: "HGM BPM" },
+  { from: "siloed engineers", to: "100% proactive owners", tag: "DAT · BOSCH" },
 ];
 
 export function TransformationsSection() {

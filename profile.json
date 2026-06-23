@@ -1,37 +1,62 @@
 {
   "basics": {
     "name": "Le Quoc Trung",
-    "label": "Software Engineer",
+    "label": "Solution Engineer",
     "email": "leqtrungit@gmail.com",
     "phone": "+84 908 103 573",
     "url": "https://lequoctrung.vn",
-    "summary": "Results-driven Software Engineer with 3+ years of experience in delivering scalable web applications and leading end-to-end project development in cross-functional teams.",
+    "summary": "I work at the intersection of engineering and strategy — diagnosing what's broken, designing what's next, and coaching teams to become independent problem-solvers.",
     "location": {
       "city": "Ho Chi Minh City",
       "countryCode": "VN"
     },
     "profiles": [
-      { "network": "LinkedIn", "username": "leqtrungit", "url": "https://www.linkedin.com/in/leqtrungit/" },
-      { "network": "GitHub", "username": "leqtrungit", "url": "https://github.com/leqtrungit" },
-      { "network": "X", "username": "leqtrungit", "url": "https://x.com/leqtrungit" },
-      { "network": "Medium", "username": "leqtrungit", "url": "https://leqtrungit.medium.com/" },
-      { "network": "Blog", "username": "lequoctrung", "url": "https://blog.lequoctrung.id.vn" }
+      {
+        "network": "LinkedIn",
+        "username": "leqtrungit",
+        "url": "https://www.linkedin.com/in/leqtrungit/"
+      },
+      {
+        "network": "GitHub",
+        "username": "leqtrungit",
+        "url": "https://github.com/leqtrungit"
+      },
+      {
+        "network": "X",
+        "username": "leqtrungit",
+        "url": "https://x.com/leqtrungit"
+      },
+      {
+        "network": "Medium",
+        "username": "leqtrungit",
+        "url": "https://leqtrungit.medium.com/"
+      },
+      {
+        "network": "Blog",
+        "username": "lequoctrung",
+        "url": "https://blog.lequoctrung.id.vn"
+      }
     ]
   },
   "work": [
     {
       "name": "DAT Software Solutions",
-      "position": "Co-Founder & Tech Lead",
+      "position": "Co-Founder & CTO",
       "startDate": "2025-03",
       "summary": "Remote",
       "_note": "Website hero copy reuses highlights[0] as a narrative summary, and shows highlights[1:] as bullets — write highlights[0] as a 1-line role narrative.",
       "highlights": [
-        "Led technology strategy",
-        "Managed requirements analysis",
-        "Architected scalable systems",
-        "Recruited and mentored engineering talent"
+        "Co-founded company, spearheading technology strategy, engineering team development, and internal operations.",
+        "Led project management, requirements analysis, and technical consulting to deliver tailored client solutions.",
+        "Architected scalable systems, selected optimal technology stacks, and managed full-cycle development.",
+        "Recruited and mentored engineering talent, fostering improved collaboration and delivery efficiency.",
+        "Acted as the primary technical consultant for key partners, ensuring alignment between business goals and technical execution."
       ],
-      "tags": []
+      "tags": [
+        "Leadership",
+        "Technology Strategy",
+        "System Architecture"
+      ]
     },
     {
       "name": "Bosch Global Software Technologies Vietnam",
@@ -40,26 +65,20 @@
       "summary": "On Site",
       "_note": "Website hero copy reuses highlights[0] as a narrative summary, and shows highlights[1:] as bullets — write highlights[0] as a 1-line role narrative.",
       "highlights": [
-        "Led acquisition web application project",
-        "Reduced API response time from 5 minutes to 1-2 seconds",
-        "Migrated Angular v10 to v18",
-        "Enhanced UI with Excel-like filters"
+        "Operated across engineering, product management, and people development.",
+        "Deployed AI agent for 1st-level support → 60% reduction in dev effort per ticket",
+        "Reduced API response time from 5 min → 1–2 sec via query optimization",
+        "End-to-end project ownership, from stakeholder alignment to production monitoring",
+        "Mentored engineers toward self-led ownership and improved delivery speed",
+        "Coordinated cross-team delivery and stakeholder reporting as Project Coordinator"
       ],
-      "tags": ["Angular", "Spring Boot", "Oracle DB", "OpenShift"]
-    },
-    {
-      "name": "Bosch Global Software Technologies Vietnam",
-      "position": "Frontend Developer Intern",
-      "startDate": "2022-06",
-      "endDate": "2022-12",
-      "summary": "On Site",
-      "_note": "Website hero copy reuses highlights[0] as a narrative summary, and shows highlights[1:] as bullets — write highlights[0] as a 1-line role narrative.",
-      "highlights": [
-        "Integrated Power BI",
-        "Developed logging project",
-        "Followed Scrum methodology"
-      ],
-      "tags": ["Angular", "Spring Boot", "Agile"]
+      "tags": [
+        "Angular",
+        "Spring Boot",
+        "Oracle DB",
+        "OpenShift",
+        "AI Agent"
+      ]
     }
   ],
   "volunteer": [
@@ -84,10 +103,26 @@
   ],
   "awards": [],
   "certificates": [
-    { "name": "Google Project Management: Professional Certificate", "date": "2024-11", "issuer": "Google" },
-    { "name": "B1 Preliminary", "date": "2023-03", "issuer": "Cambridge University" },
-    { "name": "CCNA: Introduction to Networks", "date": "2020-06", "issuer": "Cisco" },
-    { "name": "Starter Programming Scholarship", "date": "2020-06", "issuer": "INTEK Training" }
+    {
+      "name": "Google Project Management: Professional Certificate",
+      "date": "2024-11",
+      "issuer": "Google"
+    },
+    {
+      "name": "B1 Preliminary",
+      "date": "2023-03",
+      "issuer": "Cambridge University"
+    },
+    {
+      "name": "CCNA: Introduction to Networks",
+      "date": "2020-06",
+      "issuer": "Cisco"
+    },
+    {
+      "name": "Starter Programming Scholarship",
+      "date": "2020-06",
+      "issuer": "INTEK Training"
+    }
   ],
   "publications": [],
   "skills": [
@@ -124,30 +159,59 @@
       "name": "Media AI Automation Pipeline",
       "description": "Led 3-person team producing 1,500 videos daily with zero manual edits",
       "highlights": [],
-      "tags": ["n8n", "Microservices", "OpenAI", "YouTube API", "Docker"]
+      "tags": [
+        "n8n",
+        "Microservices",
+        "OpenAI",
+        "YouTube API",
+        "Docker"
+      ]
     },
     {
       "name": "HGM Orders – BPM Platform",
       "description": "Delivered 3 customized platforms; reduced order cycle by 60%",
       "highlights": [],
-      "tags": ["React", "Hasura", "PostgreSQL", "GraphQL", "Docker"]
+      "tags": [
+        "React",
+        "Hasura",
+        "PostgreSQL",
+        "GraphQL",
+        "Docker"
+      ]
     },
     {
       "name": "D365 AI Agent PoC",
       "description": "Solo-built RAG-powered AI agent enabling instant documentation answers",
       "highlights": [],
-      "tags": ["AutoGen", "LLM", "Docker", "Python"]
+      "tags": [
+        "AutoGen",
+        "LLM",
+        "Docker",
+        "Python"
+      ]
     },
     {
       "name": "HomeLab",
       "description": "Self-built AI-powered infrastructure with 99.9% uptime",
       "highlights": [],
-      "tags": ["Docker", "Home Assistant", "Prometheus", "Grafana", "Linux"]
+      "tags": [
+        "Docker",
+        "Home Assistant",
+        "Prometheus",
+        "Grafana",
+        "Linux"
+      ]
     }
   ],
   "languages": [
-    { "language": "Vietnamese", "fluency": "Native" },
-    { "language": "English", "fluency": "B1 (Cambridge certified)" }
+    {
+      "language": "Vietnamese",
+      "fluency": "Native"
+    },
+    {
+      "language": "English",
+      "fluency": "B1 (Cambridge certified)"
+    }
   ],
   "interests": [],
   "references": [],

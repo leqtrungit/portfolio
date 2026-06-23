@@ -37,32 +37,12 @@ export function Portrait({ name, src }: PortraitProps) {
             alt={`${name} — portrait photo`}
             fill
             priority
-            style={{ objectFit: "cover", filter: "grayscale(1) contrast(1.06) brightness(1.02)" }}
+            style={{ objectFit: "cover" }}
           />
         ) : (
           "Drop your photo"
         )}
       </div>
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: tokens.accent,
-          mixBlendMode: "multiply",
-          opacity: 0.34,
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: tokens.colors.dark,
-          mixBlendMode: "lighten",
-          opacity: 0.16,
-          pointerEvents: "none",
-        }}
-      />
       <div
         style={{
           position: "absolute",
@@ -82,7 +62,6 @@ export function Portrait({ name, src }: PortraitProps) {
         }}
       >
         <span>{name}</span>
-        <span style={{ color: tokens.colors.onDarkAccent }}>SAIGON</span>
       </div>
     </div>
   );

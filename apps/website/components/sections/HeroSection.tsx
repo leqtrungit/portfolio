@@ -28,7 +28,7 @@ export function HeroSection({ basics }: HeroSectionProps) {
             marginBottom: 34,
           }}
         >
-          {basics.label?.toUpperCase()} — EST. SAIGON
+          {basics.label?.toUpperCase()}
         </div>
         <h1
           style={{

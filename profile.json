@@ -24,6 +24,7 @@
       "position": "Co-Founder & Tech Lead",
       "startDate": "2025-03",
       "summary": "Remote",
+      "_note": "Website hero copy reuses highlights[0] as a narrative summary, and shows highlights[1:] as bullets — write highlights[0] as a 1-line role narrative.",
       "highlights": [
         "Led technology strategy",
         "Managed requirements analysis",
@@ -37,6 +38,7 @@
       "position": "Software Engineer",
       "startDate": "2022-12",
       "summary": "On Site",
+      "_note": "Website hero copy reuses highlights[0] as a narrative summary, and shows highlights[1:] as bullets — write highlights[0] as a 1-line role narrative.",
       "highlights": [
         "Led acquisition web application project",
         "Reduced API response time from 5 minutes to 1-2 seconds",
@@ -51,6 +53,7 @@
       "startDate": "2022-06",
       "endDate": "2022-12",
       "summary": "On Site",
+      "_note": "Website hero copy reuses highlights[0] as a narrative summary, and shows highlights[1:] as bullets — write highlights[0] as a 1-line role narrative.",
       "highlights": [
         "Integrated Power BI",
         "Developed logging project",

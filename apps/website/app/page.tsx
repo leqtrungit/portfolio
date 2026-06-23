@@ -1,38 +1,31 @@
 import { getProfile } from "@/lib/profile";
+import { Nav } from "@/components/sections/Nav";
+import { HeroSection } from "@/components/sections/HeroSection";
+import { TransformationsSection } from "@/components/sections/TransformationsSection";
+import { WorkSection } from "@/components/sections/WorkSection";
+import { ProjectsSection } from "@/components/sections/ProjectsSection";
+import { StackSection } from "@/components/sections/StackSection";
+import { EducationCertificatesSection } from "@/components/sections/EducationCertificatesSection";
+import { ContactSection } from "@/components/sections/ContactSection";
+import { tokens } from "@/lib/tokens";
 
 export default function HomePage() {
   const profile = getProfile();
 
   return (
-    <main>
-      <h1>{profile.basics.name}</h1>
-      {profile.basics.label && <p>{profile.basics.label}</p>}
-      {profile.basics.summary && <p>{profile.basics.summary}</p>}
-
-      {profile.work.length > 0 && (
-        <section>
-          <h2>Experience</h2>
-          <ul>
-            {profile.work.map((job) => (
-              <li key={`${job.name}-${job.startDate}`}>
-                <strong>{job.position}</strong> @ {job.name} ({job.startDate}
-                {job.endDate ? ` – ${job.endDate}` : " – Present"})
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {profile.projects.length > 0 && (
-        <section>
-          <h2>Projects</h2>
-          <ul>
-            {profile.projects.map((project) => (
-              <li key={project.name}>{project.name}</li>
-            ))}
-          </ul>
-        </section>
-      )}
-    </main>
+    <div style={{ background: tokens.colors.bg, color: tokens.colors.text, minHeight: "100vh", overflowX: "hidden" }}>
+      <Nav name={profile.basics.name} />
+      <main id="top" style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
+        <HeroSection basics={profile.basics} />
+      </main>
+      <TransformationsSection />
+      <div style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
+        <WorkSection work={profile.work} />
+        <ProjectsSection projects={profile.projects} />
+        <StackSection skills={profile.skills} />
+        <EducationCertificatesSection education={profile.education} certificates={profile.certificates} />
+      </div>
+      <ContactSection basics={profile.basics} languages={profile.languages} />
+    </div>
   );
 }

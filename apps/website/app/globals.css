@@ -1,0 +1,46 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+}
+
+::selection {
+  background: var(--ac, #cf4326);
+  color: #fff;
+}
+
+.trow {
+  transition: background 0.22s ease, padding 0.22s ease;
+}
+.trow:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.proj {
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.proj:hover {
+  transform: translateY(-4px);
+  box-shadow: 6px 6px 0 var(--ac, #cf4326);
+}
+
+.navlink {
+  transition: color 0.18s ease;
+}
+.navlink:hover {
+  color: var(--ac, #cf4326);
+}
+
+.pill {
+  transition: border-color 0.18s ease, color 0.18s ease;
+}
+.pill:hover {
+  border-color: var(--ac, #cf4326);
+  color: var(--ac, #cf4326);
+}

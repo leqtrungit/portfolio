@@ -22,7 +22,7 @@ session before asking the user what's going on — it has the current state and 
 
 ### Steps
 
-- [ ] Add host-based redirect in `apps/website/next.config.mjs`: any request with
+- [x] Add host-based redirect in `apps/website/next.config.mjs`: any request with
       `Host: lequoctrung.id.vn` → `https://lequoctrung.vn/` (collapse all paths to root, since
       the new site has no `/en`/`/vi` equivalents — path-preserving would 404).
 - [ ] Attach `lequoctrung.vn` to the Vercel project for `apps/website` (this repo); remove the

@@ -14,7 +14,7 @@ export function ContactSection({ basics, languages }: ContactSectionProps) {
 
   return (
     <section id="contact" style={{ background: tokens.colors.dark, color: tokens.colors.onDark, marginTop: 64 }}>
-      <div style={{ maxWidth: 1080, margin: "0 auto", padding: "80px 32px 64px" }}>
+      <div className="contact-inner" style={{ maxWidth: 1080, margin: "0 auto", padding: "80px 32px 64px" }}>
         <div
           style={{
             fontFamily: tokens.fonts.mono,
@@ -26,7 +26,16 @@ export function ContactSection({ basics, languages }: ContactSectionProps) {
         >
           → LET&apos;S BUILD SOMETHING
         </div>
-        <h2 style={{ fontWeight: 700, fontSize: 48, lineHeight: 1.04, letterSpacing: "-0.02em", margin: 0, maxWidth: 760 }}>
+        <h2
+          style={{
+            fontWeight: 700,
+            fontSize: "clamp(29px, 7vw, 48px)",
+            lineHeight: 1.05,
+            letterSpacing: "-0.02em",
+            margin: 0,
+            maxWidth: 760,
+          }}
+        >
           Got a system that needs a <span style={{ color: tokens.accent }}>root-cause fix</span>? Let&apos;s talk.
         </h2>
         {basics.email && (

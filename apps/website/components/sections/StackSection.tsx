@@ -16,6 +16,7 @@ export function StackSection({ skills }: StackSectionProps) {
       {skills.map((group) => (
         <div
           key={group.name}
+          className="stack-row"
           style={{
             display: "grid",
             gridTemplateColumns: "230px 1fr",

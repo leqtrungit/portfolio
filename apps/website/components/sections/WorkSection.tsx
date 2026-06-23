@@ -12,13 +12,14 @@ export function WorkSection({ work }: WorkSectionProps) {
   if (work.length === 0) return null;
 
   return (
-    <section id="work" style={{ padding: "88px 0 24px" }}>
+    <section id="work" className="sect-pad" style={{ padding: "88px 0 24px" }}>
       <SectionLabel>EXPERIENCE</SectionLabel>
       {work.map((job) => {
         const [narrative, ...highlights] = job.highlights;
         return (
           <div
             key={`${job.name}-${job.startDate}`}
+            className="work-row"
             style={{
               display: "grid",
               gridTemplateColumns: "230px 1fr",

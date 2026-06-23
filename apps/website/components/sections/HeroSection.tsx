@@ -9,6 +9,7 @@ export interface HeroSectionProps {
 export function HeroSection({ basics }: HeroSectionProps) {
   return (
     <section
+      className="hero"
       style={{
         display: "grid",
         gridTemplateColumns: "minmax(0,1fr) 300px",
@@ -32,7 +33,7 @@ export function HeroSection({ basics }: HeroSectionProps) {
         <h1
           style={{
             fontWeight: 700,
-            fontSize: 62,
+            fontSize: "clamp(33px, 8vw, 62px)",
             lineHeight: 1.03,
             letterSpacing: "-0.03em",
             margin: 0,

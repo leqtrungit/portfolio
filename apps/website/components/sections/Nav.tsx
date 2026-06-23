@@ -27,6 +27,7 @@ export function Nav({ name }: NavProps) {
       }}
     >
       <div
+        className="nav-inner"
         style={{
           maxWidth: 1080,
           margin: "0 auto",
@@ -56,9 +57,12 @@ export function Nav({ name }: NavProps) {
           >
             {initials(name)}
           </span>
-          <span style={{ fontWeight: 700, fontSize: 16, letterSpacing: "-0.01em" }}>{name}</span>
+          <span className="nav-name" style={{ fontWeight: 700, fontSize: 16, letterSpacing: "-0.01em" }}>
+            {name}
+          </span>
         </a>
         <div
+          className="nav-links"
           style={{
             display: "flex",
             gap: 26,

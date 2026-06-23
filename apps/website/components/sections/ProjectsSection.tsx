@@ -13,7 +13,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
   return (
     <section id="projects" style={{ padding: "64px 0 24px" }}>
       <SectionLabel>SELECTED PROJECTS</SectionLabel>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+      <div className="proj-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
         {projects.map((project) => (
           <div
             key={project.name}

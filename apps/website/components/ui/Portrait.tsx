@@ -8,6 +8,7 @@ export interface PortraitProps {
 export function Portrait({ name, src }: PortraitProps) {
   return (
     <div
+      className="hero-portrait"
       style={{
         position: "relative",
         isolation: "isolate",

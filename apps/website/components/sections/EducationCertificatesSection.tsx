@@ -14,7 +14,7 @@ export function EducationCertificatesSection({ education, certificates }: Educat
 
   return (
     <section style={{ padding: "64px 0 24px" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56 }}>
+      <div className="edu-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56 }}>
         {primaryEducation && (
           <div>
             <SectionLabel>EDUCATION</SectionLabel>

@@ -15,11 +15,11 @@ export default function HomePage() {
   return (
     <div style={{ background: tokens.colors.bg, color: tokens.colors.text, minHeight: "100vh", overflowX: "hidden" }}>
       <Nav name={profile.basics.name} />
-      <main id="top" style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
+      <main id="top" className="pad-x" style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
         <HeroSection basics={profile.basics} />
       </main>
       <TransformationsSection />
-      <div style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
+      <div className="pad-x" style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
         <WorkSection work={profile.work} />
         <ProjectsSection projects={profile.projects} />
         <StackSection skills={profile.skills} />

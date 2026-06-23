@@ -17,7 +17,7 @@ const transformations: Transformation[] = [
 export function TransformationsSection() {
   return (
     <section style={{ background: tokens.colors.dark, color: tokens.colors.onDark }}>
-      <div style={{ maxWidth: 1080, margin: "0 auto", padding: "64px 32px 70px" }}>
+      <div className="tf-inner" style={{ maxWidth: 1080, margin: "0 auto", padding: "64px 32px 70px" }}>
         <div
           style={{
             fontFamily: tokens.fonts.mono,
@@ -32,7 +32,7 @@ export function TransformationsSection() {
         {transformations.map((t) => (
           <div
             key={t.tag}
-            className="trow"
+            className="trow tf-row"
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 86px 1fr 150px",
@@ -43,10 +43,17 @@ export function TransformationsSection() {
               margin: "0 -12px",
             }}
           >
-            <span style={{ fontSize: 24, color: tokens.colors.onDarkMuted, fontWeight: 500 }}>{t.from}</span>
-            <span style={{ fontSize: 34, color: tokens.accent, textAlign: "center" }}>→</span>
-            <span style={{ fontSize: 26, fontWeight: 700, letterSpacing: "-0.01em" }}>{t.to}</span>
+            <span className="tf-from" style={{ fontSize: 24, color: tokens.colors.onDarkMuted, fontWeight: 500 }}>
+              {t.from}
+            </span>
+            <span className="tf-arrow" style={{ fontSize: 34, color: tokens.accent, textAlign: "center" }}>
+              →
+            </span>
+            <span className="tf-to" style={{ fontSize: 26, fontWeight: 700, letterSpacing: "-0.01em" }}>
+              {t.to}
+            </span>
             <span
+              className="tf-tag"
               style={{
                 fontFamily: tokens.fonts.mono,
                 fontSize: 12,

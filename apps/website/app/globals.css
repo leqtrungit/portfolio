@@ -44,3 +44,81 @@ body {
   border-color: var(--ac, #cf4326);
   color: var(--ac, #cf4326);
 }
+
+@media (max-width: 760px) {
+  .nav-inner {
+    padding: 13px 18px !important;
+  }
+  .nav-links {
+    gap: 16px !important;
+    font-size: 11.5px !important;
+  }
+  .pad-x {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .tf-inner {
+    padding: 48px 20px 52px !important;
+  }
+  .contact-inner {
+    padding: 58px 20px 48px !important;
+  }
+  .hero {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+    padding: 44px 0 32px !important;
+  }
+  .hero-portrait {
+    box-shadow: 6px 6px 0 var(--ac, #cf4326) !important;
+  }
+  .tf-row {
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+    padding: 20px 12px !important;
+  }
+  .tf-arrow {
+    text-align: left !important;
+    font-size: 24px !important;
+    line-height: 1 !important;
+  }
+  .tf-to {
+    font-size: 21px !important;
+  }
+  .tf-from {
+    font-size: 18px !important;
+  }
+  .tf-tag {
+    text-align: left !important;
+    margin-top: 4px !important;
+  }
+  .work-row {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    padding: 28px 0 !important;
+  }
+  .proj-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+  .stack-row {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .edu-grid {
+    grid-template-columns: 1fr !important;
+    gap: 44px !important;
+  }
+  .sect-pad {
+    padding-top: 60px !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .nav-name {
+    display: none !important;
+  }
+  .nav-links {
+    gap: 14px !important;
+    font-size: 11px !important;
+  }
+}

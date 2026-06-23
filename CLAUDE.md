@@ -19,8 +19,9 @@ profile.json (root, JSON Resume schema)
 - `packages/profile-schema/src/schema.ts` defines `profileSchema` (zod) and the inferred `Profile` type.
   Both apps import this package as `@new-portfolio/profile-schema` — never duplicate the type/shape elsewhere.
 - `apps/website/lib/profile.ts` loads and validates `profile.json` via `profileSchema.parse(...)`.
-- `apps/cv-renderer/src/MasterCV.tsx` is the react-pdf document component; `src/render.tsx` is the CLI
-  entry that validates an input JSON file and writes a PDF.
+- `apps/cv-renderer/src/templates/master.tsx` is the react-pdf document component (composed from
+  `src/components/*` building blocks and `src/theme.ts`); `src/render.tsx` is the CLI entry that
+  validates an input JSON file and writes a PDF.
 - **Tailored CV workflow**: there is no AI script in this repo. To produce a tailored CV, ask Claude Code
   (interactively, in this session) to read a job description plus `profile.json` and write a tailored
   profile JSON into `tailored/` (gitignored), then render it with the cv-renderer (see commands below).
@@ -61,6 +62,8 @@ Root-level scripts run across all workspace packages: `pnpm build`, `pnpm lint`,
 
 ## Conventions
 
+- See `docs/CONVENTIONS.md` for component/template architecture rules (smart vs. dumb components in
+  `apps/website`, building-block/theme/template structure in `apps/cv-renderer`).
 - Never hand-edit data inside `apps/website` or `apps/cv-renderer` — all resume content lives in
   `profile.json` (or a `tailored/*.json` variant), edited directly or through Claude Code.
 - `tailored/*.json` files are gitignored — they are generated, per-application artifacts, not source of truth.

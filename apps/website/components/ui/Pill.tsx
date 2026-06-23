@@ -28,7 +28,7 @@ export function Pill({ children, href, variant = "tag" }: PillProps) {
 
   if (href) {
     return (
-      <a href={href} target="_blank" rel="noreferrer" className="pill" style={style}>
+      <a href={href} target="_blank" rel="noopener noreferrer" className="pill" style={style}>
         {children}
       </a>
     );

@@ -13,7 +13,7 @@ export function ContactSection({ basics, languages }: ContactSectionProps) {
     .join(" · ");
 
   return (
-    <section id="contact" style={{ background: tokens.colors.dark, color: tokens.colors.onDark, marginTop: 64 }}>
+    <footer id="contact" style={{ background: tokens.colors.dark, color: tokens.colors.onDark, marginTop: 64 }}>
       <div className="contact-inner" style={{ maxWidth: 1080, margin: "0 auto", padding: "80px 32px 64px" }}>
         <div
           style={{
@@ -91,6 +91,6 @@ export function ContactSection({ basics, languages }: ContactSectionProps) {
           {basics.phone && <span>{basics.phone}</span>}
         </div>
       </div>
-    </section>
+    </footer>
   );
 }

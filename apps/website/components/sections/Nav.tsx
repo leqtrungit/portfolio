@@ -16,7 +16,7 @@ function initials(name: string): string {
 
 export function Nav({ name }: NavProps) {
   return (
-    <div
+    <header
       style={{
         position: "sticky",
         top: 0,
@@ -61,7 +61,7 @@ export function Nav({ name }: NavProps) {
             {name}
           </span>
         </a>
-        <div
+        <nav
           className="nav-links"
           style={{
             display: "flex",
@@ -76,8 +76,8 @@ export function Nav({ name }: NavProps) {
           <NavLink href="#projects">projects</NavLink>
           <NavLink href="#stack">stack</NavLink>
           <NavLink href="#contact">contact</NavLink>
-        </div>
+        </nav>
       </div>
-    </div>
+    </header>
   );
 }

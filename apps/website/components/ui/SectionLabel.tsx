@@ -8,17 +8,19 @@ export interface SectionLabelProps {
 export function SectionLabel({ children }: SectionLabelProps) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: 44 }}>
-      <span
+      <h2
         style={{
           fontFamily: tokens.fonts.mono,
           fontSize: 13,
+          fontWeight: 400,
           letterSpacing: "0.1em",
           color: tokens.accent,
           whiteSpace: "nowrap",
+          margin: 0,
         }}
       >
         → {children}
-      </span>
+      </h2>
       <span style={{ flex: 1, height: 1.5, background: tokens.colors.border }} />
     </div>
   );

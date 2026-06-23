@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { tokens } from "@/lib/tokens";
 
 export interface PortraitProps {
@@ -18,10 +19,10 @@ export function Portrait({ name, src }: PortraitProps) {
     >
       <div
         style={{
+          position: "relative",
           width: "100%",
           height: 380,
-          background: src ? `url(${src}) center/cover` : tokens.colors.borderMuted,
-          filter: "grayscale(1) contrast(1.06) brightness(1.02)",
+          background: src ? undefined : tokens.colors.borderMuted,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -30,7 +31,17 @@ export function Portrait({ name, src }: PortraitProps) {
           fontSize: 12,
         }}
       >
-        {!src && "Drop your photo"}
+        {src ? (
+          <Image
+            src={src}
+            alt={`${name} — portrait photo`}
+            fill
+            priority
+            style={{ objectFit: "cover", filter: "grayscale(1) contrast(1.06) brightness(1.02)" }}
+          />
+        ) : (
+          "Drop your photo"
+        )}
       </div>
       <div
         style={{

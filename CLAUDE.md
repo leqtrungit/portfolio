@@ -2,6 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+Check `PROGRESS.md` at the start of a new session — it tracks longer-running, cross-session tasks
+(e.g. the domain migration currently in progress) and their next steps.
+
 ## Architecture
 
 `profile.json` (root) is the single source of truth for all personal/career data, modeled on the

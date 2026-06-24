@@ -5,6 +5,7 @@ import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, JetBrains_Mono, Newsreader } from "next/font/google";
 import { tokens } from "@/lib/tokens";
 import { getProfile } from "@/lib/profile";
+import { truncateForMeta } from "@/lib/seo";
 
 // Inlined (not `import "./globals.css"`) so this ~2KB stylesheet ships in the
 // initial HTML instead of as a separate render-blocking request.
@@ -13,6 +14,10 @@ const globalCss = readFileSync(path.join(process.cwd(), "app/globals.css"), "utf
 const profile = getProfile();
 const siteUrl = profile.basics.url ?? "https://lequoctrung.vn";
 const title = `${profile.basics.name} — ${profile.basics.label}`;
+// SERP/OG snippets get cut off past ~160 chars — keep the on-page hero copy
+// (which reads `profile.basics.summary` directly) untouched and only clip
+// the metadata copies.
+const metaDescription = truncateForMeta(profile.basics.summary ?? "");
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -20,22 +25,20 @@ export const metadata: Metadata = {
     default: title,
     template: `%s — ${profile.basics.name}`,
   },
-  description: profile.basics.summary,
+  description: metaDescription,
   alternates: { canonical: "/" },
   openGraph: {
     type: "profile",
     url: "/",
     siteName: profile.basics.name,
     title,
-    description: profile.basics.summary,
+    description: metaDescription,
     locale: "en_US",
-    images: [{ url: "/portrait.png", width: 750, height: 1000, alt: `${profile.basics.name} portrait` }],
   },
   twitter: {
     card: "summary_large_image",
     title,
-    description: profile.basics.summary,
-    images: ["/portrait.png"],
+    description: metaDescription,
   },
 };
 
@@ -43,14 +46,17 @@ export const viewport: Viewport = {
   themeColor: tokens.accent,
 };
 
+const currentJob = profile.work.find((job) => !job.endDate) ?? profile.work[0];
+
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: profile.basics.name,
   jobTitle: profile.basics.label,
   email: profile.basics.email,
-  url: profile.basics.url,
-  image: profile.basics.url ? `${profile.basics.url}/portrait.png` : undefined,
+  url: siteUrl,
+  image: `${siteUrl}/portrait.png`,
+  worksFor: currentJob ? { "@type": "Organization", name: currentJob.name } : undefined,
   sameAs: profile.basics.profiles.map((p) => p.url),
   address: profile.basics.location?.city
     ? {

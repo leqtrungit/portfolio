@@ -56,10 +56,20 @@ work is the GSC Change of Address handoff + monitoring, plus the SEO follow-ups 
 
 ### Open SEO follow-ups from the audit (not blocking the migration, but related)
 
-- [ ] OG/Twitter image is portrait (750×1000) — replace with a proper 1200×630 landscape image.
-- [ ] Meta description (`profile.basics.summary`, 175 chars) is over the ~160 char SERP-safe limit.
-- [ ] Person JSON-LD (`apps/website/app/layout.tsx`) missing `worksFor`; `image` field silently
-      drops if `basics.url` is unset.
+- [x] OG/Twitter image is portrait (750×1000) — fixed 2026-06-24: replaced the hardcoded
+      `portrait.png` reference with `app/opengraph-image.tsx` (Next.js file-convention, rendered via
+      `next/og`/`ImageResponse` at build time, 1200×630). It's a custom branded card (the "LT" mark,
+      name, label, a truncated tagline, domain) — not a crop of the portrait photo, per request.
+      Twitter falls back to the same image automatically (no `twitter.images` needed).
+- [x] Meta description (`profile.basics.summary`, 175 chars) is over the ~160 char SERP-safe limit —
+      fixed 2026-06-24: added `lib/seo.ts#truncateForMeta` (word-boundary clip + `…`) and used it for
+      `description`/`openGraph.description`/`twitter.description` in `layout.tsx`. Deliberately did
+      *not* edit `profile.basics.summary` itself — that field is also the literal hero paragraph
+      copy on the page, and trimming it would have changed visible content, not just metadata.
+- [x] Person JSON-LD (`apps/website/app/layout.tsx`) missing `worksFor`; `image` field silently
+      drops if `basics.url` is unset — fixed 2026-06-24: `url`/`image` now build from `siteUrl`
+      (which already has the `https://lequoctrung.vn` fallback) instead of raw `basics.url`, and
+      `worksFor` is derived from the work entry with no `endDate` (falls back to `work[0]`).
 - [x] `SectionLabel.tsx` bakes the decorative "→ " glyph into the `<h2>` text content
       (`→ EXPERIENCE`) — fixed 2026-06-24: moved to an `aria-hidden` sibling span.
 - [ ] Favicon link tag won't appear on live HTML until `app/icon.svg` (added 2026-06-24, see Logo
@@ -114,15 +124,6 @@ Scores at audit time: Performance 96 mobile / 100 desktop, Accessibility 96/96, 
 - [x] No explicit `font-display: swap` on custom fonts — checked the prod font CSS chunk directly,
       `next/font` already emits `font-display:swap` on every `@font-face` rule. Audit finding was a
       false positive; no action needed.
-
-**P2 — bundle/font cleanup (deferred):**
-- [ ] Legacy polyfills in a vendor chunk (~14 KiB: `Array.prototype.at/.flat/.flatMap`,
-      `Object.fromEntries/.hasOwn`, `String.prototype.trimEnd/.trimStart`) — check
-      browserslist/SWC target, these are Baseline-supported and shouldn't be transpiled.
-- [ ] ~58 KiB unused JS across two chunks — candidate for code-splitting/lazy-loading
-      below-the-fold sections.
-- [ ] No explicit `font-display: swap` on custom fonts — verify whether `next/font` already
-      sets this (it usually defaults to swap) before treating as a real gap.
 
 **P3 — security headers (deferred, needs careful rollout since CSP misconfig can break the
 site's own fonts/scripts):**

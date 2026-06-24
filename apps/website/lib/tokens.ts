@@ -11,7 +11,10 @@ export const tokens = {
     textStrong: "#2c2920",
     textMuted: "#565244",
     textFaint: "#6b6657",
-    textFainter: "#8a8474",
+    // Darkened accent for small text on the light bg — `accent` itself is ~4.2:1 against
+    // `bg`, which fails WCAG AA at caption sizes (needs 4.5:1); large accent text elsewhere
+    // (headings, CTAs) keeps using `accent` since it clears the AA large-text 3:1 threshold.
+    accentMuted: "#c23d22",
     border: "#17150f",
     borderMuted: "#cabfa9",
     borderHairline: "#ddd6c8",

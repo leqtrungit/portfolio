@@ -37,6 +37,8 @@ export function Portrait({ name, src }: PortraitProps) {
             alt={`${name} — portrait photo`}
             fill
             priority
+            fetchPriority="high"
+            sizes="(max-width: 760px) calc(100vw - 40px), 300px"
             style={{ objectFit: "cover" }}
           />
         ) : (

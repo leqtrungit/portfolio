@@ -79,7 +79,7 @@ export function ContactSection({ basics, languages }: ContactSectionProps) {
             borderTop: `1px solid ${tokens.colors.onDarkBorder}`,
             fontFamily: tokens.fonts.mono,
             fontSize: 12,
-            color: tokens.colors.textFaint,
+            color: tokens.colors.onDarkMuted,
             letterSpacing: "0.04em",
           }}
         >

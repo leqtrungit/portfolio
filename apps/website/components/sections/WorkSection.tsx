@@ -33,7 +33,7 @@ export function WorkSection({ work }: WorkSectionProps) {
                 style={{
                   fontFamily: tokens.fonts.mono,
                   fontSize: 12,
-                  color: tokens.colors.textFainter,
+                  color: tokens.colors.textFaint,
                   letterSpacing: "0.04em",
                 }}
               >

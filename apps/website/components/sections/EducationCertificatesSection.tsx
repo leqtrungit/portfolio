@@ -29,7 +29,7 @@ export function EducationCertificatesSection({ education, certificates }: Educat
                 style={{
                   fontFamily: tokens.fonts.mono,
                   fontSize: 12,
-                  color: tokens.colors.textFainter,
+                  color: tokens.colors.textFaint,
                   marginTop: 10,
                   letterSpacing: "0.04em",
                 }}
@@ -55,14 +55,14 @@ export function EducationCertificatesSection({ education, certificates }: Educat
               >
                 <div>
                   <div style={{ fontSize: 15.5, fontWeight: 600, lineHeight: 1.3 }}>{cert.name}</div>
-                  {cert.issuer && <div style={{ fontSize: 13, color: tokens.colors.textFainter }}>{cert.issuer}</div>}
+                  {cert.issuer && <div style={{ fontSize: 13, color: tokens.colors.textFaint }}>{cert.issuer}</div>}
                 </div>
                 {cert.date && (
                   <div
                     style={{
                       fontFamily: tokens.fonts.mono,
                       fontSize: 12,
-                      color: tokens.colors.textFainter,
+                      color: tokens.colors.textFaint,
                       whiteSpace: "nowrap",
                     }}
                   >

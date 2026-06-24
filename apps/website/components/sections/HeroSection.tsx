@@ -24,7 +24,7 @@ export function HeroSection({ basics }: HeroSectionProps) {
             fontFamily: tokens.fonts.mono,
             fontSize: 12,
             letterSpacing: "0.14em",
-            color: tokens.accent,
+            color: tokens.colors.accentMuted,
             marginBottom: 34,
           }}
         >

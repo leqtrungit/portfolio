@@ -1,9 +1,14 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import type { CSSProperties, ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, JetBrains_Mono, Newsreader } from "next/font/google";
 import { tokens } from "@/lib/tokens";
 import { getProfile } from "@/lib/profile";
-import "./globals.css";
+
+// Inlined (not `import "./globals.css"`) so this ~2KB stylesheet ships in the
+// initial HTML instead of as a separate render-blocking request.
+const globalCss = readFileSync(path.join(process.cwd(), "app/globals.css"), "utf8");
 
 const profile = getProfile();
 const siteUrl = profile.basics.url ?? "https://lequoctrung.vn";
@@ -83,6 +88,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       style={{ "--ac": tokens.accent } as CSSProperties}
     >
       <body style={{ fontFamily: tokens.fonts.display, margin: 0 }}>
+        <style dangerouslySetInnerHTML={{ __html: globalCss }} />
         {children}
         <script
           type="application/ld+json"

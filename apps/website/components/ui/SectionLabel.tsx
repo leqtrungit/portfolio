@@ -14,12 +14,13 @@ export function SectionLabel({ children }: SectionLabelProps) {
           fontSize: 13,
           fontWeight: 400,
           letterSpacing: "0.1em",
-          color: tokens.accent,
+          color: tokens.colors.accentMuted,
           whiteSpace: "nowrap",
           margin: 0,
         }}
       >
-        → {children}
+        <span aria-hidden="true">→ </span>
+        {children}
       </h2>
       <span style={{ flex: 1, height: 1.5, background: tokens.colors.border }} />
     </div>

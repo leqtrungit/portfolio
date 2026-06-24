@@ -115,19 +115,47 @@ Scores at audit time: Performance 96 mobile / 100 desktop, Accessibility 96/96, 
     muted text on dark backgrounds. Swapped it.
   - Verified all four via manual WCAG contrast-ratio math (not yet re-run through Lighthouse).
 
-**P2 — bundle/font cleanup (deferred):**
-- [ ] Legacy polyfills in a vendor chunk (~14 KiB: `Array.prototype.at/.flat/.flatMap`,
-      `Object.fromEntries/.hasOwn`, `String.prototype.trimEnd/.trimStart`) — check
-      browserslist/SWC target, these are Baseline-supported and shouldn't be transpiled.
-- [ ] ~58 KiB unused JS across two chunks — candidate for code-splitting/lazy-loading
-      below-the-fold sections.
+**P2 — bundle/font cleanup (investigated 2026-06-24, mostly not actionable):**
+- [x] Legacy polyfills in a vendor chunk (~14 KiB: `Array.prototype.at/.flat/.flatMap`,
+      `Object.fromEntries/.hasOwn`, `String.prototype.trimEnd/.trimStart`) — added a `browserslist`
+      field (`apps/website/package.json`: `"defaults and supports es6-module"`) since that's the
+      standard fix. **Confirmed it has zero effect**: rebuilt before/after, the chunk
+      (`2xlxus0j1mvbl.js`) was byte-identical, still contains the same polyfill code verbatim. This
+      is Next.js's own bundled `@next/polyfill-module` compat shim, which this Turbopack-based build
+      doesn't appear to gate on project browserslist. Left the config in (harmless, may help other
+      tooling) but this specific finding isn't fixable through supported Next.js config right now —
+      would need to wait on a Next/Turbopack fix, not worth an unsupported hack.
+- [x] ~58 KiB unused JS across two chunks — there are zero `"use client"` components anywhere in
+      `apps/website` (`grep -rl '"use client"'` is empty), so there's nothing to code-split; these
+      chunks are Next.js/React's own hydration + router runtime, shipped unconditionally by the App
+      Router regardless of page interactivity. Not actionable without dropping App Router features
+      this site still needs (client-side nav). No change.
 - [x] No explicit `font-display: swap` on custom fonts — checked the prod font CSS chunk directly,
       `next/font` already emits `font-display:swap` on every `@font-face` rule. Audit finding was a
       false positive; no action needed.
 
-**P3 — security headers (deferred, needs careful rollout since CSP misconfig can break the
-site's own fonts/scripts):**
-- [ ] Add `Content-Security-Policy`, `Cross-Origin-Opener-Policy: same-origin`,
-      `X-Frame-Options: DENY` (or CSP `frame-ancestors 'none'`), `Trusted-Types` directive, and
-      extend HSTS to `includeSubDomains; preload` — via `headers()` in `next.config.mjs`. Test in
-      a preview deploy before promoting to production; a bad CSP can silently break the page.
+**P3 — security headers (done 2026-06-24):**
+- [x] Added `apps/website/proxy.ts` (Next.js 16 renamed the `middleware.ts` convention to
+      `proxy.ts` — `export function proxy()`, not `middleware()`) setting `Content-Security-Policy`,
+      `Cross-Origin-Opener-Policy: same-origin`, `X-Frame-Options: DENY`,
+      `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, and
+      `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload`.
+  - **First attempt used a nonce + `'strict-dynamic'` CSP** (Next's documented pattern, where the
+    framework is supposed to auto-nonce its own inline/RSC bootstrap scripts) — verified against a
+    real prod build in an actual browser (not just curl) and it **broke the entire page**: every JS
+    chunk and inline script blocked, confirmed via Playwright console capture. This Next.js/Turbopack
+    version doesn't propagate the nonce to its own injected scripts the way the docs describe.
+    Reverted before this ever got near a deploy.
+  - **Shipped instead:** `script-src 'self' 'unsafe-inline'` (`'unsafe-eval'` added only when
+    `NODE_ENV !== "production"`, for Fast Refresh) and `style-src 'self' 'unsafe-inline'` (the site
+    renders all styling via inline `style={{...}}` props — no per-element nonce mechanism exists for
+    the `style` attribute, only for `<style>`/`<script>` elements). `upgrade-insecure-requests` is
+    prod-only (would break `next dev` on http://localhost otherwise).
+  - **Skipped `Trusted-Types`:** the page uses `dangerouslySetInnerHTML` twice (inlined
+    `globals.css`, the Person JSON-LD script) — enabling `require-trusted-types-for 'script'` without
+    a custom Trusted Types policy would block both. Given this site has no forms, no user input, and
+    no dynamic/untrusted content (so the realistic stored/reflected-XSS surface is ~none), the
+    cost/risk of building a custom TT policy didn't seem worth it for the security gain. Revisit if
+    that changes.
+  - Verified clean (zero console errors, zero failed requests) via Playwright against both a
+    production build (`pnpm start`) and `pnpm dev`, including a client-side nav click.

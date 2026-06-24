@@ -9,3 +9,4 @@ dist/
 tailored/*.json
 !tailored/.gitkeep
 next-env.d.ts
+.vercel

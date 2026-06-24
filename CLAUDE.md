@@ -61,7 +61,10 @@ pnpm --filter cv-renderer build:master
 cd apps/cv-renderer && pnpm tsx src/render.tsx ../../tailored/<name>.json out/<name>.pdf
 ```
 
-Root-level scripts run across all workspace packages: `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
+Root-level scripts fan out via `pnpm -r <script>`: `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
+Only `website` defines `lint`; `pnpm test` is currently a no-op since no package defines a `test`
+script. `cv-renderer` has no plain `build` script — use `build:master` (above) or `build:tailored`
+(needs explicit input/output args, see CV renderer commands).
 
 ## Conventions
 

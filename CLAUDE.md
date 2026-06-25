@@ -77,3 +77,18 @@ script. `cv-renderer` has no plain `build` script — use `build:master` (above)
 - The website app uses `transpilePackages: ["@new-portfolio/profile-schema"]` in `next.config.mjs` since
   the schema package ships TypeScript source directly (no build step) — keep this in sync if the package
   is renamed or moved.
+
+## Workflow
+
+`main` and `develop` are both protected on GitHub (no direct pushes, PR + passing CI required, enforced
+even for the repo owner). `main` is production — every merge auto-deploys to `lequoctrung.vn` via Vercel.
+`develop` is the integration branch — it gets a Vercel preview deployment, never production.
+
+- Feature/fix work: branch off `develop` as `feature/<name>` or `fix/<name>`, open a PR back into `develop`.
+- Release: when `develop` is in a shippable state, open a PR `develop` → `main`.
+- Urgent prod-only fix: branch off `main` as `fix/<name>`, PR into `main`, then a follow-up PR/merge
+  `main` → `develop` to keep `develop` in sync.
+- **Never commit directly to `main` or `develop`** — including from Claude Code. Always create a
+  `feature/<name>` branch off `develop` first, then open a PR.
+- CI (`.github/workflows/ci.yml`) runs `profile-schema validate`, `typecheck`, `lint`, and
+  `website build` on every PR — these are the same commands listed under Commands above.

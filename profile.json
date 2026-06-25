@@ -60,6 +60,28 @@
     },
     {
       "name": "Bosch Global Software Technologies Vietnam",
+      "position": "Technical Project Coordinator",
+      "startDate": "2025-12",
+      "summary": "On Site",
+      "_note": "Website hero copy reuses highlights[0] as a narrative summary, and shows highlights[1:] as bullets — write highlights[0] as a 1-line role narrative.",
+      "highlights": [
+        "Coordinate project delivery and resourcing across multiple engineering teams at Bosch.",
+        "Defined a flexible working model for diverse projects and team members, maximizing department resource utilization",
+        "Mitigated operational risks for single-developer assignments",
+        "Established standardized workflows for stakeholder collaboration",
+        "Ensured adherence to project timelines and successful delivery of milestones",
+        "Fostered team culture and facilitated activities for skill development and morale",
+        "Contributed operational strategies and frameworks to other project teams"
+      ],
+      "tags": [
+        "Project Management",
+        "Engineering Leadership",
+        "Stakeholder Management",
+        "Employee Management"
+      ]
+    },
+    {
+      "name": "Bosch Global Software Technologies Vietnam",
       "position": "Software Engineer",
       "startDate": "2022-12",
       "summary": "On Site",
@@ -69,8 +91,7 @@
         "Deployed AI agent for 1st-level support → 60% reduction in dev effort per ticket",
         "Reduced API response time from 5 min → 1–2 sec via query optimization",
         "End-to-end project ownership, from stakeholder alignment to production monitoring",
-        "Mentored engineers toward self-led ownership and improved delivery speed",
-        "Coordinated cross-team delivery and stakeholder reporting as Project Coordinator"
+        "Mentored engineers toward self-led ownership and improved delivery speed"
       ],
       "tags": [
         "Angular",

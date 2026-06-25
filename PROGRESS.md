@@ -53,6 +53,14 @@ work is the GSC Change of Address handoff + monitoring, plus the SEO follow-ups 
 - [ ] Monitor old property's Coverage/Pages report — `/en`, `/vi` URLs should show as "Page with
       redirect", not errors. Keep both GSC properties active for 3–6 months; don't unverify the
       old one.
+- [x] Fix Vercel auto-deploy on push (broke as a side effect of the GitHub repo rename/recreate in
+      this session) — fixed 2026-06-25: the Vercel project's Git link record was intact
+      (`vercel git connect` reported "already connected"), but GitHub showed zero Deployments/commit
+      statuses for recent pushes, meaning the **Vercel GitHub App's per-repo access list** still
+      pointed at the old repo identity and never picked up the renamed `portfolio` repo. Fixed by
+      granting the Vercel GitHub App access to `leqtrungit/portfolio` at
+      `github.com/settings/installations`. Not yet verified with a real push (didn't want to spend
+      an extra prod deploy just to test) — will confirm on the next normal push to `main`.
 
 ### Open SEO follow-ups from the audit (not blocking the migration, but related)
 
@@ -72,8 +80,9 @@ work is the GSC Change of Address handoff + monitoring, plus the SEO follow-ups 
       `worksFor` is derived from the work entry with no `endDate` (falls back to `work[0]`).
 - [x] `SectionLabel.tsx` bakes the decorative "→ " glyph into the `<h2>` text content
       (`→ EXPERIENCE`) — fixed 2026-06-24: moved to an `aria-hidden` sibling span.
-- [ ] Favicon link tag won't appear on live HTML until `app/icon.svg` (added 2026-06-24, see Logo
-      work below) is deployed — not a bug, just unpushed at audit time.
+- [x] Favicon link tag won't appear on live HTML until `app/icon.svg` (added 2026-06-24, see Logo
+      work below) is deployed — confirmed 2026-06-25: `curl -I https://lequoctrung.vn/icon.svg` →
+      200, `image/svg+xml`. Live.
 
 ### PageSpeed Insights audit (2026-06-24, Lighthouse 13.4.0 — mobile + desktop)
 

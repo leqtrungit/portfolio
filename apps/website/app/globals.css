@@ -151,6 +151,13 @@ body {
 .post-body th, .post-body td { border: 1px solid #cabfa9; padding: 8px 12px; text-align: left; }
 .post-body th { background: rgba(23,21,15,.04); font-weight: 600; }
 
+/* Lede paragraph (first <p> inside post body) */
+.post-body > p:first-of-type {
+  font-size: 21px !important;
+  line-height: 1.6 !important;
+  color: #17150f !important;
+}
+
 /* Responsive */
 @media (max-width: 760px) {
   .blog-head { padding: 54px 0 30px !important; }

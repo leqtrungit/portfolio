@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { NavLink } from "@/components/ui/NavLink";
 import { tokens } from "@/lib/tokens";
@@ -49,9 +50,9 @@ export function Nav({ name }: NavProps) {
             color: tokens.colors.textFaint,
           }}
         >
-          <a href="/blog" className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
+          <Link href="/blog" className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
             blog
-          </a>
+          </Link>
           <NavLink href="#work">work</NavLink>
           <NavLink href="#projects">projects</NavLink>
           <NavLink href="#stack">stack</NavLink>

@@ -1,13 +1,14 @@
 // apps/website/components/blog/PostRow.tsx
+import Link from "next/link";
 import { buildImageUrl, estimateReadTime, type PostSummary } from "@/lib/blog";
 import { TagPill } from "@/components/blog/TagPill";
 import { tokens } from "@/lib/tokens";
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(d.getUTCDate()).padStart(2, "0");
   return `${y} · ${m} · ${day}`;
 }
 
@@ -16,7 +17,7 @@ export function PostRow({ post }: { post: PostSummary }) {
   const readTime = estimateReadTime(post.excerpt ?? post.title);
 
   return (
-    <a
+    <Link
       href={`/blog/${post.slug}`}
       className="post-row"
       style={{
@@ -95,6 +96,6 @@ export function PostRow({ post }: { post: PostSummary }) {
           </div>
         )}
       </div>
-    </a>
+    </Link>
   );
 }

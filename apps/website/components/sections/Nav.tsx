@@ -49,6 +49,9 @@ export function Nav({ name }: NavProps) {
             color: tokens.colors.textFaint,
           }}
         >
+          <a href="/blog" className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
+            blog
+          </a>
           <NavLink href="#work">work</NavLink>
           <NavLink href="#projects">projects</NavLink>
           <NavLink href="#stack">stack</NavLink>

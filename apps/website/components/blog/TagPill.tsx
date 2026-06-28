@@ -1,9 +1,10 @@
+import Link from "next/link";
 import { tokens } from "@/lib/tokens";
 import type { Tag } from "@/lib/blog";
 
 export function TagPill({ tag }: { tag: Tag }) {
   return (
-    <a
+    <Link
       href={`/blog/tags/${tag.slug}`}
       className="pill"
       style={{
@@ -18,6 +19,6 @@ export function TagPill({ tag }: { tag: Tag }) {
       }}
     >
       {tag.name}
-    </a>
+    </Link>
   );
 }

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { tokens } from "@/lib/tokens";
 
 export function BlogFooter({ name }: { name: string }) {
@@ -18,10 +19,10 @@ export function BlogFooter({ name }: { name: string }) {
           letterSpacing: "0.04em",
         }}
       >
-        <span>© 2026 {name} — Saigon</span>
-        <a href="/" style={{ color: tokens.colors.onDarkPill, textDecoration: "none" }}>
+        <span>© {new Date().getFullYear()} {name} — Saigon</span>
+        <Link href="/" style={{ color: tokens.colors.onDarkPill, textDecoration: "none" }}>
           ← back to portfolio
-        </a>
+        </Link>
       </div>
     </footer>
   );

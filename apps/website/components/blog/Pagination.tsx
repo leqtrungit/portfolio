@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { tokens } from "@/lib/tokens";
 import type { PaginationMeta } from "@/lib/blog";
 
@@ -20,9 +21,9 @@ export function Pagination({ meta, buildHref }: { meta: PaginationMeta; buildHre
   return (
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 48 }}>
       {hasPrev ? (
-        <a href={buildHref(meta.page - 1)} className="navlink" style={{ ...base, color: tokens.colors.textMuted }}>
+        <Link href={buildHref(meta.page - 1)} className="navlink" style={{ ...base, color: tokens.colors.textMuted }}>
           ← prev
-        </a>
+        </Link>
       ) : (
         <span style={{ ...base, color: tokens.colors.borderMuted, borderColor: tokens.colors.borderMuted, pointerEvents: "none" }}>
           ← prev
@@ -32,9 +33,9 @@ export function Pagination({ meta, buildHref }: { meta: PaginationMeta; buildHre
         {meta.page} / {meta.total_pages}
       </span>
       {hasNext ? (
-        <a href={buildHref(meta.page + 1)} className="navlink" style={{ ...base, color: tokens.colors.textMuted }}>
+        <Link href={buildHref(meta.page + 1)} className="navlink" style={{ ...base, color: tokens.colors.textMuted }}>
           next →
-        </a>
+        </Link>
       ) : (
         <span style={{ ...base, color: tokens.colors.borderMuted, borderColor: tokens.colors.borderMuted, pointerEvents: "none" }}>
           next →

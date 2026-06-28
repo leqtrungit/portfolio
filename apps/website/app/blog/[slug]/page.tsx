@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { fetchPost, buildImageUrl, estimateReadTime } from "@/lib/blog";
@@ -30,9 +31,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(d.getUTCDate()).padStart(2, "0");
   return `${y} · ${m} · ${day}`;
 }
 
@@ -49,7 +50,7 @@ export default async function PostPage({ params }: PageProps) {
       {/* ===== HEADER (max 760px) ===== */}
       <div className="pad-x" style={{ maxWidth: 760, margin: "0 auto", padding: "0 32px" }}>
         <header className="post-head" style={{ padding: "64px 0 34px" }}>
-          <a
+          <Link
             href="/blog"
             style={{
               fontFamily: tokens.fonts.mono,
@@ -62,7 +63,7 @@ export default async function PostPage({ params }: PageProps) {
             }}
           >
             ← all posts
-          </a>
+          </Link>
           <div
             style={{
               fontFamily: tokens.fonts.mono,
@@ -145,7 +146,7 @@ export default async function PostPage({ params }: PageProps) {
               }}
             />
           </figure>
-          <figcaption
+          <p
             style={{
               fontFamily: tokens.fonts.mono,
               fontSize: 11,
@@ -155,7 +156,7 @@ export default async function PostPage({ params }: PageProps) {
             }}
           >
             {post.excerpt}
-          </figcaption>
+          </p>
         </div>
       )}
 
@@ -186,7 +187,7 @@ export default async function PostPage({ params }: PageProps) {
               <TagPill key={tag.id} tag={tag} />
             ))}
           </div>
-          <a
+          <Link
             href="/blog"
             className="pill"
             style={{
@@ -203,7 +204,7 @@ export default async function PostPage({ params }: PageProps) {
             }}
           >
             ← read more posts
-          </a>
+          </Link>
         </div>
       </div>
     </>

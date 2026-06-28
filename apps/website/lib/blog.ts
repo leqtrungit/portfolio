@@ -11,7 +11,7 @@ export interface PostSummary {
   id: string;
   title: string;
   slug: string;
-  excerpt: string;
+  excerpt: string | null;
   featured_image_key: string | null;
   featured_image_alt: string | null;
   status: string;

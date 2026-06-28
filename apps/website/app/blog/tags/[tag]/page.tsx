@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { fetchPosts } from "@/lib/blog";
 import { PostRow } from "@/components/blog/PostRow";
@@ -32,12 +33,12 @@ export default async function TagListPage({ params, searchParams }: PageProps) {
           <h1 style={{ fontWeight: 700, fontSize: "clamp(32px, 7vw, 56px)", lineHeight: 1, letterSpacing: "-0.03em", margin: 0 }}>
             #{tag}
           </h1>
-          <a
+          <Link
             href="/blog"
             style={{ fontFamily: tokens.fonts.mono, fontSize: 12, color: tokens.colors.accentMuted, textDecoration: "none", letterSpacing: "0.04em" }}
           >
             ← all posts
-          </a>
+          </Link>
         </div>
         <div style={{ fontFamily: tokens.fonts.mono, fontSize: 12, color: tokens.colors.onDarkMuted, letterSpacing: "0.04em", marginTop: 22 }}>
           {meta.total} POST{meta.total !== 1 ? "S" : ""}

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { tokens } from "@/lib/tokens";
 
@@ -24,9 +25,9 @@ export function BlogHeader() {
           alignItems: "center",
         }}
       >
-        <a href="/" style={{ display: "flex", alignItems: "center", gap: 13, textDecoration: "none", color: "inherit" }}>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 13, textDecoration: "none", color: "inherit" }}>
           <Logo />
-        </a>
+        </Link>
         <nav
           className="nav-links"
           style={{
@@ -38,15 +39,15 @@ export function BlogHeader() {
             color: tokens.colors.textFaint,
           }}
         >
-          <a href="/" className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
+          <Link href="/" className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
             portfolio
-          </a>
-          <a href="/blog" className="navlink" style={{ textDecoration: "none", color: tokens.accent }}>
+          </Link>
+          <Link href="/blog" className="navlink" style={{ textDecoration: "none", color: tokens.accent }}>
             blog
-          </a>
-          <a href="/#contact" className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
+          </Link>
+          <Link href="/#contact" className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
             contact
-          </a>
+          </Link>
         </nav>
       </div>
     </header>

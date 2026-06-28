@@ -25,9 +25,10 @@ export default async function BlogListPage({ searchParams }: PageProps) {
     .toUpperCase()}`;
 
   return (
-    <div style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
+    <div className="pad-x" style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
       {/* ===== HEADER ===== */}
       <header
+        className="blog-head"
         style={{
           padding: "78px 0 36px",
           borderBottom: `1.5px solid ${tokens.colors.border}`,

@@ -1,24 +1,17 @@
 import type { Metadata } from "next";
 import { fetchPosts } from "@/lib/blog";
-import { PostRow } from "@/components/blog/PostRow";
-import { Pagination } from "@/components/blog/Pagination";
+import { PostListWithLoadMore } from "@/components/blog/PostListWithLoadMore";
 import { tokens } from "@/lib/tokens";
 
 export const metadata: Metadata = {
   title: "Blog",
   description:
     "A personal log of root-cause hunts, systems I build, and the lessons that only show up after something ships.",
+  alternates: { canonical: "/blog" },
 };
 
-interface PageProps {
-  searchParams: Promise<{ page?: string }>;
-}
-
-export default async function BlogListPage({ searchParams }: PageProps) {
-  const { page: pageParam } = await searchParams;
-  const page = Math.max(1, Number(pageParam ?? 1));
-
-  const { posts, meta } = await fetchPosts({ page, limit: 10 });
+export default async function BlogListPage() {
+  const { posts, meta } = await fetchPosts({ limit: 10 });
 
   const countLine = `${meta.total} POST${meta.total !== 1 ? "S" : ""} · UPDATED ${new Date()
     .toLocaleDateString("en-US", { month: "long", year: "numeric" })
@@ -105,12 +98,7 @@ export default async function BlogListPage({ searchParams }: PageProps) {
             No posts yet.
           </p>
         ) : (
-          <>
-            {posts.map((post) => (
-              <PostRow key={post.id} post={post} />
-            ))}
-            <Pagination meta={meta} buildHref={(p) => `/blog?page=${p}`} />
-          </>
+          <PostListWithLoadMore initialPosts={posts} total={meta.total} />
         )}
       </section>
     </div>

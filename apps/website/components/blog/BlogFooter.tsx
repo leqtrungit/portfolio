@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { tokens } from "@/lib/tokens";
 
-export function BlogFooter({ name }: { name: string }) {
+export function BlogFooter({ name, city }: { name: string; city?: string }) {
   return (
     <footer style={{ background: tokens.colors.dark, color: tokens.colors.onDark }}>
       <div
@@ -19,7 +19,7 @@ export function BlogFooter({ name }: { name: string }) {
           letterSpacing: "0.04em",
         }}
       >
-        <span>© {new Date().getFullYear()} {name} — Saigon</span>
+        <span>© {new Date().getFullYear()} {name}{city ? ` — ${city}` : ""}</span>
         <Link href="/" style={{ color: tokens.colors.onDarkPill, textDecoration: "none" }}>
           ← back to portfolio
         </Link>

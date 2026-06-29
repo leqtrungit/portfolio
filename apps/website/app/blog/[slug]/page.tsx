@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { fetchPost, buildImageUrl, estimateReadTime } from "@/lib/blog";
+import Image from "next/image";
+import { fetchPost, fetchPosts, buildImageUrl, estimateReadTime } from "@/lib/blog";
 import { PostContent } from "@/components/blog/PostContent";
 import { TagPill } from "@/components/blog/TagPill";
 import { tokens } from "@/lib/tokens";
@@ -19,6 +20,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: post.title,
     description,
+    alternates: { canonical: `/blog/${slug}` },
     openGraph: {
       title: post.title,
       description,
@@ -36,6 +38,17 @@ function formatDate(iso: string): string {
   const day = String(d.getUTCDate()).padStart(2, "0");
   return `${y} · ${m} · ${day}`;
 }
+
+export async function generateStaticParams() {
+  try {
+    const { posts } = await fetchPosts({ limit: 100 });
+    return posts.map((p) => ({ slug: p.slug }));
+  } catch {
+    return [];
+  }
+}
+
+export const revalidate = 3600;
 
 export default async function PostPage({ params }: PageProps) {
   const { slug } = await params;
@@ -112,15 +125,12 @@ export default async function PostPage({ params }: PageProps) {
               overflow: "hidden",
             }}
           >
-            <img
+            <Image
               src={imageUrl}
               alt={post.featured_image_alt ?? post.title}
-              style={{
-                display: "block",
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
+              fill
+              priority
+              style={{ objectFit: "cover" }}
             />
           </figure>
           <p
@@ -184,6 +194,20 @@ export default async function PostPage({ params }: PageProps) {
           </Link>
         </div>
       </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: post.title,
+            description: post.excerpt ?? post.title,
+            datePublished: post.created_at,
+            dateModified: post.updated_at,
+            url: `https://lequoctrung.vn/blog/${post.slug}`,
+          }),
+        }}
+      />
     </>
   );
 }

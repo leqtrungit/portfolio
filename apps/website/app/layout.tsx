@@ -26,7 +26,6 @@ export const metadata: Metadata = {
     template: `%s — ${profile.basics.name}`,
   },
   description: metaDescription,
-  alternates: { canonical: "/" },
   openGraph: {
     type: "profile",
     url: "/",

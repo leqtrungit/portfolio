@@ -10,7 +10,7 @@ export default function BlogLayout({ children }: { children: ReactNode }) {
     <div style={{ background: tokens.colors.bg, color: tokens.colors.text, minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <BlogHeader />
       <main style={{ flex: 1 }}>{children}</main>
-      <BlogFooter name={profile.basics.name} />
+      <BlogFooter name={profile.basics.name} city={profile.basics.location?.city} />
     </div>
   );
 }

@@ -1,5 +1,4 @@
 const API_BASE = process.env.BLOG_API_BASE_URL ?? "http://localhost:8080/api/v1";
-const MEDIA_BASE = process.env.MEDIA_BASE_URL ?? "http://localhost:9000/blog-media";
 
 export interface Tag {
   id: string;
@@ -34,7 +33,7 @@ export interface PaginationMeta {
 
 export function buildImageUrl(key: string | null): string | null {
   if (!key) return null;
-  return `${MEDIA_BASE}/${key}`;
+  return `/media/${key}`;
 }
 
 export function estimateReadTime(content: string): string {

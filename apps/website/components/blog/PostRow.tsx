@@ -48,20 +48,9 @@ export function PostRow({ post }: { post: PostSummary }) {
             src={imageUrl}
             alt={post.featured_image_alt ?? post.title}
             className="post-img"
-            style={{ display: "block", width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(1) contrast(1.05)" }}
+            style={{ display: "block", width: "100%", height: "100%", objectFit: "cover" }}
           />
         )}
-        {/* Accent colour overlay */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: tokens.accent,
-            mixBlendMode: "multiply",
-            opacity: 0.26,
-            pointerEvents: "none",
-          }}
-        />
       </div>
 
       {/* Text block */}

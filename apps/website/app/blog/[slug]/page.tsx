@@ -120,29 +120,6 @@ export default async function PostPage({ params }: PageProps) {
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-                filter: "grayscale(1) contrast(1.05)",
-              }}
-            />
-            {/* Accent overlay */}
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background: tokens.accent,
-                mixBlendMode: "multiply",
-                opacity: 0.24,
-                pointerEvents: "none",
-              }}
-            />
-            {/* Dark lighten overlay */}
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background: tokens.colors.dark,
-                mixBlendMode: "lighten",
-                opacity: 0.12,
-                pointerEvents: "none",
               }}
             />
           </figure>

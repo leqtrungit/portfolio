@@ -5,6 +5,18 @@ session before asking the user what's going on — it has the current state and 
 
 ---
 
+## Self-built blog (planned 2026-06-25, not started)
+
+**Goal:** replace the external Ghost blog (`blog.lequoctrung.id.vn`) with a self-built blog: a Go +
+Postgres backend (self-hosted later via Docker, host TBD) and public/admin UI inside `apps/website`
+at `lequoctrung.vn/blog`. Ghost data migration deferred to a later round.
+
+**Status:** design only — full plan written to `docs/blog-plan.md`, not yet implemented. Next step
+(pending discussion) is to start PR1 (`feature/blog-backend-scaffold`) per the plan's §7 sequence.
+See `docs/blog-plan.md` for the schema, API surface, auth flow, and PR breakdown.
+
+---
+
 ## Git branching + PR workflow (introduced 2026-06-25)
 
 **Goal:** stop direct-to-`main` pushes ahead of a batch of large upcoming features — every change now

@@ -26,7 +26,6 @@ export const metadata: Metadata = {
     template: `%s — ${profile.basics.name}`,
   },
   description: metaDescription,
-  alternates: { canonical: "/" },
   openGraph: {
     type: "profile",
     url: "/",
@@ -81,7 +80,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 const newsreader = Newsreader({
   subsets: ["latin"],
-  style: ["italic"],
+  style: ["normal", "italic"],
   weight: ["400"],
   variable: "--font-newsreader",
 });

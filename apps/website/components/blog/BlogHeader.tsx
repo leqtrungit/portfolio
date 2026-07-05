@@ -1,13 +1,8 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
-import { NavLink } from "@/components/ui/NavLink";
 import { tokens } from "@/lib/tokens";
 
-export interface NavProps {
-  name: string;
-}
-
-export function Nav({ name }: NavProps) {
+export function BlogHeader() {
   return (
     <header
       style={{
@@ -30,15 +25,9 @@ export function Nav({ name }: NavProps) {
           alignItems: "center",
         }}
       >
-        <a
-          href="#top"
-          style={{ display: "flex", alignItems: "center", gap: 13, textDecoration: "none", color: "inherit" }}
-        >
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 13, textDecoration: "none", color: "inherit" }}>
           <Logo />
-          <span className="nav-name" style={{ fontWeight: 700, fontSize: 16, letterSpacing: "-0.01em" }}>
-            {name}
-          </span>
-        </a>
+        </Link>
         <nav
           className="nav-links"
           style={{
@@ -50,13 +39,15 @@ export function Nav({ name }: NavProps) {
             color: tokens.colors.textFaint,
           }}
         >
-          <NavLink href="#work">work</NavLink>
-          <NavLink href="#projects">projects</NavLink>
-          <NavLink href="#stack">stack</NavLink>
-          <Link href="/blog" className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
+          <Link href="/" className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
+            portfolio
+          </Link>
+          <Link href="/blog" className="navlink" style={{ textDecoration: "none", color: tokens.accent }}>
             blog
           </Link>
-          <NavLink href="#contact">contact</NavLink>
+          <Link href="/#contact" className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
+            contact
+          </Link>
         </nav>
       </div>
     </header>

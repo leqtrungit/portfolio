@@ -138,6 +138,8 @@ body {
 .post-body h3 { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 26px; letter-spacing: -.01em; color: #17150f; margin: 46px 0 16px; }
 .post-body h4 { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: -.01em; color: #17150f; margin: 36px 0 12px; }
 .post-body blockquote { margin: 34px 0; padding: 6px 0 6px 26px; border-left: 3px solid var(--ac, #cf4326); font-style: italic; font-size: 23px; line-height: 1.5; color: #17150f; }
+.post-body blockquote p { margin: 0; }
+.post-body blockquote p + p { margin-top: 16px; }
 .post-body a { color: var(--ac, #cf4326); text-decoration: underline; text-underline-offset: 3px; }
 .post-body strong { font-weight: 600; color: #17150f; }
 .post-body code { font-family: 'JetBrains Mono', monospace; font-size: 15px; background: rgba(23,21,15,.06); padding: 2px 6px; border-radius: 3px; }

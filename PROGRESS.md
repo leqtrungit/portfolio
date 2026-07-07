@@ -5,15 +5,34 @@ session before asking the user what's going on — it has the current state and 
 
 ---
 
-## Self-built blog (planned 2026-06-25, not started)
+## Self-built blog (planned 2026-06-25, backend + frontend built, not yet deployed to production)
 
 **Goal:** replace the external Ghost blog (`blog.lequoctrung.id.vn`) with a self-built blog: a Go +
-Postgres backend (self-hosted later via Docker, host TBD) and public/admin UI inside `apps/website`
-at `lequoctrung.vn/blog`. Ghost data migration deferred to a later round.
+Postgres backend (separate repo `github.com/leqtrungit/blog-api`) and public UI inside `apps/website`
+at `lequoctrung.vn/blog`.
 
-**Status:** design only — full plan written to `docs/blog-plan.md`, not yet implemented. Next step
-(pending discussion) is to start PR1 (`feature/blog-backend-scaffold`) per the plan's §7 sequence.
-See `docs/blog-plan.md` for the schema, API surface, auth flow, and PR breakdown.
+**Status (updated 2026-07-07):** both halves are built. The Go backend is live at
+`https://blog-api.lequoctrung.id.vn/api/v1` with media at `https://s3.lequoctrung.id.vn/blog-media`
+(10 posts already published there). The frontend (`/blog`, `/blog/[slug]`, tag filtering, load-more
+pagination, SEO/sitemap) is complete on `develop` (20 commits, not yet merged to `main`). See
+`docs/blog-plan.md` for the original backend design doc (now superseded in parts — the admin UI
+described there was never built inside this monorepo; posts are managed via the separate `blog-api`
+repo/DB directly) and **`docs/superpowers/plans/2026-07-07-blog-launch-ghost-retirement.md`** for the
+concrete step-by-step plan to ship to production and retire Ghost.
+
+**Next step:** work through the phases in that plan doc, in order:
+- [ ] Phase 1 — PR `develop` → `main`, merge (blocked on Phase 2)
+- [ ] Phase 2 — set `BLOG_API_BASE_URL`/`MEDIA_BASE_URL` on Vercel (Production + Preview) — currently
+      **zero env vars configured** on the Vercel project, confirmed via `vercel env ls`
+- [ ] Phase 3 — post-deploy curl/browser verification
+- [ ] Phase 4 — Cloudflare Redirect Rules on `blog.lequoctrung.id.vn` (5 rules, manual dashboard step)
+- [ ] Phase 5 — GSC: resubmit sitemap, add `blog.lequoctrung.id.vn` property, Change of Address
+- [ ] Phase 6 — wait 4–6 weeks, monitor GSC coverage
+- [ ] Phase 7 — shut down Ghost (keep DNS + redirect rules in place)
+
+Ghost's currently-indexed surface is small and fully enumerated in the plan doc: just 4 URLs
+(homepage, `/about/`, `/author/le/`, and one post — which already exists under the identical slug in
+the new backend, confirmed via the live API).
 
 ---
 

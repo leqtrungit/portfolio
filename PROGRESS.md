@@ -5,6 +5,93 @@ session before asking the user what's going on — it has the current state and 
 
 ---
 
+## Self-built blog (planned 2026-06-25, backend + frontend built, not yet deployed to production)
+
+**Goal:** replace the external Ghost blog (`blog.lequoctrung.id.vn`) with a self-built blog: a Go +
+Postgres backend (separate repo `github.com/leqtrungit/blog-api`) and public UI inside `apps/website`
+at `lequoctrung.vn/blog`.
+
+**Status (updated 2026-07-07):** both halves are built. The Go backend is live at
+`https://blog-api.lequoctrung.id.vn/api/v1` with media at `https://s3.lequoctrung.id.vn/blog-media`
+(10 posts already published there). The frontend (`/blog`, `/blog/[slug]`, tag filtering, load-more
+pagination, SEO/sitemap) is complete on `develop` (20 commits, not yet merged to `main`). See
+`docs/blog-plan.md` for the original backend design doc (now superseded in parts — the admin UI
+described there was never built inside this monorepo; posts are managed via the separate `blog-api`
+repo/DB directly) and **`docs/superpowers/plans/2026-07-07-blog-launch-ghost-retirement.md`** for the
+concrete step-by-step plan to ship to production and retire Ghost.
+
+**Next step:** work through the phases in that plan doc, in order:
+- [x] Phase 1 (pre-main) — PR `develop` → `main` opened: #6
+- [x] Phase 2 (Preview) — `BLOG_API_BASE_URL`/`MEDIA_BASE_URL` set on Vercel **Preview** env; manually
+      triggered a preview deployment (`vercel deploy`, GitHub auto-deploy still broken — see below) at
+      `https://portfolio-website-9u3thso53-lequoctrung-its-projects.vercel.app`
+- [x] Phase 3 (Preview) — verified in browser: `/blog` list, post detail, and feature image via
+      `/media` proxy all render correctly on the preview deployment
+- [ ] Phase 2 (Production) — set the same two env vars for **Production**, then merge PR #6
+- [ ] Phase 3 (Production) — re-run the curl/browser verification against `lequoctrung.vn`
+- [ ] Phase 4 — Cloudflare Redirect Rules on `blog.lequoctrung.id.vn` (5 rules, manual dashboard step)
+- [ ] Phase 5 — GSC: resubmit sitemap, add `blog.lequoctrung.id.vn` property, Change of Address
+- [ ] Phase 6 — wait 4–6 weeks, monitor GSC coverage
+- [ ] Phase 7 — shut down Ghost (keep DNS + redirect rules in place)
+
+Note: Vercel's GitHub integration still doesn't auto-deploy on push/PR (same issue tracked in the
+domain-migration section below) — every deployment so far has been triggered manually via
+`vercel deploy`/`vercel deploy --prod`. Factor this into Phase 1/3 above: merging PR #6 will **not**
+automatically produce a new production deployment; a manual `vercel deploy --prod` (or dashboard
+redeploy) is needed right after merge.
+
+Ghost's currently-indexed surface is small and fully enumerated in the plan doc: just 4 URLs
+(homepage, `/about/`, `/author/le/`, and one post — which already exists under the identical slug in
+the new backend, confirmed via the live API).
+
+---
+
+## Git branching + PR workflow (introduced 2026-06-25)
+
+**Goal:** stop direct-to-`main` pushes ahead of a batch of large upcoming features — every change now
+flows through a PR with CI gating, on a `develop` (integration) + `main` (production) model.
+
+**Status: done.** `develop` branch created, CI added, branch protection applied to both `main` and
+`develop`, verified end-to-end (a direct push attempt to `main` was rejected by GitHub: `GH006:
+Protected branch update failed... Changes must be made through a pull request`).
+
+### What's in place
+- Branches: `main` (production, auto-deploys to `lequoctrung.vn`) and `develop` (integration branch).
+  Feature work branches off `develop` as `feature/<name>`/`fix/<name>`, PRs back into `develop`;
+  periodic PR `develop` → `main` to ship. Documented in `CLAUDE.md` under `## Workflow`.
+- `.github/workflows/ci.yml` — runs on every PR into `main`/`develop` and on push to `develop`:
+  `pnpm --filter @new-portfolio/profile-schema validate`, `pnpm typecheck`, `pnpm lint`,
+  `pnpm --filter website build`.
+- `.github/pull_request_template.md` — checklist mirroring the CI steps.
+- Branch protection on `main` and `develop` (via `gh api .../branches/<branch>/protection`):
+  PR required, `ci` status check required, **`enforce_admins: true`** (no bypass for anyone, including
+  the repo owner), `required_approving_review_count: 0` (solo repo — GitHub blocks self-approval
+  anyway, so the PR + CI is the real gate), no force-push, no branch deletion.
+- Merge strategy: squash merge for feature PRs into `develop`/`main`.
+
+### Bugs the new CI caught immediately (first time `pnpm lint`/`pnpm typecheck` had ever run across
+the whole monorepo, since no CI existed before)
+- [x] `packages/profile-schema` and `apps/cv-renderer` used `node:fs`/`process` without Node types
+      wired up — added `@types/node` devDependency + `"types": ["node"]` in both `tsconfig.json`s.
+- [x] `apps/website`'s `lint` script was `next lint`, which **no longer exists in Next.js 16**
+      (confirmed via `next --help` — the `lint` subcommand was dropped from the CLI entirely). Replaced
+      with `eslint .` backed by a new `eslint.config.mjs` (flat config) importing
+      `eslint-config-next@16.2.9`'s `core-web-vitals`/`typescript` exports directly (this version
+      ships native flat configs — no `FlatCompat` needed). 2 pre-existing warnings surfaced (not
+      errors, left as-is): an `<img>` in `Logo.tsx` and an unused `_request` param in `proxy.ts`.
+
+### Manual step — needs you to check (no CLI/API access to this Vercel setting in this session)
+- [ ] **Vercel dashboard → `portfolio-website` project → Settings → Git → confirm "Production
+      Branch" = `main`.** This determines whether `develop`/`feature/*` pushes only ever get preview
+      deployments (correct) vs. accidentally also deploying to production. Couldn't verify via
+      `vercel project inspect`/`vercel project ls` — that setting isn't exposed by the CLI subset
+      available here.
+- [ ] Related to the still-broken Vercel auto-deploy item above: once that's fixed, re-verify that a
+      push to `develop` produces a **preview** deployment (not production) — can check via
+      `gh api repos/leqtrungit/portfolio/deployments` or the Vercel dashboard's deployments list.
+
+---
+
 ## Domain migration: lequoctrung.id.vn → lequoctrung.vn
 
 **Goal:** Replace the old bilingual (`/en`, `/vi`) portfolio currently live at
@@ -53,14 +140,16 @@ work is the GSC Change of Address handoff + monitoring, plus the SEO follow-ups 
 - [ ] Monitor old property's Coverage/Pages report — `/en`, `/vi` URLs should show as "Page with
       redirect", not errors. Keep both GSC properties active for 3–6 months; don't unverify the
       old one.
-- [x] Fix Vercel auto-deploy on push (broke as a side effect of the GitHub repo rename/recreate in
-      this session) — fixed 2026-06-25: the Vercel project's Git link record was intact
-      (`vercel git connect` reported "already connected"), but GitHub showed zero Deployments/commit
-      statuses for recent pushes, meaning the **Vercel GitHub App's per-repo access list** still
-      pointed at the old repo identity and never picked up the renamed `portfolio` repo. Fixed by
-      granting the Vercel GitHub App access to `leqtrungit/portfolio` at
-      `github.com/settings/installations`. Not yet verified with a real push (didn't want to spend
-      an extra prod deploy just to test) — will confirm on the next normal push to `main`.
+- [ ] Fix Vercel auto-deploy on push (broke as a side effect of the GitHub repo rename/recreate in
+      this session) — **still broken as of 2026-06-25, re-verified**: granted the Vercel GitHub App
+      access to `leqtrungit/portfolio` at `github.com/settings/installations` (`vercel git connect`
+      reports "already connected"), but multiple real pushes to both `main` and `develop` since then
+      still show **zero auto-triggered deployments** — every deployment in `list_deployments` is still
+      `actor: claude-code_*_agent` (manually triggered via CLI/MCP), none from a GitHub webhook. The
+      permission grant did not fix it. Next step: likely need `vercel git disconnect` +
+      `vercel git connect` to force a clean re-link (disconnect is a destructive-ish action — confirm
+      with user before running), or check the Vercel dashboard's Git integration status directly for
+      an error state the CLI doesn't surface.
 
 ### Open SEO follow-ups from the audit (not blocking the migration, but related)
 

@@ -21,14 +21,24 @@ repo/DB directly) and **`docs/superpowers/plans/2026-07-07-blog-launch-ghost-ret
 concrete step-by-step plan to ship to production and retire Ghost.
 
 **Next step:** work through the phases in that plan doc, in order:
-- [ ] Phase 1 — PR `develop` → `main`, merge (blocked on Phase 2)
-- [ ] Phase 2 — set `BLOG_API_BASE_URL`/`MEDIA_BASE_URL` on Vercel (Production + Preview) — currently
-      **zero env vars configured** on the Vercel project, confirmed via `vercel env ls`
-- [ ] Phase 3 — post-deploy curl/browser verification
+- [x] Phase 1 (pre-main) — PR `develop` → `main` opened: #6
+- [x] Phase 2 (Preview) — `BLOG_API_BASE_URL`/`MEDIA_BASE_URL` set on Vercel **Preview** env; manually
+      triggered a preview deployment (`vercel deploy`, GitHub auto-deploy still broken — see below) at
+      `https://portfolio-website-9u3thso53-lequoctrung-its-projects.vercel.app`
+- [x] Phase 3 (Preview) — verified in browser: `/blog` list, post detail, and feature image via
+      `/media` proxy all render correctly on the preview deployment
+- [ ] Phase 2 (Production) — set the same two env vars for **Production**, then merge PR #6
+- [ ] Phase 3 (Production) — re-run the curl/browser verification against `lequoctrung.vn`
 - [ ] Phase 4 — Cloudflare Redirect Rules on `blog.lequoctrung.id.vn` (5 rules, manual dashboard step)
 - [ ] Phase 5 — GSC: resubmit sitemap, add `blog.lequoctrung.id.vn` property, Change of Address
 - [ ] Phase 6 — wait 4–6 weeks, monitor GSC coverage
 - [ ] Phase 7 — shut down Ghost (keep DNS + redirect rules in place)
+
+Note: Vercel's GitHub integration still doesn't auto-deploy on push/PR (same issue tracked in the
+domain-migration section below) — every deployment so far has been triggered manually via
+`vercel deploy`/`vercel deploy --prod`. Factor this into Phase 1/3 above: merging PR #6 will **not**
+automatically produce a new production deployment; a manual `vercel deploy --prod` (or dashboard
+redeploy) is needed right after merge.
 
 Ghost's currently-indexed surface is small and fully enumerated in the plan doc: just 4 URLs
 (homepage, `/about/`, `/author/le/`, and one post — which already exists under the identical slug in

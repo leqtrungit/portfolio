@@ -1,6 +1,6 @@
 // apps/website/components/blog/PostRow.tsx
 import Link from "next/link";
-import { buildImageUrl, estimateReadTime, type PostSummary } from "@/lib/blog";
+import { buildImageUrl, type PostSummary } from "@/lib/blog";
 import { TagPill } from "@/components/blog/TagPill";
 import { tokens } from "@/lib/tokens";
 
@@ -14,7 +14,6 @@ function formatDate(iso: string): string {
 
 export function PostRow({ post }: { post: PostSummary }) {
   const imageUrl = buildImageUrl(post.featured_image_key);
-  const readTime = estimateReadTime(post.excerpt ?? post.title);
 
   return (
     <Link
@@ -56,9 +55,7 @@ export function PostRow({ post }: { post: PostSummary }) {
       {/* Text block */}
       <div>
         <div style={{ fontFamily: tokens.fonts.mono, fontSize: 12, color: tokens.colors.onDarkMuted, letterSpacing: "0.04em", marginBottom: 14 }}>
-          {formatDate(post.created_at)}{" "}
-          <span style={{ color: tokens.colors.borderMuted }}>/</span>{" "}
-          {readTime}
+          {formatDate(post.created_at)}
         </div>
         <h2
           className="post-title"

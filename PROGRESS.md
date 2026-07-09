@@ -28,28 +28,43 @@ concrete step-by-step plan to ship to production and retire Ghost.
 - [x] Phase 3 (Preview) — verified in browser: `/blog` list, post detail, and feature image via
       `/media` proxy all render correctly on the preview deployment
 - [x] Phase 2 (Production) — both env vars also set for **Production**
-- [ ] Phase 3 (Production) — blocked on auto-deploy test below; then re-run curl/browser verification
-      against `lequoctrung.vn`
-- [ ] Phase 4 — Cloudflare Redirect Rules on `blog.lequoctrung.id.vn` (5 rules, manual dashboard step)
+- [x] Phase 3 (Production) — verified via curl against `lequoctrung.vn`: `/blog` (200), the migrated
+      post (200), image via `/media` proxy (200, `image/png`), sitemap includes `/blog` + all 10 posts
+- [x] Phase 4 — Cloudflare Redirect Rules on `blog.lequoctrung.id.vn` — **done and curl-verified**, see
+      "Cloudflare Redirect Rules" note below for the final rule set (differs from the plan doc's
+      original regex-based draft — Free plan doesn't support regex, rules were rebuilt using Wildcard
+      match instead)
 - [ ] Phase 5 — GSC: resubmit sitemap, add `blog.lequoctrung.id.vn` property, Change of Address
 - [ ] Phase 6 — wait 4–6 weeks, monitor GSC coverage
 - [ ] Phase 7 — shut down Ghost (keep DNS + redirect rules in place)
 
-**Auto-deploy status:** as of 2026-06-25 Vercel's GitHub integration was not triggering builds on
-push/PR merge (every deployment had to be triggered manually via `vercel deploy`/`vercel deploy
---prod`). Re-tested 2026-07-07 after merging PR #6 into `main` — still no auto-triggered deployment
-appeared after 5 minutes of polling. User then reconnected the GitHub App/repo link from the Vercel
-side a second time; this commit is a live test of whether that reconnect fixed it — if a Preview
-deployment appears automatically for this branch/PR without a manual `vercel deploy`, auto-deploy is
-fixed. Update this note with the outcome once known.
+**Auto-deploy status: fixed (2026-07-07).** Vercel's GitHub integration wasn't triggering builds on
+push/PR merge as of 2026-06-25 (every deployment had to be triggered manually via `vercel deploy`).
+User reconnected the GitHub App/repo link from the Vercel side; confirmed fixed by pushing a commit
+and watching both a Preview deployment (for a `develop`-branch push) and a Production deployment (for
+a push to `main`) get triggered automatically within ~1-2 minutes, no manual `vercel deploy` needed.
 
-Note: Factor the above into Phase 1/3: merging PR #6 will **not**
-automatically produce a new production deployment; a manual `vercel deploy --prod` (or dashboard
-redeploy) is needed right after merge.
+**Cloudflare Redirect Rules (Phase 4) — final rule set actually deployed:**
+Connected via the `cloudflare:cloudflare-api` MCP plugin (read-only for this account — the connector
+blocks all `/rulesets` API calls regardless of token scope, confirmed by testing, so rules had to be
+created manually in the dashboard; the plugin was still useful for looking up exact Rules-language
+syntax/plan limits from live docs+OpenAPI spec). Also corrected a mistake from earlier in this session:
+initial Ghost sitemap check appeared to show only 1 indexed post (truncated by the `rtk` proxy tool
+cutting curl output), but a full re-check showed **all 10 posts are indexed on Ghost**, with identical
+slugs to the new backend. First attempt used `regex_replace()` for a single dynamic rule covering all
+posts, but Cloudflare rejected it: the zone is on the **Free plan**, which doesn't support regex in
+Single Redirects (10 rule limit, wildcard support only — no regex, that needs Business+). Rebuilt using
+**Wildcard match** instead (Free-plan compatible), 4 rules total on `blog.lequoctrung.id.vn`:
+1. Path `/` → static → `https://lequoctrung.vn/blog`
+2. Path `/about/` → static → `https://lequoctrung.vn`
+3. Path `/author/le/` → static → `https://lequoctrung.vn`
+4. Wildcard path `/*` → dynamic → `https://lequoctrung.vn/blog/${1}` (catches all 10 posts plus any
+   other remaining path — no separate catch-all rule needed since `/*` already matches everything not
+   caught by rules 1-3, ordered first)
 
-Ghost's currently-indexed surface is small and fully enumerated in the plan doc: just 4 URLs
-(homepage, `/about/`, `/author/le/`, and one post — which already exists under the identical slug in
-the new backend, confirmed via the live API).
+All 4 verified via `curl -sIL` — 301 with correct `Location`, final `200` on `lequoctrung.vn`. Known
+minor edge case: `/rss/` also matches the wildcard rule and redirects to `/blog/rss` (404 on the new
+site) — acceptable since RSS isn't an indexed/SEO-relevant URL, not worth a 5th rule.
 
 ---
 

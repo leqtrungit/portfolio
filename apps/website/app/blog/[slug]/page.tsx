@@ -111,9 +111,9 @@ export default async function PostPage({ params }: PageProps) {
         </header>
       </div>
 
-      {/* ===== FEATURE IMAGE (max 980px) ===== */}
+      {/* ===== FEATURE IMAGE (max 760px, matches text column) ===== */}
       {imageUrl && (
-        <div className="pad-x" style={{ maxWidth: 980, margin: "0 auto", padding: "0 32px 10px" }}>
+        <div className="pad-x" style={{ maxWidth: 760, margin: "0 auto", padding: "0 32px 10px" }}>
           <figure
             className="feat"
             style={{

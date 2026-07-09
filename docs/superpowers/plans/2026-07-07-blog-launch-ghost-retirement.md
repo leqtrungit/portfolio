@@ -79,34 +79,45 @@ Plus a manual/browser check: open `/blog`, open a post, confirm the feature imag
 (this is the exact PNA-block scenario the `/media` rewrite proxy exists to avoid), confirm load-more
 pagination. If anything fails, check `vercel logs` first — most likely cause is a missed/stale env var.
 
-## Phase 4 — Ghost → new blog redirects (Cloudflare Redirect Rules)
+## Phase 4 — Ghost → new blog redirects (Cloudflare Redirect Rules) — DONE (2026-07-07)
 
-**Manual step (Cloudflare dashboard) — no Cloudflare API/MCP tool available.**
 `blog.lequoctrung.id.vn` resolves to Cloudflare's proxy IPs (confirmed via `dig`, same IPs as
-`blog-api`/`s3` subdomains) — **not** Vercel — so this cannot be a `next.config.mjs` redirect; it must
-be a Cloudflare Redirect Rule on the zone containing `lequoctrung.id.vn`. Do not shut down Ghost until
-all rules below are verified live (step 4 checklist).
+`blog-api`/`s3` subdomains) — **not** Vercel — so this couldn't be a `next.config.mjs` redirect; it
+had to be a Cloudflare Redirect Rule (Single Redirects) on the zone containing `lequoctrung.id.vn`
+(zone ID `b5dd08409e12960edb6cba6fced8d291`).
 
-Create rules in this exact order (most specific first, catch-all last — Redirect Rules match top-down
-and stop at first match, so an early catch-all would shadow the specific ones):
+**Correction from the original draft above**: a fuller re-check of Ghost's sitemap (the first check
+in this session had truncated `curl` output via the `rtk` proxy tool, making it look like only 1 post
+was indexed) showed **all 10 posts are indexed on Ghost**, with slugs identical to the new backend —
+not just the one post originally assumed. The rule set below supersedes the 5-rule/1-post draft.
 
-| # | Match (Hostname `blog.lequoctrung.id.vn` +) | Destination | Status |
+**Also**: the `cloudflare:cloudflare-api` MCP plugin was connected this session (real API access,
+confirmed working for reads like zone/DNS lookups), but every `/rulesets` endpoint — even read-only
+GET by ID — returned "request is not authorized" regardless of token permissions granted. This is a
+guardrail built into the connector itself (Rulesets control WAF/firewall/redirects — sensitive
+surface), not a Cloudflare-side permission issue. So rule creation had to be done manually in the
+dashboard; the plugin was still useful for looking up exact Rules-language syntax and plan limits from
+live docs + the OpenAPI spec.
+
+First attempt used a single dynamic rule with `regex_replace()` to cover all 10 posts in one rule —
+Cloudflare rejected it at deploy time: **the zone is on the Free plan**, which does not support regex
+in Single Redirects (confirmed via Cloudflare's docs: Free plan = 10 rule limit, Wildcard support
+only, regex requires Business plan or higher). Rebuilt using **Wildcard match** instead, which Free
+supports. Final 4 rules deployed, in this order (Wildcard `/*` must be last — it matches virtually
+everything not caught by rules 1-3, so a separate catch-all rule isn't needed):
+
+| # | Match | Destination | Status |
 |---|---|---|---|
-| 1 | `URI Path equals /hieu-suat-phai-luon-di-kem-voi-cam-xuc-trong-doanh-nghiep/` (verify exact trailing-slash form via `curl -sI` first — Ghost may self-redirect) | `https://lequoctrung.vn/blog/hieu-suat-phai-luon-di-kem-voi-cam-xuc-trong-doanh-nghiep` | 301 |
-| 2 | `URI Path equals /` | `https://lequoctrung.vn/blog` | 301 |
-| 3 | `URI Path equals /about/` | `https://lequoctrung.vn` (no About-equivalent exists on the new site — confirmed no `#about` anchor in `apps/website`, so bare root is the correct generic landing target, not a guess) | 301 |
-| 4 | `URI Path equals /author/le/` | `https://lequoctrung.vn` | 301 |
-| 5 | (hostname match only, no path filter — catch-all, must be ordered last) | `https://lequoctrung.vn/blog` | 301 |
+| 1 | Custom filter expression: `http.request.host eq "blog.lequoctrung.id.vn" and http.request.uri.path eq "/"` | Static: `https://lequoctrung.vn/blog` | 301 |
+| 2 | Custom filter expression: `http.request.host eq "blog.lequoctrung.id.vn" and http.request.uri.path eq "/about/"` | Static: `https://lequoctrung.vn` | 301 |
+| 3 | Custom filter expression: `http.request.host eq "blog.lequoctrung.id.vn" and http.request.uri.path eq "/author/le/"` | Static: `https://lequoctrung.vn` | 301 |
+| 4 | **Wildcard match** — Hostname `blog.lequoctrung.id.vn`, Path `/*` | Dynamic: `https://lequoctrung.vn/blog/${1}` | 301 |
 
-Verify all five before touching Ghost:
-```bash
-curl -sIL https://blog.lequoctrung.id.vn/hieu-suat-phai-luon-di-kem-voi-cam-xuc-trong-doanh-nghiep/
-curl -sIL https://blog.lequoctrung.id.vn/
-curl -sIL https://blog.lequoctrung.id.vn/about/
-curl -sIL https://blog.lequoctrung.id.vn/author/le/
-curl -sIL https://blog.lequoctrung.id.vn/some-nonexistent-path-xyz/
-```
-Each should show `301` → correct `Location` → final `200` on `lequoctrung.vn`.
+Verified via `curl -sIL` against all 10 post slugs, the homepage, `/about/`, `/author/le/`, and a
+random nonexistent path (wildcard fallback) — all show `301` → correct `Location` → final `200` on
+`lequoctrung.vn`. One accepted minor edge case: `/rss/` also matches rule 4's wildcard and redirects to
+`/blog/rss` (404 on the new site, since there's no RSS route) — not worth a 5th rule since RSS isn't an
+indexed/SEO-relevant URL.
 
 ## Phase 5 — Google Search Console
 

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { fetchPost, fetchPosts, buildImageUrl, estimateReadTime } from "@/lib/blog";
 import { PostContent } from "@/components/blog/PostContent";
 import { TagPill } from "@/components/blog/TagPill";
+import { ShareBar } from "@/components/blog/ShareBar";
 import { tokens } from "@/lib/tokens";
 import { truncateForMeta } from "@/lib/seo";
 
@@ -174,6 +175,19 @@ export default async function PostPage({ params }: PageProps) {
               <TagPill key={tag.id} tag={tag} />
             ))}
           </div>
+          <div
+            style={{
+              fontFamily: tokens.fonts.mono,
+              fontSize: 11,
+              letterSpacing: "0.1em",
+              color: tokens.colors.onDarkMuted,
+              marginBottom: 14,
+            }}
+          >
+            SHARE
+          </div>
+          <ShareBar url={`https://lequoctrung.vn/blog/${post.slug}`} title={post.title} />
+          <div style={{ marginTop: 34 }} />
           <Link
             href="/blog"
             className="pill"

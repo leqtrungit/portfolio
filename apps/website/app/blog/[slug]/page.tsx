@@ -5,6 +5,7 @@ import Image from "next/image";
 import { fetchPost, fetchPosts, buildImageUrl, estimateReadTime } from "@/lib/blog";
 import { PostContent } from "@/components/blog/PostContent";
 import { TagPill } from "@/components/blog/TagPill";
+import { ShareBar } from "@/components/blog/ShareBar";
 import { tokens } from "@/lib/tokens";
 import { truncateForMeta } from "@/lib/seo";
 
@@ -17,6 +18,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const post = await fetchPost(slug);
   if (!post) return { title: "Post not found" };
   const description = post.excerpt ? truncateForMeta(post.excerpt) : truncateForMeta(post.title);
+  const imageUrl = buildImageUrl(post.featured_image_key) ?? "/portrait.png";
+  const imageAlt = post.featured_image_alt ?? post.title;
   return {
     title: post.title,
     description,
@@ -24,9 +27,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: post.title,
       description,
+      url: `/blog/${slug}`,
       type: "article",
       publishedTime: post.created_at,
       modifiedTime: post.updated_at,
+      images: [{ url: imageUrl, alt: imageAlt }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description,
+      images: [imageUrl],
     },
   };
 }
@@ -174,6 +185,19 @@ export default async function PostPage({ params }: PageProps) {
               <TagPill key={tag.id} tag={tag} />
             ))}
           </div>
+          <div
+            style={{
+              fontFamily: tokens.fonts.mono,
+              fontSize: 11,
+              letterSpacing: "0.1em",
+              color: tokens.colors.onDarkMuted,
+              marginBottom: 14,
+            }}
+          >
+            SHARE
+          </div>
+          <ShareBar url={`https://lequoctrung.vn/blog/${post.slug}`} title={post.title} />
+          <div style={{ marginTop: 34 }} />
           <Link
             href="/blog"
             className="pill"

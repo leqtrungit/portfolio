@@ -6,6 +6,7 @@ import { Bricolage_Grotesque, JetBrains_Mono, Newsreader } from "next/font/googl
 import { tokens } from "@/lib/tokens";
 import { getProfile } from "@/lib/profile";
 import { truncateForMeta } from "@/lib/seo";
+import { AnalyticsTracker } from "@/components/ui/AnalyticsTracker";
 
 // Inlined (not `import "./globals.css"`) so this ~2KB stylesheet ships in the
 // initial HTML instead of as a separate render-blocking request.
@@ -94,6 +95,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     >
       <body style={{ fontFamily: tokens.fonts.display, margin: 0 }}>
         <style dangerouslySetInnerHTML={{ __html: globalCss }} />
+        <AnalyticsTracker />
         {children}
         <script
           type="application/ld+json"

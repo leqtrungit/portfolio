@@ -1,4 +1,5 @@
 import type { Basics, Language } from "@new-portfolio/profile-schema";
+import Link from "next/link";
 import { Pill } from "@/components/ui/Pill";
 import { tokens } from "@/lib/tokens";
 
@@ -89,6 +90,12 @@ export function ContactSection({ basics, languages }: ContactSectionProps) {
           </span>
           {languagesLine && <span>{languagesLine}</span>}
           {basics.phone && <span>{basics.phone}</span>}
+          <Link
+            href="/privacy"
+            style={{ color: tokens.colors.onDarkMuted, textDecoration: "none" }}
+          >
+            Privacy
+          </Link>
         </div>
       </div>
     </footer>

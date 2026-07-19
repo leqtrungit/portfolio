@@ -23,12 +23,16 @@ import type { NextRequest } from "next/server";
  * 'unsafe-eval' and `upgrade-insecure-requests` are dev-only/prod-only
  * respectively: Next's dev server uses eval() for Fast Refresh, and
  * upgrading to https would break `next dev` on plain http://localhost.
+ *
+ * connect-src allows the cross-origin analytics beacon (fetch + sendBeacon
+ * are both governed by connect-src) to the blog-api origin.
  */
 export function proxy(_request: NextRequest) {
   const isDev = process.env.NODE_ENV !== "production";
 
   const csp = [
     "default-src 'self'",
+    "connect-src 'self' https://blog-api.lequoctrung.id.vn",
     `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data:",

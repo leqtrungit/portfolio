@@ -1,6 +1,10 @@
 import type { MetadataRoute } from "next";
 import { getProfile } from "@/lib/profile";
-import { fetchPosts } from "@/lib/blog";
+import { fetchAllPosts } from "@/lib/blog";
+
+// Re-generate hourly so posts published after the last deploy still appear
+// (the backend no longer serves a sitemap — this file is the only one).
+export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const profile = getProfile();
@@ -8,10 +12,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let postEntries: MetadataRoute.Sitemap = [];
   try {
-    const { posts } = await fetchPosts({ limit: 100 });
+    const posts = await fetchAllPosts(3600);
     postEntries = posts.map((post) => ({
       url: `${siteUrl}/blog/${post.slug}`,
-      lastModified: new Date(post.created_at),
+      lastModified: new Date(post.updated_at ?? post.created_at),
       changeFrequency: "weekly" as const,
       priority: 0.7,
     }));

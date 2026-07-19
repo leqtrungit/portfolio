@@ -1,7 +1,5 @@
 const MEDIA_BASE_URL =
   process.env.MEDIA_BASE_URL ?? "http://localhost:9000/blog-media";
-const BLOG_API_BASE_URL =
-  process.env.BLOG_API_BASE_URL ?? "http://localhost:8080/api/v1";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -14,10 +12,6 @@ const nextConfig = {
       {
         source: "/media/:path*",
         destination: `${MEDIA_BASE_URL}/:path*`,
-      },
-      {
-        source: "/api/v1/analytics/track",
-        destination: `${BLOG_API_BASE_URL}/analytics/track`,
       },
     ];
   },

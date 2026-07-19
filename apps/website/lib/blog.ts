@@ -16,12 +16,12 @@ export interface PostSummary {
   status: string;
   tags: Tag[];
   created_at: string;
+  updated_at: string;
 }
 
 export interface PostDetail extends PostSummary {
   content: string;
   html: string;
-  updated_at: string;
 }
 
 export interface PaginationMeta {
@@ -42,25 +42,51 @@ export function estimateReadTime(content: string): string {
 }
 
 export async function fetchPosts(
-  params: { tag?: string; page?: number; limit?: number } = {}
+  params: { tag?: string; page?: number; limit?: number; revalidate?: number } = {}
 ): Promise<{ posts: PostSummary[]; meta: PaginationMeta }> {
   const url = new URL(`${API_BASE}/posts`);
   if (params.tag) url.searchParams.set("tag", params.tag);
   if (params.page) url.searchParams.set("page", String(params.page));
   if (params.limit) url.searchParams.set("limit", String(params.limit));
 
-  const res = await fetch(url.toString(), { cache: "no-store" });
+  const res = await fetch(
+    url.toString(),
+    params.revalidate != null
+      ? { next: { revalidate: params.revalidate } }
+      : { cache: "no-store" }
+  );
   if (!res.ok) throw new Error(`Failed to fetch posts: ${res.status}`);
 
   const json = (await res.json()) as { data: PostSummary[]; meta: PaginationMeta };
   return { posts: json.data, meta: json.meta };
 }
 
-export async function fetchPost(slug: string): Promise<PostDetail | null> {
-  const res = await fetch(`${API_BASE}/posts/${slug}`, { cache: "no-store" });
+export async function fetchPost(
+  slug: string,
+  opts: { revalidate?: number } = {}
+): Promise<PostDetail | null> {
+  const res = await fetch(
+    `${API_BASE}/posts/${slug}`,
+    opts.revalidate != null
+      ? { next: { revalidate: opts.revalidate } }
+      : { cache: "no-store" }
+  );
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`Failed to fetch post: ${res.status}`);
 
   const json = (await res.json()) as { data: PostDetail };
   return json.data;
+}
+
+// Handoff §3: paginate until a page returns fewer than `limit`.
+export async function fetchAllPosts(revalidate?: number): Promise<PostSummary[]> {
+  const limit = 100;
+  const all: PostSummary[] = [];
+  let page = 1;
+  for (;;) {
+    const { posts } = await fetchPosts({ limit, page, revalidate });
+    all.push(...posts);
+    if (posts.length < limit) return all;
+    page += 1;
+  }
 }

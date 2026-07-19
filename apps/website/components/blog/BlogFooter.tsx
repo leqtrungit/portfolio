@@ -20,9 +20,14 @@ export function BlogFooter({ name, city }: { name: string; city?: string }) {
         }}
       >
         <span>© {new Date().getFullYear()} {name}{city ? ` — ${city}` : ""}</span>
-        <Link href="/" style={{ color: tokens.colors.onDarkPill, textDecoration: "none" }}>
-          ← back to portfolio
-        </Link>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
+          <Link href="/privacy" style={{ color: tokens.colors.onDarkPill, textDecoration: "none" }}>
+            Privacy
+          </Link>
+          <Link href="/" style={{ color: tokens.colors.onDarkPill, textDecoration: "none" }}>
+            ← back to portfolio
+          </Link>
+        </div>
       </div>
     </footer>
   );

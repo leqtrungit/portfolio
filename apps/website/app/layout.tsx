@@ -40,6 +40,9 @@ export const metadata: Metadata = {
     title,
     description: metaDescription,
   },
+  alternates: {
+    types: { "application/rss+xml": "/feed.xml" },
+  },
 };
 
 export const viewport: Viewport = {
@@ -49,7 +52,6 @@ export const viewport: Viewport = {
 const currentJob = profile.work.find((job) => !job.endDate) ?? profile.work[0];
 
 const personJsonLd = {
-  "@context": "https://schema.org",
   "@type": "Person",
   name: profile.basics.name,
   jobTitle: profile.basics.label,
@@ -65,6 +67,27 @@ const personJsonLd = {
         addressCountry: profile.basics.location.countryCode,
       }
     : undefined,
+};
+
+const siteJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    personJsonLd,
+    {
+      "@type": "WebSite",
+      name: `${profile.basics.name}'s Blog`,
+      url: siteUrl,
+      description: metaDescription,
+      publisher: { "@type": "Person", name: profile.basics.name, url: siteUrl },
+    },
+    {
+      "@type": "Blog",
+      name: `${profile.basics.name}'s Blog`,
+      url: `${siteUrl}/blog`,
+      description: metaDescription,
+      publisher: { "@type": "Person", name: profile.basics.name, url: siteUrl },
+    },
+  ],
 };
 
 const bricolage = Bricolage_Grotesque({
@@ -99,7 +122,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {children}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
         />
       </body>
     </html>

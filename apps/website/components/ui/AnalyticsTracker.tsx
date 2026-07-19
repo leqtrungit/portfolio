@@ -2,19 +2,17 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { initAnalyticsListeners, trackPage } from "@/lib/analytics";
 
 export function AnalyticsTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (window.location.hostname !== "lequoctrung.vn") return;
-
-    fetch("/api/v1/analytics/track", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path: pathname, referrer: document.referrer }),
-      keepalive: true,
-    }).catch(() => {});
+    initAnalyticsListeners();
+    // Fires on first load and on every App Router client navigation;
+    // trackPage() flushes the previous view's engagement first, so SPA
+    // transitions are not double-counted.
+    trackPage();
   }, [pathname]);
 
   return null;

@@ -232,6 +232,16 @@ export default async function PostPage({ params }: PageProps) {
             description: post.excerpt ?? post.title,
             datePublished: post.created_at,
             dateModified: post.updated_at,
+            author: {
+              "@type": "Person",
+              name: "Le Quoc Trung",
+              url: "https://lequoctrung.vn",
+            },
+            ...(imageUrl ? { image: `https://lequoctrung.vn${imageUrl}` } : {}),
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `https://lequoctrung.vn/blog/${post.slug}`,
+            },
             url: `https://lequoctrung.vn/blog/${post.slug}`,
           }),
         }}

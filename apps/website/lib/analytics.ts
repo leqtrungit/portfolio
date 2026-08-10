@@ -9,8 +9,32 @@ let lastVisibleAt = 0;
 let ticking = false;
 let listenersReady = false;
 
+const NO_TRACK_KEY = "lqt_no_track";
+
+// Owner opt-out: visiting with ?no_track=1 persists a flag that suppresses
+// the beacon entirely (no network call), so the owner's own visits never
+// reach analytics. ?no_track=0 clears it. Must run before initAnalyticsListeners.
+function applyNoTrackParam(): void {
+  if (typeof window === "undefined") return;
+  const params = new URLSearchParams(window.location.search);
+  if (!params.has("no_track")) return;
+  if (params.get("no_track") === "1") {
+    window.localStorage.setItem(NO_TRACK_KEY, "1");
+  } else if (params.get("no_track") === "0") {
+    window.localStorage.removeItem(NO_TRACK_KEY);
+  }
+}
+
+function isOptedOut(): boolean {
+  return typeof window !== "undefined" && window.localStorage.getItem(NO_TRACK_KEY) === "1";
+}
+
 function enabled(): boolean {
-  return typeof window !== "undefined" && window.location.hostname === "lequoctrung.vn";
+  return (
+    typeof window !== "undefined" &&
+    window.location.hostname === "lequoctrung.vn" &&
+    !isOptedOut()
+  );
 }
 
 function scrollPct(): number {
@@ -91,6 +115,10 @@ export function trackPage() {
       if (viewId) startTimer();
     })
     .catch(() => {});
+}
+
+export function initAnalyticsOptOut() {
+  applyNoTrackParam();
 }
 
 export function initAnalyticsListeners() {

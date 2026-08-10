@@ -2,12 +2,13 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { initAnalyticsListeners, trackPage } from "@/lib/analytics";
+import { initAnalyticsListeners, initAnalyticsOptOut, trackPage } from "@/lib/analytics";
 
 export function AnalyticsTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
+    initAnalyticsOptOut();
     initAnalyticsListeners();
     // Fires on first load and on every App Router client navigation;
     // trackPage() flushes the previous view's engagement first, so SPA

@@ -100,6 +100,10 @@ body {
     grid-template-columns: 1fr !important;
     gap: 18px !important;
   }
+  .blog-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
   .stack-row {
     grid-template-columns: 1fr !important;
     gap: 12px !important;
@@ -120,6 +124,12 @@ body {
   .nav-links {
     gap: 14px !important;
     font-size: 11px !important;
+  }
+}
+
+@media (max-width: 900px) and (min-width: 761px) {
+  .blog-grid {
+    grid-template-columns: 1fr 1fr !important;
   }
 }
 

@@ -3,9 +3,10 @@ import { tokens } from "@/lib/tokens";
 
 export interface SectionLabelProps {
   children: ReactNode;
+  action?: ReactNode;
 }
 
-export function SectionLabel({ children }: SectionLabelProps) {
+export function SectionLabel({ children, action }: SectionLabelProps) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: 44 }}>
       <h2
@@ -23,6 +24,7 @@ export function SectionLabel({ children }: SectionLabelProps) {
         {children}
       </h2>
       <span style={{ flex: 1, height: 1.5, background: tokens.colors.border }} />
+      {action}
     </div>
   );
 }

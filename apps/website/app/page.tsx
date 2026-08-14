@@ -5,6 +5,7 @@ import { TransformationsSection } from "@/components/sections/TransformationsSec
 import { WorkSection } from "@/components/sections/WorkSection";
 import { ProjectsSection } from "@/components/sections/ProjectsSection";
 import { StackSection } from "@/components/sections/StackSection";
+import { LatestBlogSection } from "@/components/sections/LatestBlogSection";
 import { EducationCertificatesSection } from "@/components/sections/EducationCertificatesSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { tokens } from "@/lib/tokens";
@@ -24,6 +25,7 @@ export default function HomePage() {
           <WorkSection work={profile.work} />
           <ProjectsSection projects={profile.projects} />
           <StackSection skills={profile.skills} />
+          <LatestBlogSection />
           <EducationCertificatesSection education={profile.education} certificates={profile.certificates} />
         </div>
       </main>

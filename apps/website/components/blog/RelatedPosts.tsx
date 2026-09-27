@@ -3,13 +3,13 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { PostCard } from "@/components/blog/PostCard";
 
 interface RelatedPostsProps {
-  post: PostSummary;
+  slug: string;
 }
 
-export async function RelatedPosts({ post }: RelatedPostsProps) {
+export async function RelatedPosts({ slug }: RelatedPostsProps) {
   let related: PostSummary[] = [];
   try {
-    related = await fetchRelatedPosts(post, { limit: 3, revalidate: 3600 });
+    related = await fetchRelatedPosts(slug, { limit: 3, revalidate: 3600 });
   } catch {
     // Related posts are optional — never fail the article over them.
     return null;

@@ -8,6 +8,7 @@ import { PostContent } from "@/components/blog/PostContent";
 import { TableOfContents } from "@/components/blog/TableOfContents";
 import { ReadingProgress } from "@/components/blog/ReadingProgress";
 import { RelatedPosts } from "@/components/blog/RelatedPosts";
+import { PostNav } from "@/components/blog/PostNav";
 import { TagPill } from "@/components/blog/TagPill";
 import { ShareBar } from "@/components/blog/ShareBar";
 import { tokens } from "@/lib/tokens";
@@ -203,6 +204,7 @@ export default async function PostPage({ params }: PageProps) {
           </div>
           <ShareBar url={`https://lequoctrung.vn/blog/${post.slug}`} title={post.title} />
           <div style={{ marginTop: 34 }} />
+          <PostNav slug={post.slug} />
           <Link
             href="/blog"
             className="pill"
@@ -226,7 +228,7 @@ export default async function PostPage({ params }: PageProps) {
 
       {/* ===== RELATED (max 1080px, same grid as the homepage blog section) ===== */}
       <div className="pad-x" style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
-        <RelatedPosts post={post} />
+        <RelatedPosts slug={post.slug} />
       </div>
       <script
         type="application/ld+json"

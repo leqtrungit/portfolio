@@ -181,4 +181,5 @@ body {
   .post-thumb { height: 200px !important; }
   .feat { height: 300px !important; }
   .post-body p { font-size: 17px !important; }
+  .post-nav { grid-template-columns: 1fr !important; }
 }

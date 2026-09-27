@@ -22,8 +22,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const post = await fetchPost(slug);
   if (!post) return { title: "Post not found" };
   const description = post.excerpt ? truncateForMeta(post.excerpt) : truncateForMeta(post.title);
-  const imageUrl = buildImageUrl(post.featured_image_key) ?? "/portrait.png";
-  const imageAlt = post.featured_image_alt ?? post.title;
   return {
     title: post.title,
     description,
@@ -32,6 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       types: { "application/rss+xml": "/feed.xml" },
     },
 
+    // OG/Twitter image comes from ./opengraph-image.tsx (Twitter falls back to it).
     openGraph: {
       title: post.title,
       description,
@@ -40,13 +39,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       locale: "vi_VN",
       publishedTime: post.created_at,
       modifiedTime: post.updated_at,
-      images: [{ url: imageUrl, alt: imageAlt }],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description,
-      images: [imageUrl],
     },
   };
 }

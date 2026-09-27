@@ -4,6 +4,10 @@ const MEDIA_BASE_URL =
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ["@new-portfolio/profile-schema"],
+  // Fonts are read from disk at request time by the per-post OG image route.
+  outputFileTracingIncludes: {
+    "/blog/[slug]/opengraph-image": ["./assets/fonts/**"],
+  },
   turbopack: {
     root: new URL("../..", import.meta.url).pathname,
   },

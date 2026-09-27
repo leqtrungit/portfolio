@@ -31,7 +31,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const tags = post?.tags.slice(0, MAX_TAGS).map((t) => t.name) ?? [];
   const [fonts, cover] = await Promise.all([
     loadOgFonts(),
-    loadOgCoverImage(post?.featured_image_key ?? null, { size: IMAGE_BOX * 2, tint: tokens.accent }),
+    loadOgCoverImage(post?.featured_image_key ?? null, { size: IMAGE_BOX * 2 }),
   ]);
   const fontSize = titleSize(title);
 

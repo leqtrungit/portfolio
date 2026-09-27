@@ -2,8 +2,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
-import { fetchPost, fetchPosts, buildImageUrl, estimateReadTime } from "@/lib/blog";
+import { fetchPost, fetchPosts, buildImageUrl, estimateReadTime, formatPostDate } from "@/lib/blog";
+import { buildToc } from "@/lib/toc";
 import { PostContent } from "@/components/blog/PostContent";
+import { TableOfContents } from "@/components/blog/TableOfContents";
+import { ReadingProgress } from "@/components/blog/ReadingProgress";
+import { RelatedPosts } from "@/components/blog/RelatedPosts";
+import { PostNav } from "@/components/blog/PostNav";
 import { TagPill } from "@/components/blog/TagPill";
 import { ShareBar } from "@/components/blog/ShareBar";
 import { tokens } from "@/lib/tokens";
@@ -18,8 +23,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const post = await fetchPost(slug);
   if (!post) return { title: "Post not found" };
   const description = post.excerpt ? truncateForMeta(post.excerpt) : truncateForMeta(post.title);
-  const imageUrl = buildImageUrl(post.featured_image_key) ?? "/portrait.png";
-  const imageAlt = post.featured_image_alt ?? post.title;
   return {
     title: post.title,
     description,
@@ -28,30 +31,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       types: { "application/rss+xml": "/feed.xml" },
     },
 
+    // OG/Twitter image comes from ./opengraph-image.tsx (Twitter falls back to it).
     openGraph: {
       title: post.title,
       description,
       url: `/blog/${slug}`,
       type: "article",
+      locale: "vi_VN",
       publishedTime: post.created_at,
       modifiedTime: post.updated_at,
-      images: [{ url: imageUrl, alt: imageAlt }],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description,
-      images: [imageUrl],
     },
   };
-}
-
-function formatDate(iso: string): string {
-  const d = new Date(iso);
-  const y = d.getUTCFullYear();
-  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(d.getUTCDate()).padStart(2, "0");
-  return `${y} · ${m} · ${day}`;
 }
 
 export async function generateStaticParams() {
@@ -72,9 +67,13 @@ export default async function PostPage({ params }: PageProps) {
 
   const imageUrl = buildImageUrl(post.featured_image_key);
   const readTime = estimateReadTime(post.content);
+  const toc = buildToc(post.html);
+  // A contents list only pays off once there are a few sections to jump between.
+  const showToc = toc.items.length >= 3;
 
   return (
     <>
+      <ReadingProgress target=".post-body" />
       {/* ===== HEADER (max 760px) ===== */}
       <div className="pad-x" style={{ maxWidth: 760, margin: "0 auto", padding: "0 32px" }}>
         <header className="post-head" style={{ padding: "64px 0 34px" }}>
@@ -101,7 +100,7 @@ export default async function PostPage({ params }: PageProps) {
               marginBottom: 18,
             }}
           >
-            {formatDate(post.created_at)}{" "}
+            {formatPostDate(post.created_at)}{" "}
             <span style={{ color: tokens.colors.borderMuted }}>/</span>{" "}
             {readTime}
           </div>
@@ -164,7 +163,10 @@ export default async function PostPage({ params }: PageProps) {
 
       {/* ===== CONTENT (max 680px) ===== */}
       <div className="pad-x" style={{ maxWidth: 680, margin: "0 auto", padding: "0 32px" }}>
-        <PostContent html={post.html} />
+        <div className="toc-anchor">
+          {showToc && <TableOfContents items={toc.items} />}
+          <PostContent html={toc.html} />
+        </div>
 
         {/* ===== FOOTER TAGS ===== */}
         <div
@@ -202,6 +204,7 @@ export default async function PostPage({ params }: PageProps) {
           </div>
           <ShareBar url={`https://lequoctrung.vn/blog/${post.slug}`} title={post.title} />
           <div style={{ marginTop: 34 }} />
+          <PostNav slug={post.slug} />
           <Link
             href="/blog"
             className="pill"
@@ -222,6 +225,11 @@ export default async function PostPage({ params }: PageProps) {
           </Link>
         </div>
       </div>
+
+      {/* ===== RELATED (max 1080px, same grid as the homepage blog section) ===== */}
+      <div className="pad-x" style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
+        <RelatedPosts slug={post.slug} />
+      </div>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -229,6 +237,7 @@ export default async function PostPage({ params }: PageProps) {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             headline: post.title,
+            inLanguage: "vi",
             description: post.excerpt ?? post.title,
             datePublished: post.created_at,
             dateModified: post.updated_at,

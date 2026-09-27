@@ -78,6 +78,52 @@ export async function fetchPost(
   return json.data;
 }
 
+export interface AdjacentPosts {
+  prev: PostSummary | null;
+  next: PostSummary | null;
+}
+
+// Ranked by shared tags, newest first; the API pads with the newest posts when
+// fewer than `limit` share a tag.
+export async function fetchRelatedPosts(
+  slug: string,
+  opts: { limit?: number; revalidate?: number } = {}
+): Promise<PostSummary[]> {
+  const url = new URL(`${API_BASE}/posts/${slug}/related`);
+  if (opts.limit) url.searchParams.set("limit", String(opts.limit));
+  const res = await fetch(
+    url.toString(),
+    opts.revalidate != null ? { next: { revalidate: opts.revalidate } } : { cache: "no-store" }
+  );
+  if (!res.ok) throw new Error(`Failed to fetch related posts: ${res.status}`);
+
+  const json = (await res.json()) as { data: PostSummary[] };
+  return json.data;
+}
+
+// prev = nearest older published post, next = nearest newer one.
+export async function fetchAdjacentPosts(
+  slug: string,
+  opts: { revalidate?: number } = {}
+): Promise<AdjacentPosts> {
+  const res = await fetch(
+    `${API_BASE}/posts/${slug}/adjacent`,
+    opts.revalidate != null ? { next: { revalidate: opts.revalidate } } : { cache: "no-store" }
+  );
+  if (!res.ok) throw new Error(`Failed to fetch adjacent posts: ${res.status}`);
+
+  const json = (await res.json()) as { data: AdjacentPosts };
+  return json.data;
+}
+
+export function formatPostDate(iso: string): string {
+  const d = new Date(iso);
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(d.getUTCDate()).padStart(2, "0");
+  return `${y} · ${m} · ${day}`;
+}
+
 // Handoff §3: paginate until a page returns fewer than `limit`.
 export async function fetchAllPosts(revalidate?: number): Promise<PostSummary[]> {
   const limit = 100;

@@ -91,19 +91,19 @@ const siteJsonLd = {
 };
 
 const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
+  subsets: ["latin", "vietnamese"],
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-bricolage",
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
+  subsets: ["latin", "vietnamese"],
   weight: ["400", "500", "600"],
   variable: "--font-jetbrains-mono",
 });
 
 const newsreader = Newsreader({
-  subsets: ["latin"],
+  subsets: ["latin", "vietnamese"],
   style: ["normal", "italic"],
   weight: ["400"],
   variable: "--font-newsreader",

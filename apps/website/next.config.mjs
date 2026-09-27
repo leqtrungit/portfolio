@@ -4,9 +4,15 @@ const MEDIA_BASE_URL =
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ["@new-portfolio/profile-schema"],
-  // Fonts are read from disk at request time by the per-post OG image route.
+  // The per-post OG image route reads its fonts from disk at request time, and
+  // file tracing picks up sharp's native binding but not the libvips shared
+  // library it dlopen()s (pnpm store path), so both are included explicitly.
   outputFileTracingIncludes: {
-    "/blog/[slug]/opengraph-image": ["./assets/fonts/**"],
+    // Keys are globs, so a literal "[slug]" would be read as a character class.
+    "/blog/*/opengraph-image*": [
+      "./assets/fonts/**",
+      "../../node_modules/.pnpm/@img+sharp-libvips-*/node_modules/@img/sharp-libvips-*/lib/**",
+    ],
   },
   turbopack: {
     root: new URL("../..", import.meta.url).pathname,

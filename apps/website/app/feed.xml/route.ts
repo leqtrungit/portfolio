@@ -43,7 +43,7 @@ export async function GET() {
     <title>${esc(title)}</title>
     <link>${siteUrl}</link>
     <description>${esc(description)}</description>
-    <language>en</language>
+    <language>vi</language>
     <atom:link href="${siteUrl}/feed.xml" rel="self" type="application/rss+xml" />
 ${items}
   </channel>

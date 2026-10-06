@@ -12,6 +12,7 @@ export const en = {
     middle: "and teams into",
     underline: "independent problem-solvers.",
     available: "available for select work",
+    portraitAlt: "{name} — portrait photo",
   },
   transformations: {
     label: "SELECTED TRANSFORMATIONS",

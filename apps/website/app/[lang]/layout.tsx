@@ -3,8 +3,8 @@ import path from "node:path";
 import type { CSSProperties, ReactNode } from "react";
 import { notFound } from "next/navigation";
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, JetBrains_Mono, Newsreader } from "next/font/google";
 import { tokens } from "@/lib/tokens";
+import { fontVariables } from "@/lib/fonts";
 import { getProfile } from "@/lib/profile";
 import { truncateForMeta } from "@/lib/seo";
 import { fill, isLocale, locales, htmlLang, localePath, ogLocale, type Locale } from "@/lib/i18n/config";
@@ -108,25 +108,6 @@ function buildSiteJsonLd(locale: Locale) {
   };
 }
 
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-bricolage",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600"],
-  variable: "--font-jetbrains-mono",
-});
-
-const newsreader = Newsreader({
-  subsets: ["latin", "vietnamese"],
-  style: ["normal", "italic"],
-  weight: ["400"],
-  variable: "--font-newsreader",
-});
-
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
@@ -146,7 +127,7 @@ export default async function RootLayout({
   return (
     <html
       lang={htmlLang[lang]}
-      className={`${bricolage.variable} ${jetbrainsMono.variable} ${newsreader.variable}`}
+      className={fontVariables}
       style={{ "--ac": tokens.accent } as CSSProperties}
     >
       <body style={{ fontFamily: tokens.fonts.display, margin: 0 }}>

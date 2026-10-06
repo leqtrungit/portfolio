@@ -26,6 +26,7 @@ export function localizedOpenGraph(
     siteName: getProfile(locale).basics.name,
     title: fields.title,
     description: fields.description,
+    images: [{ url: localePath(locale, "/opengraph-image"), width: 1200, height: 630 }],
     locale: ogLocale[locale],
     alternateLocale: [ogLocale[other]],
   };

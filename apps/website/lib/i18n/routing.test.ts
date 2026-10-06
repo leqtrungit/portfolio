@@ -30,3 +30,8 @@ test("look-alike prefixes are not locales", () => {
   assert.deepEqual(resolveLocaleRoute("/english"), { type: "rewrite", pathname: "/en/english" });
   assert.deepEqual(resolveLocaleRoute("/video"), { type: "rewrite", pathname: "/en/video" });
 });
+
+test("dotted slugs are pages, not static files", () => {
+  assert.deepEqual(resolveLocaleRoute("/blog/nextjs-16.2"), { type: "rewrite", pathname: "/en/blog/nextjs-16.2" });
+  assert.deepEqual(resolveLocaleRoute("/blog/v1.0.json-notes"), { type: "rewrite", pathname: "/en/blog/v1.0.json-notes" });
+});

@@ -6,6 +6,7 @@ import { tokens } from "@/lib/tokens";
 import { isLocale, localePath } from "@/lib/i18n/config";
 import { localizedAlternates, localizedOpenGraph } from "@/lib/i18n/seo";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
@@ -38,24 +39,33 @@ const bodyText: CSSProperties = {
 export default async function PrivacyPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
-  const dict = (await getDictionary(lang)).privacy;
+  const fullDict = await getDictionary(lang);
+  const dict = fullDict.privacy;
   return (
     <div className="pad-x" style={{ maxWidth: 680, margin: "0 auto", padding: "0 32px" }}>
       <header style={{ padding: "64px 0 34px" }}>
-        <Link
-          href={localePath(lang, "/")}
+        <div
           style={{
-            fontFamily: tokens.fonts.mono,
-            fontSize: 12,
-            letterSpacing: "0.06em",
-            color: tokens.colors.textFaint,
-            textDecoration: "none",
-            display: "inline-block",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
             marginBottom: 30,
           }}
         >
-          {dict.home}
-        </Link>
+          <Link
+            href={localePath(lang, "/")}
+            style={{
+              fontFamily: tokens.fonts.mono,
+              fontSize: 12,
+              letterSpacing: "0.06em",
+              color: tokens.colors.textFaint,
+              textDecoration: "none",
+            }}
+          >
+            {dict.home}
+          </Link>
+          <LanguageSwitcher label={fullDict.nav.language} />
+        </div>
         <div
           style={{
             fontFamily: tokens.fonts.mono,

@@ -3,7 +3,7 @@ export type RouteDecision =
   | { type: "redirect"; pathname: string }
   | { type: "rewrite"; pathname: string };
 
-const BYPASS = [/^\/_next\//, /^\/media(\/|$)/, /\.[a-z0-9]+$/i];
+const BYPASS = [/^\/_next\//, /^\/media(\/|$)/, /\.(xml|txt|svg|png|jpe?g|webp|gif|ico|json|webmanifest|css|js|map|woff2?)$/i];
 const OG_IMAGE = /\/opengraph-image(-[\w-]+)?$/;
 
 export function resolveLocaleRoute(pathname: string): RouteDecision {

@@ -62,7 +62,7 @@ cd apps/cv-renderer && pnpm tsx src/render.tsx ../../tailored/<name>.json out/<n
 ```
 
 Root-level scripts fan out via `pnpm -r <script>`: `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
-Only `website` defines `lint`; `pnpm test` runs the `profile-schema` parity unit tests (`node:test` via tsx). `cv-renderer` has no plain `build` script — use `build:master` (above) or `build:tailored`
+Only `website` defines `lint`; `pnpm test` runs the `node:test` suites (via tsx) in `profile-schema` (parity tests) and `website` (`lib/**/*.test.ts`). `cv-renderer` has no plain `build` script — use `build:master` (above) or `build:tailored`
 (needs explicit input/output args, see CV renderer commands).
 
 ## Conventions

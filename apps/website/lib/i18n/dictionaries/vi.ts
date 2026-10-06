@@ -8,6 +8,7 @@ export const vi: Dictionary = {
     middle: "và giúp đội ngũ trở thành",
     underline: "những người tự giải quyết vấn đề.",
     available: "đang nhận một số dự án chọn lọc",
+    portraitAlt: "Ảnh chân dung {name}",
   },
   transformations: {
     label: "NHỮNG CHUYỂN ĐỔI TIÊU BIỂU",
@@ -15,7 +16,7 @@ export const vi: Dictionary = {
       { from: "hỗ trợ cấp 1 thủ công", to: "AI agent, giảm 60% công sức dev", tag: "BOSCH" },
       { from: "chỉnh sửa video thủ công", to: "1.500 video tự động xuất / ngày", tag: "MEDIA AI" },
       { from: "quy trình đặt hàng 60 bước", to: "nhanh hơn 60%, 0 lỗi", tag: "HGM BPM" },
-      { from: "kỹ sư làm việc rời rạc", to: "100% chủ động làm chủ", tag: "DAT · BOSCH" },
+      { from: "kỹ sư làm việc rời rạc", to: "100% chủ động, tự làm chủ", tag: "DAT · BOSCH" },
     ],
   },
   sections: {

@@ -40,6 +40,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         languages: {
           en: siteUrl + (path === "/" ? "" : path),
           vi: siteUrl + localePath("vi", path),
+          "x-default": siteUrl + (path === "/" ? "" : path),
         },
       },
     })),

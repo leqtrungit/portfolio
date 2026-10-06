@@ -1,6 +1,7 @@
 import type { Basics } from "@new-portfolio/profile-schema";
 import { Portrait } from "@/components/ui/Portrait";
 import type { Dictionary } from "@/lib/i18n/getDictionary";
+import { fill } from "@/lib/i18n/config";
 import { tokens } from "@/lib/tokens";
 
 export interface HeroSectionProps {
@@ -98,7 +99,7 @@ export function HeroSection({ basics, dict }: HeroSectionProps) {
         </div>
       </div>
 
-      <Portrait name={basics.name} src="/portrait.png" />
+      <Portrait name={basics.name} src="/portrait.png" alt={fill(dict.portraitAlt, { name: basics.name })} />
     </section>
   );
 }

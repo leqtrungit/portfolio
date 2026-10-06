@@ -7,12 +7,13 @@ const nextConfig = {
   // notFound() need a global 404 (app/global-not-found.tsx).
   experimental: { globalNotFound: true },
   transpilePackages: ["@new-portfolio/profile-schema"],
-  // The per-post OG image route reads its fonts from disk at request time, and
-  // file tracing picks up sharp's native binding but not the libvips shared
-  // library it dlopen()s (pnpm store path), so both are included explicitly.
+  // The per-post OG image route (app/[lang]/blog/[slug]/opengraph-image.tsx)
+  // reads its fonts from disk at request time, and file tracing picks up
+  // sharp's native binding but not the libvips shared library it dlopen()s
+  // (pnpm store path), so both are included explicitly.
   outputFileTracingIncludes: {
     // Keys are globs, so a literal "[slug]" would be read as a character class.
-    "/blog/*/opengraph-image*": [
+    "**/blog/*/opengraph-image*": [
       "./assets/fonts/**",
       "../../node_modules/.pnpm/@img+sharp-libvips-*/node_modules/@img/sharp-libvips-*/lib/**",
     ],

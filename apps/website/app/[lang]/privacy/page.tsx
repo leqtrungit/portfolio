@@ -1,7 +1,9 @@
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { tokens } from "@/lib/tokens";
+import { isLocale } from "@/lib/i18n/config";
 
 export const metadata: Metadata = {
   title: "Privacy",
@@ -25,7 +27,9 @@ const bodyText: CSSProperties = {
   margin: "0 0 28px",
 };
 
-export default function PrivacyPage() {
+export default async function PrivacyPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
   return (
     <div className="pad-x" style={{ maxWidth: 680, margin: "0 auto", padding: "0 32px" }}>
       <header style={{ padding: "64px 0 34px" }}>

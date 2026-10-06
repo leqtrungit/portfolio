@@ -1,11 +1,13 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import type { CSSProperties, ReactNode } from "react";
+import { notFound } from "next/navigation";
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, JetBrains_Mono, Newsreader } from "next/font/google";
 import { tokens } from "@/lib/tokens";
 import { getProfile } from "@/lib/profile";
 import { truncateForMeta } from "@/lib/seo";
+import { isLocale, locales, htmlLang } from "@/lib/i18n/config";
 import { AnalyticsTracker } from "@/components/ui/AnalyticsTracker";
 
 // Inlined (not `import "./globals.css"`) so this ~2KB stylesheet ships in the
@@ -109,10 +111,25 @@ const newsreader = Newsreader({
   variable: "--font-newsreader",
 });
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export function generateStaticParams() {
+  return locales.map((lang) => ({ lang }));
+}
+
+export const dynamicParams = false;
+
+export default async function RootLayout({
+  children,
+  params,
+}: {
+  children: ReactNode;
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
+
   return (
     <html
-      lang="en"
+      lang={htmlLang[lang]}
       className={`${bricolage.variable} ${jetbrainsMono.variable} ${newsreader.variable}`}
       style={{ "--ac": tokens.accent } as CSSProperties}
     >

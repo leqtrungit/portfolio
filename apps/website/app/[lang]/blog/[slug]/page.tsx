@@ -13,9 +13,10 @@ import { TagPill } from "@/components/blog/TagPill";
 import { ShareBar } from "@/components/blog/ShareBar";
 import { tokens } from "@/lib/tokens";
 import { truncateForMeta } from "@/lib/seo";
+import { isLocale, locales } from "@/lib/i18n/config";
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ lang: string; slug: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -52,7 +53,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export async function generateStaticParams() {
   try {
     const { posts } = await fetchPosts({ limit: 100 });
-    return posts.map((p) => ({ slug: p.slug }));
+    return locales.flatMap((lang) => posts.map((p) => ({ lang, slug: p.slug })));
   } catch {
     return [];
   }
@@ -61,7 +62,8 @@ export async function generateStaticParams() {
 export const revalidate = 3600;
 
 export default async function PostPage({ params }: PageProps) {
-  const { slug } = await params;
+  const { lang, slug } = await params;
+  if (!isLocale(lang)) notFound();
   const post = await fetchPost(slug);
   if (!post) notFound();
 

@@ -9,8 +9,12 @@ import { LatestBlogSection } from "@/components/sections/LatestBlogSection";
 import { EducationCertificatesSection } from "@/components/sections/EducationCertificatesSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { tokens } from "@/lib/tokens";
+import { notFound } from "next/navigation";
+import { isLocale } from "@/lib/i18n/config";
 
-export default function HomePage() {
+export default async function HomePage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
   const profile = getProfile();
 
   return (

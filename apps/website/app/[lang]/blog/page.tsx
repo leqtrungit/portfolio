@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { fetchPosts } from "@/lib/blog";
 import { PostListWithLoadMore } from "@/components/blog/PostListWithLoadMore";
+import { notFound } from "next/navigation";
 import { tokens } from "@/lib/tokens";
+import { isLocale } from "@/lib/i18n/config";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -10,7 +12,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/blog" },
 };
 
-export default async function BlogListPage() {
+export default async function BlogListPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
   const { posts, meta } = await fetchPosts({ limit: 10 });
 
   const countLine = `${meta.total} POST${meta.total !== 1 ? "S" : ""} · UPDATED ${new Date()

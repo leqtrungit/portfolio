@@ -4,7 +4,7 @@ import { PostListWithLoadMore } from "@/components/blog/PostListWithLoadMore";
 import { notFound } from "next/navigation";
 import { tokens } from "@/lib/tokens";
 import { fill, isLocale } from "@/lib/i18n/config";
-import { localizedAlternates } from "@/lib/i18n/seo";
+import { localizedAlternates, localizedOpenGraph } from "@/lib/i18n/seo";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
@@ -14,6 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   return {
     title: "Blog",
     description: dict.metaDescription,
+    openGraph: localizedOpenGraph(locale, "/blog", { title: "Blog", description: dict.metaDescription }),
     alternates: {
       ...localizedAlternates(locale, "/blog"),
       types: { "application/rss+xml": "/feed.xml" },

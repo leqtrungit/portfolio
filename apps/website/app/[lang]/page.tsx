@@ -17,7 +17,12 @@ import { getDictionary } from "@/lib/i18n/getDictionary";
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
-  return { alternates: localizedAlternates(isLocale(lang) ? lang : "en", "/") };
+  return {
+    alternates: {
+      ...localizedAlternates(isLocale(lang) ? lang : "en", "/"),
+      types: { "application/rss+xml": "/feed.xml" },
+    },
+  };
 }
 
 export default async function HomePage({ params }: { params: Promise<{ lang: string }> }) {

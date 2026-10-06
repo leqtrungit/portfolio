@@ -122,8 +122,19 @@ body {
     display: none !important;
   }
   .nav-links {
-    gap: 14px !important;
-    font-size: 11px !important;
+    gap: 8px !important;
+    font-size: 10.5px !important;
+    letter-spacing: 0.02em !important;
+    margin-left: auto;
+  }
+  .nav-links > * {
+    white-space: nowrap;
+  }
+  /* Longer (e.g. Vietnamese) labels don't fit beside the logo: wrap the link
+     row beneath it instead of breaking individual labels across lines. */
+  .nav-inner {
+    flex-wrap: wrap;
+    row-gap: 10px;
   }
 }
 

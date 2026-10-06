@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { tokens } from "@/lib/tokens";
 import { isLocale, localePath } from "@/lib/i18n/config";
-import { localizedAlternates } from "@/lib/i18n/seo";
+import { localizedAlternates, localizedOpenGraph } from "@/lib/i18n/seo";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
@@ -13,6 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const dict = (await getDictionary(locale)).privacy;
   return {
     title: dict.title,
+    openGraph: localizedOpenGraph(locale, "/privacy", { title: dict.title }),
     alternates: localizedAlternates(locale, "/privacy"),
   };
 }

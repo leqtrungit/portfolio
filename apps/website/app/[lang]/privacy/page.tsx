@@ -3,12 +3,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { tokens } from "@/lib/tokens";
-import { isLocale } from "@/lib/i18n/config";
+import { isLocale, localePath } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
-export const metadata: Metadata = {
-  title: "Privacy",
-  alternates: { canonical: "/privacy" },
-};
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = (await getDictionary(isLocale(lang) ? lang : "en")).privacy;
+  return {
+    title: dict.title,
+    alternates: { canonical: "/privacy" },
+  };
+}
 
 const sectionLabel: CSSProperties = {
   fontFamily: tokens.fonts.mono,
@@ -30,11 +35,12 @@ const bodyText: CSSProperties = {
 export default async function PrivacyPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
+  const dict = (await getDictionary(lang)).privacy;
   return (
     <div className="pad-x" style={{ maxWidth: 680, margin: "0 auto", padding: "0 32px" }}>
       <header style={{ padding: "64px 0 34px" }}>
         <Link
-          href="/"
+          href={localePath(lang, "/")}
           style={{
             fontFamily: tokens.fonts.mono,
             fontSize: 12,
@@ -45,7 +51,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ lang: 
             marginBottom: 30,
           }}
         >
-          ← home
+          {dict.home}
         </Link>
         <div
           style={{
@@ -56,7 +62,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ lang: 
             marginBottom: 18,
           }}
         >
-          PRIVACY
+          {dict.kicker}
         </div>
         <h1
           style={{
@@ -67,7 +73,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ lang: 
             margin: 0,
           }}
         >
-          Privacy
+          {dict.title}
         </h1>
         <p
           style={{
@@ -78,45 +84,20 @@ export default async function PrivacyPage({ params }: { params: Promise<{ lang: 
             margin: "20px 0 0",
           }}
         >
-          How this site handles first-party analytics and visitor data.
+          {dict.intro}
         </p>
       </header>
 
       <section style={{ paddingBottom: 80 }}>
-        <h2 style={sectionLabel}>WHAT IS COLLECTED</h2>
-        <p style={bodyText}>
-          This site uses first-party analytics only. When you load a page, we record the
-          page path, referring URL, query string (including UTM parameters when present),
-          approximate engagement (time on page and scroll depth), your IP address, and
-          your browser User-Agent string.
-        </p>
-
-        <h2 style={sectionLabel}>WHY</h2>
-        <p style={bodyText}>
-          These measurements support traffic analysis, bot and spam detection, and content
-          improvement. They are not used for advertising or ad targeting.
-        </p>
-
-        <h2 style={sectionLabel}>SHARING</h2>
-        <p style={bodyText}>
-          There are no third-party analytics vendors. Analytics data stays on infrastructure
-          controlled by the site operator and is not sold or shared for marketing purposes.
-        </p>
-
-        <h2 style={sectionLabel}>NO CROSS-SITE TRACKING</h2>
-        <p style={bodyText}>
-          This site does not use ad pixels, third-party tracking cookies, or shared
-          advertising identifiers. Analytics does not follow you across other websites.
-        </p>
-
-        <h2 style={sectionLabel}>RETENTION</h2>
-        <p style={bodyText}>
-          Raw analytics events are retained only as long as operationally needed. A more
-          specific retention period will be published here if the backend defines one.
-        </p>
+        {dict.sections.map((section) => (
+          <div key={section.heading}>
+            <h2 style={sectionLabel}>{section.heading}</h2>
+            <p style={bodyText}>{section.body}</p>
+          </div>
+        ))}
 
         <Link
-          href="/"
+          href={localePath(lang, "/")}
           className="pill"
           style={{
             display: "inline-flex",
@@ -131,7 +112,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ lang: 
             letterSpacing: "0.03em",
           }}
         >
-          ← back home
+          {dict.backHome}
         </Link>
       </section>
     </div>

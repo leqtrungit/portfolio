@@ -3,23 +3,29 @@ import { fetchPosts } from "@/lib/blog";
 import { PostListWithLoadMore } from "@/components/blog/PostListWithLoadMore";
 import { notFound } from "next/navigation";
 import { tokens } from "@/lib/tokens";
-import { isLocale } from "@/lib/i18n/config";
+import { fill, isLocale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description:
-    "A personal log of root-cause hunts, systems I build, and the lessons that only show up after something ships.",
-  alternates: { canonical: "/blog" },
-};
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = (await getDictionary(isLocale(lang) ? lang : "en")).blog;
+  return {
+    title: dict.titleAccent,
+    description: dict.metaDescription,
+    alternates: { canonical: "/blog" },
+  };
+}
 
 export default async function BlogListPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
+  const dict = (await getDictionary(lang)).blog;
   const { posts, meta } = await fetchPosts({ limit: 10 });
 
-  const countLine = `${meta.total} POST${meta.total !== 1 ? "S" : ""} · UPDATED ${new Date()
-    .toLocaleDateString("en-US", { month: "long", year: "numeric" })
-    .toUpperCase()}`;
+  const date = new Date()
+    .toLocaleDateString(lang === "vi" ? "vi-VN" : "en-US", { month: "long", year: "numeric" })
+    .toUpperCase();
+  const countLine = `${fill(meta.total === 1 ? dict.countOne : dict.countMany, { count: meta.total })} · ${fill(dict.updated, { date })}`;
 
   return (
     <div className="pad-x" style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
@@ -40,7 +46,7 @@ export default async function BlogListPage({ params }: { params: Promise<{ lang:
             marginBottom: 26,
           }}
         >
-          → WRITING — NOTES FROM THE BUILD
+          {dict.kicker}
         </div>
         <h1
           style={{
@@ -51,7 +57,7 @@ export default async function BlogListPage({ params }: { params: Promise<{ lang:
             margin: 0,
           }}
         >
-          The{" "}
+          {dict.titleLead}{" "}
           <span
             style={{
               fontFamily: tokens.fonts.serif,
@@ -59,7 +65,7 @@ export default async function BlogListPage({ params }: { params: Promise<{ lang:
               fontWeight: 400,
             }}
           >
-            Blog
+            {dict.titleAccent}
           </span>
         </h1>
         <p
@@ -71,9 +77,7 @@ export default async function BlogListPage({ params }: { params: Promise<{ lang:
             margin: "24px 0 0",
           }}
         >
-          A personal log of root-cause hunts, systems I build, and the lessons
-          that only show up after something ships. Written by me, irregularly,
-          honestly.
+          {dict.description}
         </p>
         <div
           style={{
@@ -99,10 +103,14 @@ export default async function BlogListPage({ params }: { params: Promise<{ lang:
               padding: "48px 0",
             }}
           >
-            No posts yet.
+            {dict.empty}
           </p>
         ) : (
-          <PostListWithLoadMore initialPosts={posts} total={meta.total} />
+          <PostListWithLoadMore
+            initialPosts={posts} total={meta.total}
+            locale={lang}
+            labels={{ loadMore: dict.loadMore, loading: dict.loading }}
+          />
         )}
       </section>
     </div>

@@ -3,6 +3,8 @@ import { tokens } from "@/lib/tokens";
 
 interface TableOfContentsProps {
   items: TocItem[];
+  label: string;
+  ariaLabel: string;
 }
 
 const labelStyle = {
@@ -12,9 +14,9 @@ const labelStyle = {
   color: tokens.colors.textFaint,
 } as const;
 
-function TocList({ items }: TableOfContentsProps) {
+function TocList({ items }: { items: TocItem[] }) {
   return (
-    <ol style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 10 }}>
+    <ol lang="vi" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 10 }}>
       {items.map((item) => (
         <li key={item.id} style={{ paddingLeft: item.level === 3 ? 14 : 0 }}>
           <a
@@ -39,7 +41,7 @@ function TocList({ items }: TableOfContentsProps) {
  * Rendered twice: a collapsible block above the article on narrow screens and a
  * sticky rail beside it on wide ones — CSS (`.toc-inline` / `.toc-rail`) picks one.
  */
-export function TableOfContents({ items }: TableOfContentsProps) {
+export function TableOfContents({ items, label, ariaLabel }: TableOfContentsProps) {
   return (
     <>
       <details
@@ -51,14 +53,14 @@ export function TableOfContents({ items }: TableOfContentsProps) {
           padding: "14px 18px",
         }}
       >
-        <summary style={{ ...labelStyle, cursor: "pointer" }}>MỤC LỤC</summary>
-        <nav aria-label="Mục lục" style={{ marginTop: 14 }}>
+        <summary style={{ ...labelStyle, cursor: "pointer" }}>{label}</summary>
+        <nav aria-label={ariaLabel} style={{ marginTop: 14 }}>
           <TocList items={items} />
         </nav>
       </details>
-      <aside className="toc-rail" aria-label="Mục lục">
+      <aside className="toc-rail" aria-label={ariaLabel}>
         <div style={{ position: "sticky", top: 110 }}>
-          <div style={{ ...labelStyle, marginBottom: 14 }}>MỤC LỤC</div>
+          <div style={{ ...labelStyle, marginBottom: 14 }}>{label}</div>
           <TocList items={items} />
         </div>
       </aside>

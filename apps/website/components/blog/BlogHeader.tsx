@@ -1,8 +1,16 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { localePath, type Locale } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/getDictionary";
 import { tokens } from "@/lib/tokens";
 
-export function BlogHeader() {
+interface BlogHeaderProps {
+  locale: Locale;
+  dict: Dictionary["nav"];
+}
+
+export function BlogHeader({ locale, dict }: BlogHeaderProps) {
   return (
     <header
       style={{
@@ -25,7 +33,7 @@ export function BlogHeader() {
           alignItems: "center",
         }}
       >
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 13, textDecoration: "none", color: "inherit" }}>
+        <Link href={localePath(locale, "/")} style={{ display: "flex", alignItems: "center", gap: 13, textDecoration: "none", color: "inherit" }}>
           <Logo />
         </Link>
         <nav
@@ -39,15 +47,16 @@ export function BlogHeader() {
             color: tokens.colors.textFaint,
           }}
         >
-          <Link href="/" className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
-            portfolio
+          <Link href={localePath(locale, "/")} className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
+            {dict.portfolio}
           </Link>
-          <Link href="/blog" className="navlink" style={{ textDecoration: "none", color: tokens.accent }}>
-            blog
+          <Link href={localePath(locale, "/blog")} className="navlink" style={{ textDecoration: "none", color: tokens.accent }}>
+            {dict.blog}
           </Link>
-          <Link href="/#contact" className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
-            contact
+          <Link href={localePath(locale, "/#contact")} className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
+            {dict.contact}
           </Link>
+          <LanguageSwitcher label={dict.language} />
         </nav>
       </div>
     </header>

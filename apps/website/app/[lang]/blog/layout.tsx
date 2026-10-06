@@ -5,6 +5,7 @@ import { getProfile } from "@/lib/profile";
 import { notFound } from "next/navigation";
 import { tokens } from "@/lib/tokens";
 import { isLocale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
 export default async function BlogLayout({
   children,
@@ -15,12 +16,18 @@ export default async function BlogLayout({
 }) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
-  const profile = getProfile();
+  const profile = getProfile(lang);
+  const dict = await getDictionary(lang);
   return (
     <div style={{ background: tokens.colors.bg, color: tokens.colors.text, minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      <BlogHeader />
-      <main lang="vi" style={{ flex: 1 }}>{children}</main>
-      <BlogFooter name={profile.basics.name} city={profile.basics.location?.city} />
+      <BlogHeader locale={lang} dict={dict.nav} />
+      <main style={{ flex: 1 }}>{children}</main>
+      <BlogFooter
+        name={profile.basics.name}
+        city={profile.basics.location?.city}
+        locale={lang}
+        labels={{ privacy: dict.blog.privacy, backToPortfolio: dict.blog.backToPortfolio }}
+      />
     </div>
   );
 }

@@ -62,7 +62,7 @@ export function PostCard({ post, locale }: PostCardProps) {
           {post.title}
         </div>
         {post.tags.length > 0 && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginTop: "auto", paddingTop: 16 }}>
+          <div lang="vi" style={{ display: "flex", flexWrap: "wrap", gap: 7, marginTop: "auto", paddingTop: 16 }}>
             {post.tags.map((tag) => (
               <TagPill key={tag.id} tag={tag} />
             ))}

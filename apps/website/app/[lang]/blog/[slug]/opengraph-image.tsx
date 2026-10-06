@@ -27,7 +27,7 @@ function titleSize(title: string): number {
 export default async function Image({ params }: { params: Promise<{ lang: string; slug: string }> }) {
   const { lang, slug } = await params;
   if (!isLocale(lang)) notFound();
-  const profile = getProfile();
+  const profile = getProfile(lang);
   const post = await fetchPost(slug, { revalidate }).catch(() => null);
 
   const title = post?.title ?? "Blog";
@@ -124,7 +124,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
               <div style={{ display: "flex", fontSize: 17, color: tokens.colors.textFaint, letterSpacing: 0.7 }}>
                 {formatPostDate(post.created_at)}
                 <span style={{ color: tokens.colors.borderMuted, margin: "0 10px" }}>/</span>
-                {estimateReadTime(post.content)}
+                {estimateReadTime(post.content, lang)}
               </div>
             )}
           </div>

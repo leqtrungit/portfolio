@@ -5,6 +5,30 @@ session before asking the user what's going on — it has the current state and 
 
 ---
 
+## i18n (Vietnamese) (implemented 2026-10-06, branch `feature/i18n-vietnamese`, not yet PR'd/merged)
+
+**Goal:** Vietnamese version of the site. English stays at unprefixed URLs, Vietnamese lives under
+`/vi/...` (homepage, blog list, privacy, localized 404 via `experimental.globalNotFound`), with a
+`LanguageSwitcher` in the homepage Nav and BlogHeader, localized metadata, hreflang alternates,
+sitemap alternates and OG locale.
+
+**Status:** implemented and verified end to end on `feature/i18n-vietnamese` (Playwright pass at
+1280 and 375 px, switcher round-trips, no English UI leaks on `/vi` pages). Not yet pushed or opened
+as a PR.
+- Spec: `docs/superpowers/specs/2026-10-06-i18n-vietnamese-design.md`
+- Plan: `docs/superpowers/plans/2026-10-06-i18n-vietnamese.md`
+
+**Next steps:**
+1. Open a PR `feature/i18n-vietnamese` -> `develop`.
+2. Verify the Vercel preview, especially the 404 page (`experimental.globalNotFound`) on `/vi/nope`
+   and an unprefixed unknown path.
+3. Release: PR `develop` -> `main`, merged with a **merge commit** (not rebase).
+
+**Follow-up:** blog post content is still English-only (shared canonical across locales). When posts
+are translated, drop the shared canonical and add hreflang alternates on post pages.
+
+---
+
 ## Self-built blog (planned 2026-06-25, backend + frontend built, not yet deployed to production)
 
 **Goal:** replace the external Ghost blog (`blog.lequoctrung.id.vn`) with a self-built blog: a Go +

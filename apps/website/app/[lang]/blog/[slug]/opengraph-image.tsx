@@ -2,7 +2,9 @@ import { ImageResponse } from "next/og";
 import { fetchPost, estimateReadTime, formatPostDate } from "@/lib/blog";
 import { loadOgCoverImage, loadOgFonts } from "@/lib/ogImage";
 import { getProfile } from "@/lib/profile";
+import { notFound } from "next/navigation";
 import { tokens } from "@/lib/tokens";
+import { isLocale } from "@/lib/i18n/config";
 
 // Layout follows the "Blog OG Images" Claude Design handoff (light variant).
 export const size = { width: 1200, height: 630 };
@@ -22,9 +24,10 @@ function titleSize(title: string): number {
   return 62;
 }
 
-export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const profile = getProfile();
+export default async function Image({ params }: { params: Promise<{ lang: string; slug: string }> }) {
+  const { lang, slug } = await params;
+  if (!isLocale(lang)) notFound();
+  const profile = getProfile(lang);
   const post = await fetchPost(slug, { revalidate }).catch(() => null);
 
   const title = post?.title ?? "Blog";
@@ -121,7 +124,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               <div style={{ display: "flex", fontSize: 17, color: tokens.colors.textFaint, letterSpacing: 0.7 }}>
                 {formatPostDate(post.created_at)}
                 <span style={{ color: tokens.colors.borderMuted, margin: "0 10px" }}>/</span>
-                {estimateReadTime(post.content)}
+                {estimateReadTime(post.content, lang)}
               </div>
             )}
           </div>

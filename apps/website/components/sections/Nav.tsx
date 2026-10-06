@@ -1,13 +1,18 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { NavLink } from "@/components/ui/NavLink";
+import { localePath, type Locale } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/getDictionary";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { tokens } from "@/lib/tokens";
 
 export interface NavProps {
   name: string;
+  locale: Locale;
+  dict: Dictionary["nav"];
 }
 
-export function Nav({ name }: NavProps) {
+export function Nav({ name, locale, dict }: NavProps) {
   return (
     <header
       style={{
@@ -50,13 +55,14 @@ export function Nav({ name }: NavProps) {
             color: tokens.colors.textFaint,
           }}
         >
-          <NavLink href="#work">work</NavLink>
-          <NavLink href="#projects">projects</NavLink>
-          <NavLink href="#stack">stack</NavLink>
-          <Link href="/blog" className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
-            blog
+          <NavLink href="#work">{dict.work}</NavLink>
+          <NavLink href="#projects">{dict.projects}</NavLink>
+          <NavLink href="#stack">{dict.stack}</NavLink>
+          <Link href={localePath(locale, "/blog")} className="navlink" style={{ textDecoration: "none", color: "inherit" }}>
+            {dict.blog}
           </Link>
-          <NavLink href="#contact">contact</NavLink>
+          <NavLink href="#contact">{dict.contact}</NavLink>
+          <LanguageSwitcher label={dict.language} />
         </nav>
       </div>
     </header>

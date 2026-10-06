@@ -6,6 +6,7 @@ import { tokens } from "@/lib/tokens";
 interface ShareBarProps {
   url: string;
   title: string;
+  labels: { share: string; copyLink: string; copied: string };
 }
 
 const pillStyle: React.CSSProperties = {
@@ -23,7 +24,7 @@ const pillStyle: React.CSSProperties = {
   cursor: "pointer",
 };
 
-export function ShareBar({ url, title }: ShareBarProps) {
+export function ShareBar({ url, title, labels }: ShareBarProps) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -90,7 +91,7 @@ export function ShareBar({ url, title }: ShareBarProps) {
         aria-expanded={open}
         style={pillStyle}
       >
-        Share
+        {labels.share}
       </button>
 
       {open && (
@@ -117,7 +118,7 @@ export function ShareBar({ url, title }: ShareBarProps) {
             onClick={handleCopyLink}
             style={{ ...pillStyle, border: "none", padding: "8px 10px", justifyContent: "flex-start" }}
           >
-            {copied ? "Copied!" : "Copy link"}
+            {copied ? labels.copied : labels.copyLink}
           </button>
           {links.map((link) => (
             <a

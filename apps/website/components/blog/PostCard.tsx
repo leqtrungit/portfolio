@@ -2,19 +2,20 @@ import Link from "next/link";
 import Image from "next/image";
 import { buildImageUrl, formatPostDate, type PostSummary } from "@/lib/blog";
 import { TagPill } from "@/components/blog/TagPill";
+import { localePath, type Locale } from "@/lib/i18n/config";
 import { tokens } from "@/lib/tokens";
 
 interface PostCardProps {
   post: PostSummary;
+  locale: Locale;
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, locale }: PostCardProps) {
   const imageUrl = buildImageUrl(post.featured_image_key);
 
   return (
     <Link
-      href={`/blog/${post.slug}`}
-      lang="vi"
+      href={localePath(locale, `/blog/${post.slug}`)}
       className="proj"
       style={{
         border: `1.5px solid ${tokens.colors.border}`,
@@ -57,11 +58,11 @@ export function PostCard({ post }: PostCardProps) {
         >
           {formatPostDate(post.created_at)}
         </div>
-        <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.01em", lineHeight: 1.25 }}>
+        <div lang="vi" style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.01em", lineHeight: 1.25 }}>
           {post.title}
         </div>
         {post.tags.length > 0 && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginTop: "auto", paddingTop: 16 }}>
+          <div lang="vi" style={{ display: "flex", flexWrap: "wrap", gap: 7, marginTop: "auto", paddingTop: 16 }}>
             {post.tags.map((tag) => (
               <TagPill key={tag.id} tag={tag} />
             ))}

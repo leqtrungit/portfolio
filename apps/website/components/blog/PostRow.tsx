@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { buildImageUrl, type PostSummary } from "@/lib/blog";
 import { TagPill } from "@/components/blog/TagPill";
+import { localePath, type Locale } from "@/lib/i18n/config";
 import { tokens } from "@/lib/tokens";
 
 function formatDate(iso: string): string {
@@ -12,12 +13,17 @@ function formatDate(iso: string): string {
   return `${y} · ${m} · ${day}`;
 }
 
-export function PostRow({ post }: { post: PostSummary }) {
+interface PostRowProps {
+  post: PostSummary;
+  locale: Locale;
+}
+
+export function PostRow({ post, locale }: PostRowProps) {
   const imageUrl = buildImageUrl(post.featured_image_key);
 
   return (
     <Link
-      href={`/blog/${post.slug}`}
+      href={localePath(locale, `/blog/${post.slug}`)}
       className="post-row"
       style={{
         display: "grid",
@@ -58,6 +64,7 @@ export function PostRow({ post }: { post: PostSummary }) {
           {formatDate(post.created_at)}
         </div>
         <h2
+          lang="vi"
           className="post-title"
           style={{
             fontWeight: 700,
@@ -70,12 +77,12 @@ export function PostRow({ post }: { post: PostSummary }) {
           {post.title}
         </h2>
         {post.excerpt && (
-          <p style={{ fontSize: 16, lineHeight: 1.55, color: tokens.colors.textMuted, margin: "14px 0 20px", maxWidth: 560 }}>
+          <p lang="vi" style={{ fontSize: 16, lineHeight: 1.55, color: tokens.colors.textMuted, margin: "14px 0 20px", maxWidth: 560 }}>
             {post.excerpt}
           </p>
         )}
         {post.tags.length > 0 && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          <div lang="vi" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {post.tags.map((tag) => (
               <TagPill key={tag.id} tag={tag} />
             ))}

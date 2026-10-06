@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -13,15 +14,17 @@ import { TagPill } from "@/components/blog/TagPill";
 import { ShareBar } from "@/components/blog/ShareBar";
 import { tokens } from "@/lib/tokens";
 import { truncateForMeta } from "@/lib/seo";
+import { isLocale, localePath, locales } from "@/lib/i18n/config";
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ lang: string; slug: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { lang, slug } = await params;
+  const locale = isLocale(lang) ? lang : "en";
   const post = await fetchPost(slug);
-  if (!post) return { title: "Post not found" };
+  if (!post) return { title: (await getDictionary(locale)).blog.notFound };
   const description = post.excerpt ? truncateForMeta(post.excerpt) : truncateForMeta(post.title);
   return {
     title: post.title,
@@ -52,7 +55,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export async function generateStaticParams() {
   try {
     const { posts } = await fetchPosts({ limit: 100 });
-    return posts.map((p) => ({ slug: p.slug }));
+    return locales.flatMap((lang) => posts.map((p) => ({ lang, slug: p.slug })));
   } catch {
     return [];
   }
@@ -61,12 +64,14 @@ export async function generateStaticParams() {
 export const revalidate = 3600;
 
 export default async function PostPage({ params }: PageProps) {
-  const { slug } = await params;
+  const { lang, slug } = await params;
+  if (!isLocale(lang)) notFound();
   const post = await fetchPost(slug);
   if (!post) notFound();
+  const dict = (await getDictionary(lang)).blog;
 
   const imageUrl = buildImageUrl(post.featured_image_key);
-  const readTime = estimateReadTime(post.content);
+  const readTime = estimateReadTime(post.content, lang);
   const toc = buildToc(post.html);
   // A contents list only pays off once there are a few sections to jump between.
   const showToc = toc.items.length >= 3;
@@ -78,7 +83,7 @@ export default async function PostPage({ params }: PageProps) {
       <div className="pad-x" style={{ maxWidth: 760, margin: "0 auto", padding: "0 32px" }}>
         <header className="post-head" style={{ padding: "64px 0 34px" }}>
           <Link
-            href="/blog"
+            href={localePath(lang, "/blog")}
             style={{
               fontFamily: tokens.fonts.mono,
               fontSize: 12,
@@ -89,7 +94,7 @@ export default async function PostPage({ params }: PageProps) {
               marginBottom: 30,
             }}
           >
-            ← all posts
+            {dict.allPostsBack}
           </Link>
           <div
             style={{
@@ -105,6 +110,7 @@ export default async function PostPage({ params }: PageProps) {
             {readTime}
           </div>
           <h1
+            lang="vi"
             style={{
               fontWeight: 700,
               fontSize: "clamp(32px, 6vw, 52px)",
@@ -116,7 +122,7 @@ export default async function PostPage({ params }: PageProps) {
             {post.title}
           </h1>
           {post.tags.length > 0 && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 24 }}>
+            <div lang="vi" style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 24 }}>
               {post.tags.map((tag) => (
                 <TagPill key={tag.id} tag={tag} />
               ))}
@@ -148,6 +154,7 @@ export default async function PostPage({ params }: PageProps) {
             />
           </figure>
           <p
+            lang="vi"
             style={{
               fontFamily: tokens.fonts.mono,
               fontSize: 11,
@@ -164,8 +171,10 @@ export default async function PostPage({ params }: PageProps) {
       {/* ===== CONTENT (max 680px) ===== */}
       <div className="pad-x" style={{ maxWidth: 680, margin: "0 auto", padding: "0 32px" }}>
         <div className="toc-anchor">
-          {showToc && <TableOfContents items={toc.items} />}
-          <PostContent html={toc.html} />
+          {showToc && <TableOfContents items={toc.items} label={dict.toc} ariaLabel={dict.tocAria} />}
+          <div lang="vi">
+            <PostContent html={toc.html} />
+          </div>
         </div>
 
         {/* ===== FOOTER TAGS ===== */}
@@ -184,9 +193,9 @@ export default async function PostPage({ params }: PageProps) {
               marginBottom: 14,
             }}
           >
-            TAGGED
+            {dict.tagged}
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 34 }}>
+          <div lang="vi" style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 34 }}>
             {post.tags.map((tag) => (
               <TagPill key={tag.id} tag={tag} />
             ))}
@@ -200,13 +209,21 @@ export default async function PostPage({ params }: PageProps) {
               marginBottom: 14,
             }}
           >
-            SHARE
+            {dict.share}
           </div>
-          <ShareBar url={`https://lequoctrung.vn/blog/${post.slug}`} title={post.title} />
+          <ShareBar
+            url={`https://lequoctrung.vn/blog/${post.slug}`}
+            title={post.title}
+            labels={{ share: dict.shareButton, copyLink: dict.copyLink, copied: dict.copied }}
+          />
           <div style={{ marginTop: 34 }} />
-          <PostNav slug={post.slug} />
+          <PostNav
+            slug={post.slug}
+            locale={lang}
+            labels={{ prev: dict.prev, next: dict.next, ariaLabel: dict.postNavAria }}
+          />
           <Link
-            href="/blog"
+            href={localePath(lang, "/blog")}
             className="pill"
             style={{
               display: "inline-flex",
@@ -221,14 +238,14 @@ export default async function PostPage({ params }: PageProps) {
               letterSpacing: "0.03em",
             }}
           >
-            ← read more posts
+            {dict.readMore}
           </Link>
         </div>
       </div>
 
       {/* ===== RELATED (max 1080px, same grid as the homepage blog section) ===== */}
       <div className="pad-x" style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
-        <RelatedPosts slug={post.slug} />
+        <RelatedPosts slug={post.slug} locale={lang} label={dict.related} />
       </div>
       <script
         type="application/ld+json"

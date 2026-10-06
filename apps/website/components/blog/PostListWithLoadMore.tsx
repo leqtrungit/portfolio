@@ -5,14 +5,17 @@ import { PostRow } from "@/components/blog/PostRow";
 import { loadMorePosts } from "@/app/actions/blog";
 import { tokens } from "@/lib/tokens";
 import type { PostSummary } from "@/lib/blog";
+import type { Locale } from "@/lib/i18n/config";
 
 interface PostListWithLoadMoreProps {
   initialPosts: PostSummary[];
   total: number;
   tag?: string;
+  locale: Locale;
+  labels: { loadMore: string; loading: string };
 }
 
-export function PostListWithLoadMore({ initialPosts, total, tag }: PostListWithLoadMoreProps) {
+export function PostListWithLoadMore({ initialPosts, total, tag, locale, labels }: PostListWithLoadMoreProps) {
   const [posts, setPosts] = useState<PostSummary[]>(initialPosts);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -34,7 +37,7 @@ export function PostListWithLoadMore({ initialPosts, total, tag }: PostListWithL
   return (
     <>
       {posts.map((post) => (
-        <PostRow key={post.id} post={post} />
+        <PostRow key={post.id} post={post} locale={locale} />
       ))}
       {hasMore && (
         <div style={{ marginTop: 48, display: "flex", justifyContent: "center" }}>
@@ -56,7 +59,7 @@ export function PostListWithLoadMore({ initialPosts, total, tag }: PostListWithL
               touchAction: "manipulation",
             }}
           >
-            {loading ? "loading…" : "load more →"}
+            {loading ? labels.loading : labels.loadMore}
           </button>
         </div>
       )}

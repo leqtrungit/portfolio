@@ -12,7 +12,7 @@ Check `PROGRESS.md` at the start of a new session — it tracks longer-running, 
 work and projects, for tailoring). Everything else derives from it:
 
 ```
-profile.json (root, JSON Resume schema)
+profile.json (root, JSON Resume schema)   profile.vi.json (Vietnamese translation, same structure)
     │
     ├── packages/profile-schema  — zod schema + TS types + validator, imported by both apps
     ├── apps/website             — Next.js portfolio (lequoctrung.vn), reads profile.json at build time
@@ -39,7 +39,7 @@ Install once at the root:
 pnpm install
 ```
 
-Validate `profile.json` against the schema:
+Validate `profile.json` and `profile.vi.json` against the schema and check their structural parity:
 ```bash
 pnpm --filter @new-portfolio/profile-schema validate
 ```
@@ -62,8 +62,7 @@ cd apps/cv-renderer && pnpm tsx src/render.tsx ../../tailored/<name>.json out/<n
 ```
 
 Root-level scripts fan out via `pnpm -r <script>`: `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
-Only `website` defines `lint`; `pnpm test` is currently a no-op since no package defines a `test`
-script. `cv-renderer` has no plain `build` script — use `build:master` (above) or `build:tailored`
+Only `website` defines `lint`; `pnpm test` runs the `node:test` suites (via tsx) in `profile-schema` (parity tests) and `website` (`lib/**/*.test.ts`). `cv-renderer` has no plain `build` script — use `build:master` (above) or `build:tailored`
 (needs explicit input/output args, see CV renderer commands).
 
 ## Conventions
@@ -72,6 +71,8 @@ script. `cv-renderer` has no plain `build` script — use `build:master` (above)
   `apps/website`, building-block/theme/template structure in `apps/cv-renderer`).
 - Never hand-edit data inside `apps/website` or `apps/cv-renderer` — all resume content lives in
   `profile.json` (or a `tailored/*.json` variant), edited directly or through Claude Code.
+- When editing `profile.json`, update `profile.vi.json` in the same change — `validate` enforces structural parity
+  (same keys/array lengths, identical dates/urls/tags). Parity is not checked for explicit-path (tailored) validation.
 - `tailored/*.json` files are gitignored — they are generated, per-application artifacts, not source of truth.
 - Dates in `profile.json` follow `YYYY`, `YYYY-MM`, or `YYYY-MM-DD` (enforced by `profileSchema`).
 - The website app uses `transpilePackages: ["@new-portfolio/profile-schema"]` in `next.config.mjs` since

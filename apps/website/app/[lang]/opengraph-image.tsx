@@ -1,13 +1,17 @@
 import { ImageResponse } from "next/og";
 import { getProfile } from "@/lib/profile";
 import { truncateForMeta } from "@/lib/seo";
+import { notFound } from "next/navigation";
 import { tokens } from "@/lib/tokens";
+import { isLocale } from "@/lib/i18n/config";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function Image() {
-  const profile = getProfile();
+export default async function Image({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
+  const profile = getProfile(lang);
   const { name, label, summary, url } = profile.basics;
   const domain = url ? url.replace(/^https?:\/\//, "") : "lequoctrung.vn";
 

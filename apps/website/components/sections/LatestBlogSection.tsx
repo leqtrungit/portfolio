@@ -2,9 +2,16 @@ import Link from "next/link";
 import { fetchPosts, type PostSummary } from "@/lib/blog";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { PostCard } from "@/components/blog/PostCard";
+import { localePath, type Locale } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/getDictionary";
 import { tokens } from "@/lib/tokens";
 
-export async function LatestBlogSection() {
+export interface LatestBlogSectionProps {
+  locale: Locale;
+  dict: Dictionary["sections"];
+}
+
+export async function LatestBlogSection({ locale, dict }: LatestBlogSectionProps) {
   let posts: PostSummary[] = [];
   try {
     ({ posts } = await fetchPosts({ limit: 3, revalidate: 3600 }));
@@ -19,7 +26,7 @@ export async function LatestBlogSection() {
       <SectionLabel
         action={
           <Link
-            href="/blog"
+            href={localePath(locale, "/blog")}
             className="navlink"
             style={{
               fontFamily: tokens.fonts.mono,
@@ -29,15 +36,15 @@ export async function LatestBlogSection() {
               whiteSpace: "nowrap",
             }}
           >
-            all posts →
+            {dict.allPosts}
           </Link>
         }
       >
-        LATEST FROM THE BLOG
+        {dict.latestBlog}
       </SectionLabel>
       <div className="blog-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 24 }}>
         {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
+          <PostCard key={post.id} post={post} locale={locale} />
         ))}
       </div>
     </section>

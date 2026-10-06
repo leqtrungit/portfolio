@@ -1,7 +1,15 @@
 import Link from "next/link";
+import { localePath, type Locale } from "@/lib/i18n/config";
 import { tokens } from "@/lib/tokens";
 
-export function BlogFooter({ name, city }: { name: string; city?: string }) {
+interface BlogFooterProps {
+  name: string;
+  city?: string;
+  locale: Locale;
+  labels: { privacy: string; backToPortfolio: string };
+}
+
+export function BlogFooter({ name, city, locale, labels }: BlogFooterProps) {
   return (
     <footer style={{ background: tokens.colors.dark, color: tokens.colors.onDark }}>
       <div
@@ -21,11 +29,11 @@ export function BlogFooter({ name, city }: { name: string; city?: string }) {
       >
         <span>© {new Date().getFullYear()} {name}{city ? ` — ${city}` : ""}</span>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
-          <Link href="/privacy" style={{ color: tokens.colors.onDarkPill, textDecoration: "none" }}>
-            Privacy
+          <Link href={localePath(locale, "/privacy")} style={{ color: tokens.colors.onDarkPill, textDecoration: "none" }}>
+            {labels.privacy}
           </Link>
-          <Link href="/" style={{ color: tokens.colors.onDarkPill, textDecoration: "none" }}>
-            ← back to portfolio
+          <Link href={localePath(locale, "/")} style={{ color: tokens.colors.onDarkPill, textDecoration: "none" }}>
+            {labels.backToPortfolio}
           </Link>
         </div>
       </div>

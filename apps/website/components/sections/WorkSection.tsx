@@ -1,19 +1,23 @@
 import type { Work } from "@new-portfolio/profile-schema";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Pill } from "@/components/ui/Pill";
+import type { Locale } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/getDictionary";
 import { tokens } from "@/lib/tokens";
 import { formatPeriod } from "@/lib/formatDate";
 
 export interface WorkSectionProps {
   work: Work[];
+  locale: Locale;
+  dict: Dictionary["sections"];
 }
 
-export function WorkSection({ work }: WorkSectionProps) {
+export function WorkSection({ work, locale, dict }: WorkSectionProps) {
   if (work.length === 0) return null;
 
   return (
     <section id="work" className="sect-pad" style={{ padding: "88px 0 24px" }}>
-      <SectionLabel>EXPERIENCE</SectionLabel>
+      <SectionLabel>{dict.experience}</SectionLabel>
       {work.map((job) => {
         const [narrative, ...highlights] = job.highlights;
         return (
@@ -37,7 +41,7 @@ export function WorkSection({ work }: WorkSectionProps) {
                   letterSpacing: "0.04em",
                 }}
               >
-                {formatPeriod(job.startDate, job.endDate)}
+                {formatPeriod(job.startDate, job.endDate, locale)}
               </div>
               {job.summary && (
                 <div

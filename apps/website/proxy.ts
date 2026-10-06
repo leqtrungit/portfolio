@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { resolveLocaleRoute } from "@/lib/i18n/routing";
 
 /**
  * Security headers + CSP.
@@ -27,7 +28,7 @@ import type { NextRequest } from "next/server";
  * connect-src allows the cross-origin analytics beacon (fetch + sendBeacon
  * are both governed by connect-src) to the blog-api origin.
  */
-export function proxy(_request: NextRequest) {
+export function proxy(request: NextRequest) {
   const isDev = process.env.NODE_ENV !== "production";
 
   const csp = [
@@ -44,7 +45,24 @@ export function proxy(_request: NextRequest) {
     ...(isDev ? [] : ["upgrade-insecure-requests"]),
   ].join("; ");
 
-  const response = NextResponse.next();
+  // Locale scheme: unprefixed = English via internal rewrite to /en, /vi passes
+  // through, and an explicit /en prefix 301s to the unprefixed canonical URL.
+  const decision = resolveLocaleRoute(request.nextUrl.pathname);
+  // Forwarded so app/global-not-found.tsx (no params access) can pick the locale.
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-pathname", request.nextUrl.pathname);
+  let response: NextResponse;
+  if (decision.type === "redirect") {
+    const url = request.nextUrl.clone();
+    url.pathname = decision.pathname;
+    response = NextResponse.redirect(url, 301);
+  } else if (decision.type === "rewrite") {
+    const url = request.nextUrl.clone();
+    url.pathname = decision.pathname;
+    response = NextResponse.rewrite(url, { request: { headers: requestHeaders } });
+  } else {
+    response = NextResponse.next({ request: { headers: requestHeaders } });
+  }
 
   response.headers.set("Content-Security-Policy", csp);
   response.headers.set("Cross-Origin-Opener-Policy", "same-origin");

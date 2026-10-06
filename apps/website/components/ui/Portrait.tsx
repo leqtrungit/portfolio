@@ -4,9 +4,10 @@ import { tokens } from "@/lib/tokens";
 export interface PortraitProps {
   name: string;
   src?: string;
+  alt: string;
 }
 
-export function Portrait({ name, src }: PortraitProps) {
+export function Portrait({ name, src, alt }: PortraitProps) {
   return (
     <div
       className="hero-portrait"
@@ -34,7 +35,7 @@ export function Portrait({ name, src }: PortraitProps) {
         {src ? (
           <Image
             src={src}
-            alt={`${name} — portrait photo`}
+            alt={alt}
             fill
             priority
             fetchPriority="high"

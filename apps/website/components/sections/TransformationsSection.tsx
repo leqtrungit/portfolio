@@ -1,19 +1,11 @@
+import type { Dictionary } from "@/lib/i18n/getDictionary";
 import { tokens } from "@/lib/tokens";
 
-interface Transformation {
-  from: string;
-  to: string;
-  tag: string;
+export interface TransformationsSectionProps {
+  dict: Dictionary["transformations"];
 }
 
-const transformations: Transformation[] = [
-  { from: "manual 1st-level support", to: "AI agent, 60% less dev effort", tag: "BOSCH" },
-  { from: "manual video edits", to: "1,500 auto-shipped / day", tag: "MEDIA AI" },
-  { from: "60-step order cycle", to: "60% faster, 0 errors", tag: "HGM BPM" },
-  { from: "siloed engineers", to: "100% proactive owners", tag: "DAT · BOSCH" },
-];
-
-export function TransformationsSection() {
+export function TransformationsSection({ dict }: TransformationsSectionProps) {
   return (
     <section style={{ background: tokens.colors.dark, color: tokens.colors.onDark }}>
       <div className="tf-inner" style={{ maxWidth: 1080, margin: "0 auto", padding: "64px 32px 70px" }}>
@@ -26,9 +18,9 @@ export function TransformationsSection() {
             marginBottom: 34,
           }}
         >
-          SELECTED TRANSFORMATIONS
+          {dict.label}
         </div>
-        {transformations.map((t) => (
+        {dict.items.map((t) => (
           <div
             key={t.tag}
             className="trow tf-row"

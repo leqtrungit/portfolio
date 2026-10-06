@@ -17,6 +17,8 @@ export async function GET() {
     "",
     `> ${profile.basics.summary ?? ""}`,
     "",
+    `Vietnamese version: ${siteUrl}/vi`,
+    "",
     "## Posts",
     "",
     ...posts.map(

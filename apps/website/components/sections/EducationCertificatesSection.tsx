@@ -34,7 +34,7 @@ export function EducationCertificatesSection({ education, certificates }: Educat
                   letterSpacing: "0.04em",
                 }}
               >
-                {formatPeriod(primaryEducation.startDate, primaryEducation.endDate)}
+                {formatPeriod(primaryEducation.startDate, primaryEducation.endDate, "en")}
               </div>
             )}
           </div>
@@ -66,7 +66,7 @@ export function EducationCertificatesSection({ education, certificates }: Educat
                       whiteSpace: "nowrap",
                     }}
                   >
-                    {formatDate(cert.date)}
+                    {formatDate(cert.date, "en")}
                   </div>
                 )}
               </div>

@@ -37,7 +37,7 @@ export function WorkSection({ work }: WorkSectionProps) {
                   letterSpacing: "0.04em",
                 }}
               >
-                {formatPeriod(job.startDate, job.endDate)}
+                {formatPeriod(job.startDate, job.endDate, "en")}
               </div>
               {job.summary && (
                 <div

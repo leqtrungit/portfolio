@@ -36,9 +36,13 @@ export function buildImageUrl(key: string | null): string | null {
   return `/media/${key}`;
 }
 
-export function estimateReadTime(content: string): string {
+export function estimateReadTime(content: string, locale: string = "en"): string {
   const words = content.trim().split(/\s+/).length;
-  return `${Math.max(1, Math.ceil(words / 200))} min read`;
+  const mins = Math.max(1, Math.ceil(words / 200));
+  if (locale === "vi") {
+    return `${mins} phút đọc`;
+  }
+  return `${mins} min read`;
 }
 
 export async function fetchPosts(

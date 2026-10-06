@@ -10,8 +10,15 @@ import { EducationCertificatesSection } from "@/components/sections/EducationCer
 import { ContactSection } from "@/components/sections/ContactSection";
 import { tokens } from "@/lib/tokens";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { isLocale } from "@/lib/i18n/config";
+import { localizedAlternates } from "@/lib/i18n/seo";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params;
+  return { alternates: localizedAlternates(isLocale(lang) ? lang : "en", "/") };
+}
 
 export default async function HomePage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;

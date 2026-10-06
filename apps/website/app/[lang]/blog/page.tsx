@@ -4,15 +4,20 @@ import { PostListWithLoadMore } from "@/components/blog/PostListWithLoadMore";
 import { notFound } from "next/navigation";
 import { tokens } from "@/lib/tokens";
 import { fill, isLocale } from "@/lib/i18n/config";
+import { localizedAlternates } from "@/lib/i18n/seo";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
-  const dict = (await getDictionary(isLocale(lang) ? lang : "en")).blog;
+  const locale = isLocale(lang) ? lang : "en";
+  const dict = (await getDictionary(locale)).blog;
   return {
-    title: dict.titleAccent,
+    title: "Blog",
     description: dict.metaDescription,
-    alternates: { canonical: "/blog" },
+    alternates: {
+      ...localizedAlternates(locale, "/blog"),
+      types: { "application/rss+xml": "/feed.xml" },
+    },
   };
 }
 

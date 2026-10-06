@@ -11,7 +11,7 @@ export const contentType = "image/png";
 export default async function Image({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
-  const profile = getProfile();
+  const profile = getProfile(lang);
   const { name, label, summary, url } = profile.basics;
   const domain = url ? url.replace(/^https?:\/\//, "") : "lequoctrung.vn";
 

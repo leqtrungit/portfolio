@@ -7,90 +7,106 @@ import { Bricolage_Grotesque, JetBrains_Mono, Newsreader } from "next/font/googl
 import { tokens } from "@/lib/tokens";
 import { getProfile } from "@/lib/profile";
 import { truncateForMeta } from "@/lib/seo";
-import { isLocale, locales, htmlLang } from "@/lib/i18n/config";
+import { fill, isLocale, locales, htmlLang, localePath, ogLocale, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
+import { localizedAlternates } from "@/lib/i18n/seo";
 import { AnalyticsTracker } from "@/components/ui/AnalyticsTracker";
 
 // Inlined (not `import "./globals.css"`) so this ~2KB stylesheet ships in the
 // initial HTML instead of as a separate render-blocking request.
 const globalCss = readFileSync(path.join(process.cwd(), "app/globals.css"), "utf8");
 
-const profile = getProfile();
-const siteUrl = profile.basics.url ?? "https://lequoctrung.vn";
-const title = `${profile.basics.name} — ${profile.basics.label}`;
-// SERP/OG snippets get cut off past ~160 chars — keep the on-page hero copy
-// (which reads `profile.basics.summary` directly) untouched and only clip
-// the metadata copies.
-const metaDescription = truncateForMeta(profile.basics.summary ?? "");
+const siteUrl = getProfile().basics.url ?? "https://lequoctrung.vn";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: title,
-    template: `%s — ${profile.basics.name}`,
-  },
-  description: metaDescription,
-  openGraph: {
-    type: "profile",
-    url: "/",
-    siteName: profile.basics.name,
-    title,
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params;
+  const locale: Locale = isLocale(lang) ? lang : "en";
+  const profile = getProfile(locale);
+  const title = `${profile.basics.name} — ${profile.basics.label}`;
+  // SERP/OG snippets get cut off past ~160 chars — keep the on-page hero copy
+  // (which reads `profile.basics.summary` directly) untouched and only clip
+  // the metadata copies.
+  const metaDescription = truncateForMeta(profile.basics.summary ?? "");
+  const other: Locale = locale === "en" ? "vi" : "en";
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: title,
+      template: `%s — ${profile.basics.name}`,
+    },
     description: metaDescription,
-    locale: "en_US",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description: metaDescription,
-  },
-  alternates: {
-    types: { "application/rss+xml": "/feed.xml" },
-  },
-};
+    openGraph: {
+      type: "profile",
+      url: localePath(locale, "/"),
+      siteName: profile.basics.name,
+      title,
+      description: metaDescription,
+      locale: ogLocale[locale],
+      alternateLocale: [ogLocale[other]],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: metaDescription,
+    },
+    alternates: {
+      ...localizedAlternates(locale, "/"),
+      types: { "application/rss+xml": "/feed.xml" },
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: tokens.accent,
 };
 
-const currentJob = profile.work.find((job) => !job.endDate) ?? profile.work[0];
+function buildSiteJsonLd(locale: Locale) {
+  const profile = getProfile(locale);
+  const metaDescription = truncateForMeta(profile.basics.summary ?? "");
+  const blogName = fill(getDictionary(locale).blog.siteName, { name: profile.basics.name });
+  const currentJob = profile.work.find((job) => !job.endDate) ?? profile.work[0];
+  const publisher = { "@type": "Person", name: profile.basics.name, url: siteUrl };
 
-const personJsonLd = {
-  "@type": "Person",
-  name: profile.basics.name,
-  jobTitle: profile.basics.label,
-  email: profile.basics.email,
-  url: siteUrl,
-  image: `${siteUrl}/portrait.png`,
-  worksFor: currentJob ? { "@type": "Organization", name: currentJob.name } : undefined,
-  sameAs: profile.basics.profiles.map((p) => p.url),
-  address: profile.basics.location?.city
-    ? {
-        "@type": "PostalAddress",
-        addressLocality: profile.basics.location.city,
-        addressCountry: profile.basics.location.countryCode,
-      }
-    : undefined,
-};
-
-const siteJsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    personJsonLd,
-    {
-      "@type": "WebSite",
-      name: `${profile.basics.name}'s Blog`,
-      url: siteUrl,
-      description: metaDescription,
-      publisher: { "@type": "Person", name: profile.basics.name, url: siteUrl },
-    },
-    {
-      "@type": "Blog",
-      name: `${profile.basics.name}'s Blog`,
-      url: `${siteUrl}/blog`,
-      description: metaDescription,
-      publisher: { "@type": "Person", name: profile.basics.name, url: siteUrl },
-    },
-  ],
-};
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        name: profile.basics.name,
+        jobTitle: profile.basics.label,
+        email: profile.basics.email,
+        url: siteUrl,
+        image: `${siteUrl}/portrait.png`,
+        worksFor: currentJob ? { "@type": "Organization", name: currentJob.name } : undefined,
+        sameAs: profile.basics.profiles.map((p) => p.url),
+        address: profile.basics.location?.city
+          ? {
+              "@type": "PostalAddress",
+              addressLocality: profile.basics.location.city,
+              addressCountry: profile.basics.location.countryCode,
+            }
+          : undefined,
+      },
+      {
+        "@type": "WebSite",
+        name: blogName,
+        url: siteUrl,
+        inLanguage: htmlLang[locale],
+        description: metaDescription,
+        publisher,
+      },
+      {
+        "@type": "Blog",
+        name: blogName,
+        url: `${siteUrl}${localePath(locale, "/blog")}`,
+        inLanguage: htmlLang[locale],
+        description: metaDescription,
+        publisher,
+      },
+    ],
+  };
+}
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin", "vietnamese"],
@@ -139,7 +155,7 @@ export default async function RootLayout({
         {children}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildSiteJsonLd(lang)) }}
         />
       </body>
     </html>

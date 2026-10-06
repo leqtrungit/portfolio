@@ -4,14 +4,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { tokens } from "@/lib/tokens";
 import { isLocale, localePath } from "@/lib/i18n/config";
+import { localizedAlternates } from "@/lib/i18n/seo";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
-  const dict = (await getDictionary(isLocale(lang) ? lang : "en")).privacy;
+  const locale = isLocale(lang) ? lang : "en";
+  const dict = (await getDictionary(locale)).privacy;
   return {
     title: dict.title,
-    alternates: { canonical: "/privacy" },
+    alternates: localizedAlternates(locale, "/privacy"),
   };
 }
 

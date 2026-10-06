@@ -48,6 +48,9 @@ export function proxy(request: NextRequest) {
   // Locale scheme: unprefixed = English via internal rewrite to /en, /vi passes
   // through, and an explicit /en prefix 301s to the unprefixed canonical URL.
   const decision = resolveLocaleRoute(request.nextUrl.pathname);
+  // Forwarded so app/global-not-found.tsx (no params access) can pick the locale.
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-pathname", request.nextUrl.pathname);
   let response: NextResponse;
   if (decision.type === "redirect") {
     const url = request.nextUrl.clone();
@@ -56,9 +59,9 @@ export function proxy(request: NextRequest) {
   } else if (decision.type === "rewrite") {
     const url = request.nextUrl.clone();
     url.pathname = decision.pathname;
-    response = NextResponse.rewrite(url);
+    response = NextResponse.rewrite(url, { request: { headers: requestHeaders } });
   } else {
-    response = NextResponse.next();
+    response = NextResponse.next({ request: { headers: requestHeaders } });
   }
 
   response.headers.set("Content-Security-Policy", csp);

@@ -3,6 +3,9 @@ const MEDIA_BASE_URL =
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Root layout lives under the [lang] dynamic segment, so unmatched URLs and
+  // notFound() need a global 404 (app/global-not-found.tsx).
+  experimental: { globalNotFound: true },
   transpilePackages: ["@new-portfolio/profile-schema"],
   // The per-post OG image route reads its fonts from disk at request time, and
   // file tracing picks up sharp's native binding but not the libvips shared

@@ -29,5 +29,8 @@
   "browserslist": [
     "defaults and supports es6-module",
     "maintained node versions"
-  ]
+  ],
+  "engines": {
+    "node": "24.x"
+  }
 }

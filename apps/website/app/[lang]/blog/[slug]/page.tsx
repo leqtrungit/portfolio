@@ -230,7 +230,7 @@ export default async function PostPage({ params }: PageProps) {
 
       {/* ===== RELATED (max 1080px, same grid as the homepage blog section) ===== */}
       <div className="pad-x" style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
-        <RelatedPosts slug={post.slug} />
+        <RelatedPosts slug={post.slug} locale={lang} />
       </div>
       <script
         type="application/ld+json"

@@ -1,18 +1,20 @@
 import type { Project } from "@new-portfolio/profile-schema";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Pill } from "@/components/ui/Pill";
+import type { Dictionary } from "@/lib/i18n/getDictionary";
 import { tokens } from "@/lib/tokens";
 
 export interface ProjectsSectionProps {
   projects: Project[];
+  dict: Dictionary["sections"];
 }
 
-export function ProjectsSection({ projects }: ProjectsSectionProps) {
+export function ProjectsSection({ projects, dict }: ProjectsSectionProps) {
   if (projects.length === 0) return null;
 
   return (
     <section id="projects" style={{ padding: "64px 0 24px" }}>
-      <SectionLabel>SELECTED PROJECTS</SectionLabel>
+      <SectionLabel>{dict.projects}</SectionLabel>
       <div className="proj-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
         {projects.map((project) => (
           <div

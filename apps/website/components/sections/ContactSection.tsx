@@ -1,14 +1,18 @@
 import type { Basics, Language } from "@new-portfolio/profile-schema";
 import Link from "next/link";
 import { Pill } from "@/components/ui/Pill";
+import { localePath, type Locale } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/getDictionary";
 import { tokens } from "@/lib/tokens";
 
 export interface ContactSectionProps {
   basics: Basics;
   languages: Language[];
+  locale: Locale;
+  dict: Dictionary["contact"];
 }
 
-export function ContactSection({ basics, languages }: ContactSectionProps) {
+export function ContactSection({ basics, languages, locale, dict }: ContactSectionProps) {
   const languagesLine = languages
     .map((lang) => `${lang.language.toUpperCase()}${lang.fluency ? ` (${lang.fluency.toUpperCase()})` : ""}`)
     .join(" · ");
@@ -25,7 +29,7 @@ export function ContactSection({ basics, languages }: ContactSectionProps) {
             marginBottom: 28,
           }}
         >
-          → LET&apos;S BUILD SOMETHING
+          {dict.kicker}
         </div>
         <h2
           style={{
@@ -37,7 +41,8 @@ export function ContactSection({ basics, languages }: ContactSectionProps) {
             maxWidth: 760,
           }}
         >
-          Got a system that needs a <span style={{ color: tokens.accent }}>root-cause fix</span>? Let&apos;s talk.
+          {dict.headingLead} <span style={{ color: tokens.accent }}>{dict.headingAccent}</span>
+          {dict.headingTail}
         </h2>
         {basics.email && (
           <a
@@ -91,10 +96,10 @@ export function ContactSection({ basics, languages }: ContactSectionProps) {
           {languagesLine && <span>{languagesLine}</span>}
           {basics.phone && <span>{basics.phone}</span>}
           <Link
-            href="/privacy"
+            href={localePath(locale, "/privacy")}
             style={{ color: tokens.colors.onDarkMuted, textDecoration: "none" }}
           >
-            Privacy
+            {dict.privacy}
           </Link>
         </div>
       </div>

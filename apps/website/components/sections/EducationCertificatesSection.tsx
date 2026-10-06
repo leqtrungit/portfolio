@@ -1,14 +1,18 @@
 import type { Certificate, Education } from "@new-portfolio/profile-schema";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import type { Locale } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/getDictionary";
 import { tokens } from "@/lib/tokens";
 import { formatDate, formatPeriod } from "@/lib/formatDate";
 
 export interface EducationCertificatesSectionProps {
   education: Education[];
   certificates: Certificate[];
+  locale: Locale;
+  dict: Dictionary["sections"];
 }
 
-export function EducationCertificatesSection({ education, certificates }: EducationCertificatesSectionProps) {
+export function EducationCertificatesSection({ education, certificates, locale, dict }: EducationCertificatesSectionProps) {
   const primaryEducation = education[0];
   if (!primaryEducation && certificates.length === 0) return null;
 
@@ -17,7 +21,7 @@ export function EducationCertificatesSection({ education, certificates }: Educat
       <div className="edu-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56 }}>
         {primaryEducation && (
           <div>
-            <SectionLabel>EDUCATION</SectionLabel>
+            <SectionLabel>{dict.education}</SectionLabel>
             <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.01em" }}>
               {primaryEducation.institution}
             </div>
@@ -34,14 +38,14 @@ export function EducationCertificatesSection({ education, certificates }: Educat
                   letterSpacing: "0.04em",
                 }}
               >
-                {formatPeriod(primaryEducation.startDate, primaryEducation.endDate, "en")}
+                {formatPeriod(primaryEducation.startDate, primaryEducation.endDate, locale)}
               </div>
             )}
           </div>
         )}
         {certificates.length > 0 && (
           <div>
-            <SectionLabel>CERTIFICATES</SectionLabel>
+            <SectionLabel>{dict.certificates}</SectionLabel>
             {certificates.map((cert) => (
               <div
                 key={cert.name}
@@ -66,7 +70,7 @@ export function EducationCertificatesSection({ education, certificates }: Educat
                       whiteSpace: "nowrap",
                     }}
                   >
-                    {formatDate(cert.date, "en")}
+                    {formatDate(cert.date, locale)}
                   </div>
                 )}
               </div>

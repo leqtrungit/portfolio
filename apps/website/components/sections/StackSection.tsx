@@ -1,18 +1,20 @@
 import type { Skill } from "@new-portfolio/profile-schema";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Pill } from "@/components/ui/Pill";
+import type { Dictionary } from "@/lib/i18n/getDictionary";
 import { tokens } from "@/lib/tokens";
 
 export interface StackSectionProps {
   skills: Skill[];
+  dict: Dictionary["sections"];
 }
 
-export function StackSection({ skills }: StackSectionProps) {
+export function StackSection({ skills, dict }: StackSectionProps) {
   if (skills.length === 0) return null;
 
   return (
     <section id="stack" style={{ padding: "64px 0 24px" }}>
-      <SectionLabel>STACK</SectionLabel>
+      <SectionLabel>{dict.stack}</SectionLabel>
       {skills.map((group) => (
         <div
           key={group.name}

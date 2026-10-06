@@ -1,12 +1,14 @@
 import type { Basics } from "@new-portfolio/profile-schema";
 import { Portrait } from "@/components/ui/Portrait";
+import type { Dictionary } from "@/lib/i18n/getDictionary";
 import { tokens } from "@/lib/tokens";
 
 export interface HeroSectionProps {
   basics: Basics;
+  dict: Dictionary["hero"];
 }
 
-export function HeroSection({ basics }: HeroSectionProps) {
+export function HeroSection({ basics, dict }: HeroSectionProps) {
   return (
     <section
       className="hero"
@@ -40,9 +42,8 @@ export function HeroSection({ basics }: HeroSectionProps) {
             fontFamily: tokens.fonts.display,
           }}
         >
-          I turn root-cause analysis into <span style={{ color: tokens.accent }}>scalable solutions</span>{" "}
-          <span style={{ fontFamily: tokens.fonts.serif, fontStyle: "italic", fontWeight: 400 }}>—</span> and teams
-          into{" "}
+          {dict.lead} <span style={{ color: tokens.accent }}>{dict.accent}</span>{" "}
+          <span style={{ fontFamily: tokens.fonts.serif, fontStyle: "italic", fontWeight: 400 }}>—</span> {dict.middle}{" "}
           <span
             style={{
               textDecoration: "underline",
@@ -51,7 +52,7 @@ export function HeroSection({ basics }: HeroSectionProps) {
               textUnderlineOffset: 6,
             }}
           >
-            independent problem-solvers.
+            {dict.underline}
           </span>
         </h1>
         {basics.summary && (
@@ -83,7 +84,7 @@ export function HeroSection({ basics }: HeroSectionProps) {
         >
           <span style={{ display: "inline-flex", alignItems: "center", gap: 9 }}>
             <span style={{ width: 8, height: 8, borderRadius: "50%", background: tokens.colors.available }} />
-            available for select work
+            {dict.available}
           </span>
           {basics.location?.city && (
             <>

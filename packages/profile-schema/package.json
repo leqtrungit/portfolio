@@ -10,7 +10,8 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "validate": "tsx src/validate.ts"
+    "validate": "tsx src/validate.ts",
+    "test": "tsx --test src/parity.test.ts"
   },
   "dependencies": {
     "zod": "^4.4.3"

@@ -1,0 +1,232 @@
+{
+  "basics": {
+    "name": "Le Quoc Trung",
+    "label": "Solution Engineer",
+    "email": "leqtrungit@gmail.com",
+    "phone": "+84 908 103 573",
+    "url": "https://lequoctrung.vn",
+    "summary": "Tôi làm việc ở giao điểm giữa kỹ thuật và chiến lược — tìm ra điểm nghẽn, thiết kế bước đi tiếp theo và đồng hành giúp các đội nhóm trở nên chủ động giải quyết vấn đề.",
+    "location": {
+      "city": "TP. Hồ Chí Minh",
+      "countryCode": "VN"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "leqtrungit",
+        "url": "https://www.linkedin.com/in/leqtrungit/"
+      },
+      {
+        "network": "GitHub",
+        "username": "leqtrungit",
+        "url": "https://github.com/leqtrungit"
+      },
+      {
+        "network": "X",
+        "username": "leqtrungit",
+        "url": "https://x.com/leqtrungit"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "DAT Software Solutions",
+      "position": "Đồng sáng lập & Tech Lead",
+      "startDate": "2025-03",
+      "summary": "Làm việc từ xa",
+      "_note": "Website hero copy reuses highlights[0] as a narrative summary, and shows highlights[1:] as bullets — write highlights[0] as a 1-line role narrative.",
+      "highlights": [
+        "Đồng sáng lập công ty, dẫn dắt chiến lược công nghệ, xây dựng đội ngũ kỹ thuật và vận hành nội bộ.",
+        "Phụ trách quản lý dự án, phân tích yêu cầu và tư vấn kỹ thuật để mang đến giải pháp phù hợp cho từng khách hàng.",
+        "Thiết kế kiến trúc hệ thống có khả năng mở rộng, lựa chọn công nghệ phù hợp nhất và quản lý toàn bộ vòng đời phát triển.",
+        "Tuyển dụng và kèm cặp nhân sự kỹ thuật, giúp cải thiện sự phối hợp và hiệu quả bàn giao.",
+        "Đóng vai trò cố vấn kỹ thuật chính cho các đối tác quan trọng, đảm bảo mục tiêu kinh doanh và việc triển khai kỹ thuật luôn đồng nhất."
+      ],
+      "tags": [
+        "Leadership",
+        "Technology Strategy",
+        "System Architecture"
+      ]
+    },
+    {
+      "name": "Bosch Global Software Technologies Vietnam",
+      "position": "Điều phối viên dự án kỹ thuật",
+      "startDate": "2025-12",
+      "summary": "Tại văn phòng",
+      "_note": "Website hero copy reuses highlights[0] as a narrative summary, and shows highlights[1:] as bullets — write highlights[0] as a 1-line role narrative.",
+      "highlights": [
+        "Điều phối việc bàn giao dự án và phân bổ nguồn lực giữa nhiều đội kỹ thuật tại Bosch.",
+        "Xây dựng mô hình làm việc linh hoạt cho các dự án và thành viên đa dạng, tối ưu việc sử dụng nguồn lực của phòng ban",
+        "Giảm thiểu rủi ro vận hành cho các hạng mục chỉ có một lập trình viên đảm nhiệm",
+        "Thiết lập quy trình chuẩn cho việc phối hợp với các bên liên quan",
+        "Đảm bảo tiến độ dự án và bàn giao thành công các mốc quan trọng",
+        "Xây dựng văn hóa đội nhóm và tổ chức các hoạt động nâng cao kỹ năng, gắn kết tinh thần",
+        "Đóng góp các chiến lược và khung vận hành cho những nhóm dự án khác"
+      ],
+      "tags": [
+        "Project Management",
+        "Engineering Leadership",
+        "Stakeholder Management",
+        "Employee Management"
+      ]
+    },
+    {
+      "name": "Bosch Global Software Technologies Vietnam",
+      "position": "Kỹ sư phần mềm",
+      "startDate": "2022-12",
+      "summary": "Tại văn phòng",
+      "_note": "Website hero copy reuses highlights[0] as a narrative summary, and shows highlights[1:] as bullets — write highlights[0] as a 1-line role narrative.",
+      "highlights": [
+        "Làm việc xuyên suốt các mảng kỹ thuật, quản lý sản phẩm và phát triển con người.",
+        "Triển khai AI agent hỗ trợ tuyến đầu (1st-level support) → giảm 60% công sức phát triển cho mỗi ticket",
+        "Rút ngắn thời gian phản hồi API từ 5 phút → 1–2 giây nhờ tối ưu truy vấn",
+        "Sở hữu dự án trọn vòng đời, từ thống nhất với các bên liên quan đến giám sát trên production",
+        "Kèm cặp kỹ sư làm chủ công việc, qua đó cải thiện tốc độ bàn giao"
+      ],
+      "tags": [
+        "Angular",
+        "Spring Boot",
+        "Oracle DB",
+        "OpenShift",
+        "AI Agent"
+      ]
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "Tổ chức chính trị địa phương",
+      "position": "Tổ trưởng tổ dân phố",
+      "startDate": "2021-07",
+      "endDate": "2024-04",
+      "summary": "Tham gia hoạt động cộng đồng, triển khai công nghệ, các sáng kiến chuyển đổi số của chính quyền",
+      "highlights": []
+    }
+  ],
+  "education": [
+    {
+      "institution": "Đại học Tôn Đức Thắng",
+      "area": "Mạng máy tính và Truyền thông dữ liệu",
+      "studyType": "Cử nhân",
+      "startDate": "2019-09",
+      "endDate": "2024-09",
+      "courses": []
+    }
+  ],
+  "awards": [],
+  "certificates": [
+    {
+      "name": "Google Project Management: Professional Certificate",
+      "date": "2024-11",
+      "issuer": "Google"
+    },
+    {
+      "name": "B1 Preliminary",
+      "date": "2023-03",
+      "issuer": "Cambridge University"
+    },
+    {
+      "name": "CCNA: Introduction to Networks",
+      "date": "2020-06",
+      "issuer": "Cisco"
+    },
+    {
+      "name": "Starter Programming Scholarship",
+      "date": "2020-06",
+      "issuer": "INTEK Training"
+    }
+  ],
+  "publications": [],
+  "skills": [
+    {
+      "name": "Kỹ năng mềm",
+      "keywords": [
+        "Phát triển phần mềm",
+        "Phương pháp Agile",
+        "Quản lý dự án",
+        "Triển khai dự án trọn vòng đời",
+        "Phối hợp liên chức năng",
+        "Lãnh đạo và quản lý",
+        "Tinh thần khởi nghiệp"
+      ]
+    },
+    {
+      "name": "Kỹ năng chuyên môn",
+      "keywords": [
+        "Angular",
+        "React.js",
+        "Spring Boot",
+        "Oracle Database",
+        "Docker",
+        "OpenShift",
+        "GitHub Actions",
+        "Power BI",
+        "Unix Shell",
+        "System Architecture"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Media AI Automation Pipeline",
+      "description": "Dẫn dắt nhóm 3 người sản xuất 1.500 video mỗi ngày, không cần chỉnh sửa thủ công",
+      "highlights": [],
+      "tags": [
+        "n8n",
+        "Microservices",
+        "OpenAI",
+        "YouTube API",
+        "Docker"
+      ]
+    },
+    {
+      "name": "HGM Orders – BPM Platform",
+      "description": "Bàn giao 3 nền tảng tùy biến; rút ngắn 60% chu trình xử lý đơn hàng",
+      "highlights": [],
+      "tags": [
+        "React",
+        "Hasura",
+        "PostgreSQL",
+        "GraphQL",
+        "Docker"
+      ]
+    },
+    {
+      "name": "D365 AI Agent PoC",
+      "description": "Một mình xây dựng AI agent ứng dụng RAG, trả lời tức thì các câu hỏi về tài liệu",
+      "highlights": [],
+      "tags": [
+        "AutoGen",
+        "LLM",
+        "Docker",
+        "Python"
+      ]
+    },
+    {
+      "name": "HomeLab",
+      "description": "Tự xây dựng hạ tầng ứng dụng AI với uptime 99,9%",
+      "highlights": [],
+      "tags": [
+        "Docker",
+        "Home Assistant",
+        "Prometheus",
+        "Grafana",
+        "Linux"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "language": "Tiếng Việt",
+      "fluency": "Bản ngữ"
+    },
+    {
+      "language": "Tiếng Anh",
+      "fluency": "Thành thạo"
+    }
+  ],
+  "interests": [],
+  "references": [],
+  "meta": {
+    "version": "0.1.0"
+  }
+}

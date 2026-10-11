@@ -1,8 +1,6 @@
 import type { Project } from "@new-portfolio/profile-schema";
-import { SectionLabel } from "@/components/ui/SectionLabel";
-import { Pill } from "@/components/ui/Pill";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import type { Dictionary } from "@/lib/i18n/getDictionary";
-import { tokens } from "@/lib/tokens";
 
 export interface ProjectsSectionProps {
   projects: Project[];
@@ -13,36 +11,15 @@ export function ProjectsSection({ projects, dict }: ProjectsSectionProps) {
   if (projects.length === 0) return null;
 
   return (
-    <section id="projects" style={{ padding: "64px 0 24px" }}>
-      <SectionLabel>{dict.projects}</SectionLabel>
-      <div className="proj-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-        {projects.map((project) => (
-          <div
-            key={project.name}
-            className="proj"
-            style={{
-              border: `1.5px solid ${tokens.colors.border}`,
-              background: tokens.colors.cardBg,
-              padding: "30px 28px",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <span style={{ fontSize: 23, fontWeight: 700, letterSpacing: "-0.01em", lineHeight: 1.1 }}>
-              {project.name}
-            </span>
-            {project.description && (
-              <p style={{ fontSize: 15.5, lineHeight: 1.55, color: tokens.colors.textMuted, margin: "14px 0 22px" }}>
-                {project.description}
-              </p>
-            )}
-            {project.tags.length > 0 && (
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: "auto" }}>
-                {project.tags.map((tag) => (
-                  <Pill key={tag}>{tag}</Pill>
-                ))}
-              </div>
-            )}
+    <section id="projects" className="wrap projects">
+      <SectionHeading number="03">{dict.projects}</SectionHeading>
+      <div className="proj-grid">
+        {projects.map((project, i) => (
+          <div key={project.name} className="proj">
+            <span className="proj-no">03.{i + 1}</span>
+            <h3 className="proj-name">{project.name}</h3>
+            {project.description && <p className="proj-desc">{project.description}</p>}
+            {project.tags.length > 0 && <div className="proj-tags">{project.tags.join(" · ")}</div>}
           </div>
         ))}
       </div>

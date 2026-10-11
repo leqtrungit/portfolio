@@ -1,36 +1,46 @@
 /**
- * Single source for design tokens (colors, fonts) — taken from the
- * "Portfolio V1" Claude Design handoff. Update here when the design changes;
- * components/ui/* and sections/* should read from here, not hardcode values.
+ * Single source for design tokens — taken from the "Portfolio - All Pages" Claude Design
+ * handoff (lacquer palette: ink, paper, lacquer red, gold). Update here when the design
+ * changes. Components read these either directly (`tokens.colors.x`) or as CSS custom
+ * properties (`var(--ink)`) emitted by `tokenCss` into every root layout.
  */
 export const tokens = {
-  accent: "#cf4326",
+  accent: "#a3241a",
   colors: {
-    bg: "#f6f3ec",
-    text: "#17150f",
-    textStrong: "#2c2920",
-    textMuted: "#565244",
-    textFaint: "#6b6657",
-    // Darkened accent for small text on the light bg — `accent` itself is ~4.2:1 against
-    // `bg`, which fails WCAG AA at caption sizes (needs 4.5:1); large accent text elsewhere
-    // (headings, CTAs) keeps using `accent` since it clears the AA large-text 3:1 threshold.
-    accentMuted: "#c23d22",
-    border: "#17150f",
-    borderMuted: "#cabfa9",
-    borderHairline: "#ddd6c8",
-    dark: "#17150f",
-    onDark: "#f6f3ec",
-    onDarkMuted: "#8a8474",
-    onDarkBorder: "#322e23",
-    onDarkAccent: "#e98b6f",
-    onDarkPill: "#cabfa9",
-    onDarkPillBorder: "#3a352a",
-    available: "#3f9c5b",
-    cardBg: "#fbf9f3",
+    ink: "#16100c",
+    paper: "#f1e9d8",
+    card: "#f7f1e4",
+    cardHover: "#efe3c9",
+    red: "#a3241a",
+    gold: "#c49a45",
+    goldLight: "#e3c47c",
+    goldSoft: "#d2ae5c",
+    highlight: "#e0c27a",
+    goldDark: "#8a6d33",
+    text: "#16100c",
+    textBody: "#3a3026",
+    textArticle: "#2e261e",
+    textMuted: "#6b5e4b",
+    textFaint: "#776a56",
+    slash: "#b4a68d",
+    rule: "#d8ccb3",
+    ruleSoft: "#e3d8c3",
+    track: "#e3d7bf",
+    hatch: "#221a14",
+    onDark: "#efe6d2",
+    onDarkSoft: "#dccfb6",
+    onDarkMuted: "#cfc4ad",
+    onDarkRule: "#3a2c22",
   },
   fonts: {
-    display: "var(--font-bricolage), sans-serif",
-    mono: "var(--font-jetbrains-mono), monospace",
-    serif: "var(--font-newsreader), serif",
+    display: "var(--font-bricolage), 'Bricolage Grotesque', sans-serif",
+    mono: "ui-monospace, Menlo, monospace",
   },
 } as const;
+
+const kebab = (s: string) => s.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+
+/** `:root { --ink: …; --paper: …; --font: … }` — inlined by the root layouts. */
+export const tokenCss = `:root{${Object.entries(tokens.colors)
+  .map(([k, v]) => `--${kebab(k)}:${v}`)
+  .join(";")};--font:${tokens.fonts.display};--mono:${tokens.fonts.mono}}`;

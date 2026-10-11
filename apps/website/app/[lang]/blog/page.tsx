@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
-import { fetchPosts } from "@/lib/blog";
+import Link from "next/link";
+import { buildImageUrl, fetchPosts, formatPostDate } from "@/lib/blog";
 import { PostListWithLoadMore } from "@/components/blog/PostListWithLoadMore";
+import { SubpageHeader } from "@/components/sections/SubpageHeader";
+import { Cover } from "@/components/ui/Cover";
 import { notFound } from "next/navigation";
-import { tokens } from "@/lib/tokens";
-import { fill, isLocale } from "@/lib/i18n/config";
+import { fill, isLocale, localePath } from "@/lib/i18n/config";
 import { localizedAlternates, localizedOpenGraph } from "@/lib/i18n/seo";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+
+// Lead post + 7 rows per page, as in the design.
+const PAGE_SIZE = 8;
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
   const locale = isLocale(lang) ? lang : "en";
-  const dict = (await getDictionary(locale)).blog;
+  const dict = getDictionary(locale).blog;
   return {
     title: "Blog",
     description: dict.metaDescription,
@@ -25,100 +30,79 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 export default async function BlogListPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
-  const dict = (await getDictionary(lang)).blog;
-  const { posts, meta } = await fetchPosts({ limit: 10 });
+  const dict = getDictionary(lang).blog;
+  const { posts, meta } = await fetchPosts({ limit: PAGE_SIZE });
+  const lead = posts[0];
 
-  const date = new Date()
+  const updated = new Date()
     .toLocaleDateString(lang === "vi" ? "vi-VN" : "en-US", { month: "long", year: "numeric" })
     .toUpperCase();
-  const countLine = `${fill(meta.total === 1 ? dict.countOne : dict.countMany, { count: meta.total })} · ${fill(dict.updated, { date })}`;
 
   return (
-    <div className="pad-x" style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
-      {/* ===== HEADER ===== */}
-      <header
-        className="blog-head"
-        style={{
-          padding: "78px 0 36px",
-          borderBottom: `1.5px solid ${tokens.colors.border}`,
-        }}
-      >
-        <div
-          style={{
-            fontFamily: tokens.fonts.mono,
-            fontSize: 12,
-            letterSpacing: "0.14em",
-            color: tokens.accent,
-            marginBottom: 26,
-          }}
-        >
-          {dict.kicker}
-        </div>
-        <h1
-          style={{
-            fontWeight: 700,
-            fontSize: "clamp(40px, 9vw, 76px)",
-            lineHeight: 1,
-            letterSpacing: "-0.03em",
-            margin: 0,
-          }}
-        >
-          {dict.titleLead}{" "}
-          <span
-            style={{
-              fontFamily: tokens.fonts.serif,
-              fontStyle: "italic",
-              fontWeight: 400,
-            }}
-          >
-            {dict.titleAccent}
-          </span>
-        </h1>
-        <p
-          style={{
-            fontSize: 18,
-            lineHeight: 1.55,
-            color: tokens.colors.textMuted,
-            maxWidth: 540,
-            margin: "24px 0 0",
-          }}
-        >
-          {dict.description}
-        </p>
-        <div
-          style={{
-            fontFamily: tokens.fonts.mono,
-            fontSize: 12,
-            color: tokens.colors.onDarkMuted,
-            letterSpacing: "0.04em",
-            marginTop: 22,
-          }}
-        >
-          {countLine}
-        </div>
-      </header>
+    <>
+      <SubpageHeader locale={lang} crumbs={[{ label: "Blog" }]} inBlog />
+      <main>
+        <section className="blog-hero-band">
+          <div className="wrap blog-hero">
+            <div>
+              <div className="kicker blog-kicker">{dict.kicker}</div>
+              <h1 className="blog-title">
+                {dict.titleLead} <span className="hl">{dict.titleAccent}</span>
+              </h1>
+            </div>
+            <div className="blog-intro">
+              <p className="blog-desc">{dict.description}</p>
+              <div className="meta blog-count">
+                <span className="blog-count-n">
+                  {fill(meta.total === 1 ? dict.countOne : dict.countMany, { count: meta.total })}
+                </span>
+                <span style={{ color: "var(--text-muted)" }}>{fill(dict.updated, { date: updated })}</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
-      {/* ===== POST LIST ===== */}
-      <section style={{ padding: "8px 0 96px" }}>
-        {posts.length === 0 ? (
-          <p
-            style={{
-              fontFamily: tokens.fonts.mono,
-              fontSize: 13,
-              color: tokens.colors.textMuted,
-              padding: "48px 0",
-            }}
-          >
-            {dict.empty}
-          </p>
+        {lead ? (
+          <>
+            <section className="wrap blog-lead-wrap">
+              <Link href={localePath(lang, `/blog/${lead.slug}`)} className="blog-lead post-link" lang="vi">
+                <Cover src={buildImageUrl(lead.featured_image_key)} alt={lead.featured_image_alt ?? lead.title} sizes="(max-width: 860px) 100vw, 660px" priority />
+                <div className="blog-lead-body">
+                  <div className="meta meta-row">
+                    <span className="latest-label" lang={lang}>
+                      {dict.latest}
+                    </span>
+                    <span className="red">{formatPostDate(lead.created_at)}</span>
+                  </div>
+                  <h2 className="blog-lead-title post-link-title">{lead.title}</h2>
+                  {lead.excerpt && <p className="blog-lead-excerpt">{lead.excerpt}</p>}
+                  {lead.tags.length > 0 && (
+                    <div className="tags">
+                      {lead.tags.map((tag) => (
+                        <span key={tag.id} className="tag">
+                          {tag.name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Link>
+            </section>
+            <section className="wrap" style={{ paddingBottom: 24 }}>
+              <PostListWithLoadMore
+                initialPosts={posts}
+                skip={1}
+                total={meta.total}
+                pageSize={PAGE_SIZE}
+                locale={lang}
+                labels={{ loadMore: dict.loadMore, loading: dict.loading, shownOf: dict.shownOf }}
+              />
+            </section>
+          </>
         ) : (
-          <PostListWithLoadMore
-            initialPosts={posts} total={meta.total}
-            locale={lang}
-            labels={{ loadMore: dict.loadMore, loading: dict.loading }}
-          />
+          <p className="wrap blog-empty">{dict.empty}</p>
         )}
-      </section>
-    </div>
+      </main>
+    </>
   );
 }

@@ -25,7 +25,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "90px",
-          background: tokens.colors.bg,
+          background: tokens.colors.paper,
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
@@ -37,8 +37,8 @@ export default async function Image({ params }: { params: Promise<{ lang: string
               width: 110,
               height: 110,
               background: tokens.accent,
-              boxShadow: `8px 8px 0 ${tokens.colors.dark}`,
-              color: tokens.colors.onDark,
+              boxShadow: `8px 8px 0 ${tokens.colors.ink}`,
+              color: tokens.colors.paper,
               fontSize: 44,
               fontWeight: 700,
             }}
@@ -52,7 +52,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
                 style={{
                   display: "flex",
                   fontSize: 28,
-                  color: tokens.colors.accentMuted,
+                  color: tokens.colors.red,
                   letterSpacing: 6,
                   marginTop: 14,
                 }}
@@ -68,7 +68,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
             display: "flex",
             flexDirection: "column",
             gap: 24,
-            borderTop: `2px solid ${tokens.colors.borderMuted}`,
+            borderTop: `2px solid ${tokens.colors.rule}`,
             paddingTop: 28,
           }}
         >

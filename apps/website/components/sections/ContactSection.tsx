@@ -1,9 +1,8 @@
 import type { Basics, Language } from "@new-portfolio/profile-schema";
 import Link from "next/link";
-import { Pill } from "@/components/ui/Pill";
+import { BrandIcon } from "@/components/ui/Icons";
 import { localePath, type Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/getDictionary";
-import { tokens } from "@/lib/tokens";
 
 export interface ContactSectionProps {
   basics: Basics;
@@ -18,89 +17,46 @@ export function ContactSection({ basics, languages, locale, dict }: ContactSecti
     .join(" · ");
 
   return (
-    <footer id="contact" style={{ background: tokens.colors.dark, color: tokens.colors.onDark, marginTop: 64 }}>
-      <div className="contact-inner" style={{ maxWidth: 1080, margin: "0 auto", padding: "80px 32px 64px" }}>
-        <div
-          style={{
-            fontFamily: tokens.fonts.mono,
-            fontSize: 12,
-            letterSpacing: "0.14em",
-            color: tokens.colors.onDarkAccent,
-            marginBottom: 28,
-          }}
-        >
-          {dict.kicker}
-        </div>
-        <h2
-          style={{
-            fontWeight: 700,
-            fontSize: "clamp(29px, 7vw, 48px)",
-            lineHeight: 1.05,
-            letterSpacing: "-0.02em",
-            margin: 0,
-            maxWidth: 760,
-          }}
-        >
-          {dict.headingLead} <span style={{ color: tokens.accent }}>{dict.headingAccent}</span>
+    <footer id="contact" className="contact">
+      <div className="wrap contact-inner">
+        <div className="kicker contact-kicker">{dict.kicker}</div>
+        <h2 className="contact-title">
+          {dict.headingLead} <span className="hl-red">{dict.headingAccent}</span>
           {dict.headingTail}
         </h2>
-        {basics.email && (
-          <a
-            href={`mailto:${basics.email}`}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 12,
-              marginTop: 34,
-              fontSize: 24,
-              fontWeight: 600,
-              color: tokens.colors.onDark,
-              textDecoration: "none",
-              borderBottom: `2px solid ${tokens.accent}`,
-              paddingBottom: 4,
-            }}
-          >
-            {basics.email} <span style={{ color: tokens.accent }}>→</span>
-          </a>
-        )}
-
-        {basics.profiles.length > 0 && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 48 }}>
-            {basics.profiles.map((profile) => (
-              <Pill key={profile.network} href={profile.url} variant="social">
-                {profile.network} ↗
-              </Pill>
-            ))}
-          </div>
-        )}
-
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            gap: 16,
-            marginTop: 64,
-            paddingTop: 24,
-            borderTop: `1px solid ${tokens.colors.onDarkBorder}`,
-            fontFamily: tokens.fonts.mono,
-            fontSize: 12,
-            color: tokens.colors.onDarkMuted,
-            letterSpacing: "0.04em",
-          }}
-        >
+        <div className="contact-row">
+          {basics.email && (
+            <a href={`mailto:${basics.email}`} className="contact-email">
+              {basics.email} →
+            </a>
+          )}
+          {basics.profiles.length > 0 && (
+            <div className="socials">
+              {basics.profiles.map((profile) => (
+                <a
+                  key={profile.network}
+                  href={profile.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social"
+                  aria-label={profile.network}
+                >
+                  <BrandIcon network={profile.network} />
+                  {/* X is recognisable from its mark alone; the others carry a label. */}
+                  {profile.network !== "X" && <span>{profile.network.toUpperCase()}</span>}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="contact-bottom">
           <span>
             © {new Date().getFullYear()} {basics.name}
             {basics.location?.city ? ` — ${basics.location.city}` : ""}
           </span>
           {languagesLine && <span>{languagesLine}</span>}
           {basics.phone && <span>{basics.phone}</span>}
-          <Link
-            href={localePath(locale, "/privacy")}
-            style={{ color: tokens.colors.onDarkMuted, textDecoration: "none" }}
-          >
-            {dict.privacy}
-          </Link>
+          <Link href={localePath(locale, "/privacy")}>{dict.privacy}</Link>
         </div>
       </div>
     </footer>

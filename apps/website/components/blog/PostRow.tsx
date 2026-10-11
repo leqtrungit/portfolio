@@ -1,94 +1,31 @@
-// apps/website/components/blog/PostRow.tsx
 import Link from "next/link";
-import { buildImageUrl, type PostSummary } from "@/lib/blog";
-import { TagPill } from "@/components/blog/TagPill";
+import { buildImageUrl, formatPostDate, type PostSummary } from "@/lib/blog";
+import { Cover } from "@/components/ui/Cover";
 import { localePath, type Locale } from "@/lib/i18n/config";
-import { tokens } from "@/lib/tokens";
-
-function formatDate(iso: string): string {
-  const d = new Date(iso);
-  const y = d.getUTCFullYear();
-  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(d.getUTCDate()).padStart(2, "0");
-  return `${y} · ${m} · ${day}`;
-}
 
 interface PostRowProps {
   post: PostSummary;
   locale: Locale;
 }
 
+/** Blog list row: big day number + year·month, title/excerpt/tags, framed thumbnail. */
 export function PostRow({ post, locale }: PostRowProps) {
-  const imageUrl = buildImageUrl(post.featured_image_key);
+  const [y, m, d] = formatPostDate(post.created_at).split(" · ");
 
   return (
-    <Link
-      href={localePath(locale, `/blog/${post.slug}`)}
-      className="post-row"
-      style={{
-        display: "grid",
-        gridTemplateColumns: "300px 1fr",
-        gap: 40,
-        alignItems: "center",
-        padding: "42px 0",
-        borderBottom: `1px solid ${tokens.colors.borderHairline}`,
-        textDecoration: "none",
-        color: "inherit",
-      }}
-    >
-      {/* Thumbnail */}
-      <div
-        className="post-thumb"
-        style={{
-          position: "relative",
-          height: 200,
-          border: `1.5px solid ${tokens.colors.border}`,
-          overflow: "hidden",
-          background: tokens.colors.borderMuted,
-          flexShrink: 0,
-        }}
-      >
-        {imageUrl && (
-          <img
-            src={imageUrl}
-            alt={post.featured_image_alt ?? post.title}
-            className="post-img"
-            style={{ display: "block", width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        )}
+    <Link href={localePath(locale, `/blog/${post.slug}`)} className="post-row post-link" lang="vi">
+      <div className="post-row-date">
+        <span className="post-row-day">{d}</span>
+        <span className="post-row-ym">
+          {y} · {m}
+        </span>
       </div>
-
-      {/* Text block */}
-      <div>
-        <div style={{ fontFamily: tokens.fonts.mono, fontSize: 12, color: tokens.colors.onDarkMuted, letterSpacing: "0.04em", marginBottom: 14 }}>
-          {formatDate(post.created_at)}
-        </div>
-        <h2
-          lang="vi"
-          className="post-title"
-          style={{
-            fontWeight: 700,
-            fontSize: "clamp(24px, 3.4vw, 33px)",
-            lineHeight: 1.08,
-            letterSpacing: "-0.02em",
-            margin: 0,
-          }}
-        >
-          {post.title}
-        </h2>
-        {post.excerpt && (
-          <p lang="vi" style={{ fontSize: 16, lineHeight: 1.55, color: tokens.colors.textMuted, margin: "14px 0 20px", maxWidth: 560 }}>
-            {post.excerpt}
-          </p>
-        )}
-        {post.tags.length > 0 && (
-          <div lang="vi" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {post.tags.map((tag) => (
-              <TagPill key={tag.id} tag={tag} />
-            ))}
-          </div>
-        )}
+      <div className="post-row-body">
+        <h2 className="post-row-title post-link-title">{post.title}</h2>
+        {post.excerpt && <p className="post-row-excerpt">{post.excerpt}</p>}
+        {post.tags.length > 0 && <div className="tags-line">{post.tags.map((t) => t.name).join(" · ")}</div>}
       </div>
+      <Cover src={buildImageUrl(post.featured_image_key)} alt={post.featured_image_alt ?? post.title} sizes="(max-width: 860px) 100vw, 230px" />
     </Link>
   );
 }

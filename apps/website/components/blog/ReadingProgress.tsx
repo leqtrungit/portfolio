@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { tokens } from "@/lib/tokens";
 
 interface ReadingProgressProps {
   /** CSS selector of the element whose read-through is tracked. */
@@ -42,18 +41,7 @@ export function ReadingProgress({ target }: ReadingProgressProps) {
     <div
       ref={barRef}
       aria-hidden="true"
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        height: 3,
-        zIndex: 60,
-        background: tokens.accent,
-        transform: "scaleX(0)",
-        transformOrigin: "0 50%",
-        pointerEvents: "none",
-      }}
+      className="reading-progress"
     />
   );
 }

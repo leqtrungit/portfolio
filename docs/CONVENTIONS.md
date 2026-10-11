@@ -27,9 +27,12 @@ apps/website/
    directly, never contain raw display JSX.
 4. **Server vs. Client**: default to Server Components. `"use client"` is only ever placed on leaf
    components inside `ui/` that need interactivity (state/events) — never on `sections/` or routes.
-5. **Styling**: no UI/styling library is chosen yet. Until one is, `components/ui/*` must not
-   hardcode colors/spacing — read them from `lib/tokens.ts` (currently a stub). When a design
-   handoff arrives, fill in `tokens.ts` and restyle `ui/*` — the architecture doesn't change.
+5. **Styling**: no UI/styling library. Colors and fonts live in `lib/tokens.ts`, which the root
+   layouts also emit as CSS custom properties (`tokenCss` → `var(--ink)`, `var(--gold)`, …).
+   Layout, type scale, hover and responsive rules are plain classes in `app/globals.css`
+   (inlined into the HTML by `app/[lang]/layout.tsx`). Don't hardcode hex values in components —
+   use a token or a `var(--…)`. A new design handoff means updating `tokens.ts` + `globals.css`
+   and restyling `ui/*` — the architecture doesn't change.
 6. **Naming**: filename matches component name (PascalCase), one component per file, `Props` type
    colocated in the same file unless reused across ≥2 files (then move to `components/ui/types.ts`).
 

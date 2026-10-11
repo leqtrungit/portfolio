@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { localePath, locales, stripLocale } from "@/lib/i18n/config";
-import { tokens } from "@/lib/tokens";
 
 export interface LanguageSwitcherProps {
   label: string;
@@ -14,37 +13,23 @@ export function LanguageSwitcher({ label }: LanguageSwitcherProps) {
   const { locale, path } = stripLocale(usePathname());
 
   return (
-    <nav
-      aria-label={label}
-      style={{
-        display: "flex",
-        gap: 8,
-        fontFamily: tokens.fonts.mono,
-        fontSize: 12,
-        letterSpacing: "0.04em",
-        color: tokens.colors.textFaint,
-      }}
-    >
+    <span role="group" aria-label={label} className="lang">
       {locales.map((target, i) => (
-        <span key={target} style={{ display: "inline-flex", gap: 8 }}>
+        <span key={target} style={{ display: "inline-flex", gap: 4 }}>
           {i > 0 && <span aria-hidden="true">/</span>}
           {target === locale ? (
-            <span aria-current="true" style={{ color: tokens.accent }}>
+            <span aria-current="true" className="lang-active">
               {target.toUpperCase()}
             </span>
           ) : (
-            <Link
-              href={localePath(target, path)}
-              hrefLang={target}
-              lang={target}
-              className="navlink"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
+            // No prefetch: switching language is rare, and prefetching the other locale of a
+            // 404 URL leaves a request hanging on the global not-found page.
+            <Link href={localePath(target, path)} hrefLang={target} lang={target} prefetch={false}>
               {target.toUpperCase()}
             </Link>
           )}
         </span>
       ))}
-    </nav>
+    </span>
   );
 }

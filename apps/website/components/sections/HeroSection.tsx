@@ -1,105 +1,78 @@
 import type { Basics } from "@new-portfolio/profile-schema";
 import { Portrait } from "@/components/ui/Portrait";
+import { LinkedInIcon, MailIcon, PhoneIcon } from "@/components/ui/Icons";
 import type { Dictionary } from "@/lib/i18n/getDictionary";
 import { fill } from "@/lib/i18n/config";
-import { tokens } from "@/lib/tokens";
 
 export interface HeroSectionProps {
   basics: Basics;
   dict: Dictionary["hero"];
+  /** Use the design's hand-set line breaks. Off for copy they don't fit (Vietnamese is longer). */
+  lineBreaks?: boolean;
 }
 
-export function HeroSection({ basics, dict }: HeroSectionProps) {
+export function HeroSection({ basics, dict, lineBreaks = true }: HeroSectionProps) {
+  const linkedIn = basics.profiles.find((p) => p.network === "LinkedIn");
+  // "Solution Engineer" → highlight the first word only.
+  const [roleFirst, ...roleRest] = (basics.label ?? "").split(" ");
+
   return (
-    <section
-      className="hero"
-      style={{
-        display: "grid",
-        gridTemplateColumns: "minmax(0,1fr) 300px",
-        gap: 56,
-        alignItems: "center",
-        padding: "88px 0 72px",
-      }}
-    >
-      <div>
-        <div
-          style={{
-            fontFamily: tokens.fonts.mono,
-            fontSize: 12,
-            letterSpacing: "0.14em",
-            color: tokens.colors.accentMuted,
-            marginBottom: 34,
-          }}
-        >
-          {basics.label?.toUpperCase()}
+    <section id="top" className="hero-band">
+      <div className="wrap hero">
+        <div className="hero-main">
+          <h1 className={lineBreaks ? "hero-title" : "hero-title balance"}>
+            {dict.line1}
+            {lineBreaks && <br />} {dict.line2Lead} <span className="hl">{dict.accent}</span> {dict.line2Tail}
+            {lineBreaks && <br />} {dict.line3} <span className="ul-red">{dict.underline1}</span>
+            {lineBreaks && <br />} <span className="ul-red">{dict.underline2}</span>
+          </h1>
+          <div className="hero-sub">
+            {basics.summary && <p className="hero-summary">{basics.summary}</p>}
+            <div className="hero-status">
+              <span className="diamond" aria-hidden="true" />
+              {dict.available}
+              {basics.location?.city && (
+                <>
+                  <span style={{ color: "var(--slash)" }} aria-hidden="true">
+                    /
+                  </span>
+                  <span style={{ color: "var(--text-muted)" }}>{basics.location.city}</span>
+                </>
+              )}
+            </div>
+          </div>
         </div>
-        <h1
-          style={{
-            fontWeight: 700,
-            fontSize: "clamp(33px, 8vw, 62px)",
-            lineHeight: 1.03,
-            letterSpacing: "-0.03em",
-            margin: 0,
-            fontFamily: tokens.fonts.display,
-          }}
-        >
-          {dict.lead} <span style={{ color: tokens.accent }}>{dict.accent}</span>{" "}
-          <span style={{ fontFamily: tokens.fonts.serif, fontStyle: "italic", fontWeight: 400 }}>—</span> {dict.middle}{" "}
-          <span
-            style={{
-              textDecoration: "underline",
-              textDecorationColor: tokens.accent,
-              textDecorationThickness: 3,
-              textUnderlineOffset: 6,
-            }}
-          >
-            {dict.underline}
-          </span>
-        </h1>
-        {basics.summary && (
-          <p
-            style={{
-              fontSize: 19,
-              lineHeight: 1.55,
-              color: tokens.colors.textMuted,
-              maxWidth: 560,
-              margin: "34px 0 0",
-              fontWeight: 400,
-            }}
-          >
-            {basics.summary}
-          </p>
-        )}
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 22,
-            alignItems: "center",
-            marginTop: 40,
-            fontFamily: tokens.fonts.mono,
-            fontSize: 13,
-            color: tokens.colors.textFaint,
-            letterSpacing: "0.03em",
-          }}
-        >
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 9 }}>
-            <span style={{ width: 8, height: 8, borderRadius: "50%", background: tokens.colors.available }} />
-            {dict.available}
-          </span>
-          {basics.location?.city && (
-            <>
-              <span style={{ color: tokens.colors.borderMuted }}>/</span>
-              <span>
-                {basics.location.city}
-                {basics.location.region ? `, ${basics.location.region}` : ""}
-              </span>
-            </>
+
+        <div className="hero-side">
+          <Portrait src="/portrait.png" alt={fill(dict.portraitAlt, { name: basics.name })} />
+          {basics.label && (
+            <div className="role">
+              <span className="hl">{roleFirst}</span>
+              {roleRest.length > 0 && ` ${roleRest.join(" ")}`}
+            </div>
           )}
+          <div className="hero-links">
+            {linkedIn && (
+              <a href={linkedIn.url} target="_blank" rel="noopener noreferrer" className="hero-link">
+                <LinkedInIcon />
+                LinkedIn
+              </a>
+            )}
+            {basics.phone && (
+              <a href={`tel:${basics.phone.replace(/\s/g, "")}`} className="hero-link">
+                <PhoneIcon />
+                {dict.call}
+              </a>
+            )}
+            {basics.email && (
+              <a href={`mailto:${basics.email}`} className="hero-link">
+                <MailIcon />
+                {dict.email}
+              </a>
+            )}
+          </div>
         </div>
       </div>
-
-      <Portrait name={basics.name} src="/portrait.png" alt={fill(dict.portraitAlt, { name: basics.name })} />
     </section>
   );
 }

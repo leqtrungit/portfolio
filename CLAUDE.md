@@ -2,8 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Check `PROGRESS.md` at the start of a new session — it tracks longer-running, cross-session tasks
-(e.g. the domain migration currently in progress) and their next steps.
+Longer-running work is tracked through the superpowers plugin: specs live in `docs/superpowers/specs/` and
+plans in `docs/superpowers/plans/`. Check them for in-flight tasks at the start of a new session.
 
 ## Architecture
 

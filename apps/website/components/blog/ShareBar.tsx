@@ -1,28 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { tokens } from "@/lib/tokens";
+import { ShareIcon } from "@/components/ui/Icons";
 
 interface ShareBarProps {
   url: string;
   title: string;
   labels: { share: string; copyLink: string; copied: string };
 }
-
-const pillStyle: React.CSSProperties = {
-  display: "inline-flex",
-  alignItems: "center",
-  gap: 8,
-  fontFamily: tokens.fonts.mono,
-  fontSize: 12,
-  color: tokens.colors.text,
-  border: `1.5px solid ${tokens.colors.border}`,
-  padding: "9px 16px",
-  textDecoration: "none",
-  letterSpacing: "0.03em",
-  background: "transparent",
-  cursor: "pointer",
-};
 
 export function ShareBar({ url, title, labels }: ShareBarProps) {
   const [open, setOpen] = useState(false);
@@ -84,40 +69,14 @@ export function ShareBar({ url, title, labels }: ShareBarProps) {
 
   return (
     <div ref={rootRef} style={{ position: "relative", display: "inline-block" }}>
-      <button
-        type="button"
-        onClick={handleShareClick}
-        aria-haspopup="true"
-        aria-expanded={open}
-        style={pillStyle}
-      >
+      <button type="button" className="share-btn" onClick={handleShareClick} aria-haspopup="true" aria-expanded={open}>
+        <ShareIcon size={16} />
         {labels.share}
       </button>
 
       {open && (
-        <div
-          role="menu"
-          style={{
-            position: "absolute",
-            top: "calc(100% + 10px)",
-            left: 0,
-            zIndex: 10,
-            display: "flex",
-            flexDirection: "column",
-            gap: 4,
-            minWidth: 160,
-            padding: 6,
-            background: tokens.colors.cardBg,
-            border: `1.5px solid ${tokens.colors.border}`,
-            boxShadow: `6px 6px 0 ${tokens.accent}`,
-          }}
-        >
-          <button
-            type="button"
-            role="menuitem"
-            onClick={handleCopyLink}
-            style={{ ...pillStyle, border: "none", padding: "8px 10px", justifyContent: "flex-start" }}
-          >
+        <div role="menu" className="share-menu">
+          <button type="button" role="menuitem" className="share-item" onClick={handleCopyLink}>
             {copied ? labels.copied : labels.copyLink}
           </button>
           {links.map((link) => (
@@ -127,7 +86,7 @@ export function ShareBar({ url, title, labels }: ShareBarProps) {
               target="_blank"
               rel="noopener noreferrer"
               role="menuitem"
-              style={{ ...pillStyle, border: "none", padding: "8px 10px", justifyContent: "flex-start" }}
+              className="share-item"
               onClick={() => setOpen(false)}
             >
               {link.label}

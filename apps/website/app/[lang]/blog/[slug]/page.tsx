@@ -3,16 +3,15 @@ import { getDictionary } from "@/lib/i18n/getDictionary";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
-import { fetchPost, fetchPosts, buildImageUrl, estimateReadTime, formatPostDate } from "@/lib/blog";
+import { fetchPost, fetchPosts, buildImageUrl, estimateReadTime, formatPostDate, type Tag } from "@/lib/blog";
 import { buildToc } from "@/lib/toc";
 import { PostContent } from "@/components/blog/PostContent";
 import { TableOfContents } from "@/components/blog/TableOfContents";
 import { ReadingProgress } from "@/components/blog/ReadingProgress";
 import { RelatedPosts } from "@/components/blog/RelatedPosts";
 import { PostNav } from "@/components/blog/PostNav";
-import { TagPill } from "@/components/blog/TagPill";
+import { SubpageHeader } from "@/components/sections/SubpageHeader";
 import { ShareBar } from "@/components/blog/ShareBar";
-import { tokens } from "@/lib/tokens";
 import { truncateForMeta } from "@/lib/seo";
 import { isLocale, localePath, locales } from "@/lib/i18n/config";
 
@@ -79,174 +78,95 @@ export default async function PostPage({ params }: PageProps) {
   return (
     <>
       <ReadingProgress target=".post-body" />
-      {/* ===== HEADER (max 760px) ===== */}
-      <div className="pad-x" style={{ maxWidth: 760, margin: "0 auto", padding: "0 32px" }}>
-        <header className="post-head" style={{ padding: "64px 0 34px" }}>
-          <Link
-            href={localePath(lang, "/blog")}
-            style={{
-              fontFamily: tokens.fonts.mono,
-              fontSize: 12,
-              letterSpacing: "0.06em",
-              color: tokens.colors.onDarkMuted,
-              textDecoration: "none",
-              display: "inline-block",
-              marginBottom: 30,
-            }}
-          >
-            {dict.allPostsBack}
-          </Link>
-          <div
-            style={{
-              fontFamily: tokens.fonts.mono,
-              fontSize: 12,
-              color: tokens.colors.onDarkMuted,
-              letterSpacing: "0.04em",
-              marginBottom: 18,
-            }}
-          >
-            {formatPostDate(post.created_at)}{" "}
-            <span style={{ color: tokens.colors.borderMuted }}>/</span>{" "}
-            {readTime}
-          </div>
-          <h1
-            lang="vi"
-            style={{
-              fontWeight: 700,
-              fontSize: "clamp(32px, 6vw, 52px)",
-              lineHeight: 1.06,
-              letterSpacing: "-0.025em",
-              margin: 0,
-            }}
-          >
-            {post.title}
-          </h1>
-          {post.tags.length > 0 && (
-            <div lang="vi" style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 24 }}>
-              {post.tags.map((tag) => (
-                <TagPill key={tag.id} tag={tag} />
-              ))}
+      <SubpageHeader
+        locale={lang}
+        crumbs={[{ label: "Blog", href: localePath(lang, "/blog") }, { label: post.title }]}
+        inBlog
+        currentLang="vi"
+      />
+      <main>
+        <section className="wrap post-head">
+          <div className="post-grid">
+            <span className="post-spacer" />
+            <div className="post-head-main">
+              <div className="meta post-meta">
+                <span className="red">{formatPostDate(post.created_at)}</span>
+                <span style={{ color: "var(--slash)" }} aria-hidden="true">
+                  /
+                </span>
+                <span style={{ color: "var(--text-muted)", textTransform: "uppercase" }}>{readTime}</span>
+              </div>
+              <h1 className="post-title" lang="vi">
+                {post.title}
+              </h1>
+              {post.tags.length > 0 && <Tags tags={post.tags} />}
             </div>
-          )}
-        </header>
-      </div>
-
-      {/* ===== FEATURE IMAGE (max 760px, matches text column) ===== */}
-      {imageUrl && (
-        <div className="pad-x" style={{ maxWidth: 760, margin: "0 auto", padding: "0 32px 10px" }}>
-          <figure
-            className="feat"
-            style={{
-              position: "relative",
-              margin: 0,
-              height: 460,
-              border: `1.5px solid ${tokens.colors.border}`,
-              boxShadow: `8px 8px 0 ${tokens.accent}`,
-              overflow: "hidden",
-            }}
-          >
-            <Image
-              src={imageUrl}
-              alt={post.featured_image_alt ?? post.title}
-              fill
-              priority
-              style={{ objectFit: "cover" }}
-            />
-          </figure>
-          <p
-            lang="vi"
-            style={{
-              fontFamily: tokens.fonts.mono,
-              fontSize: 11,
-              color: tokens.colors.onDarkMuted,
-              letterSpacing: "0.03em",
-              marginTop: 12,
-            }}
-          >
-            {post.excerpt}
-          </p>
-        </div>
-      )}
-
-      {/* ===== CONTENT (max 680px) ===== */}
-      <div className="pad-x" style={{ maxWidth: 680, margin: "0 auto", padding: "0 32px" }}>
-        <div className="toc-anchor">
-          {showToc && <TableOfContents items={toc.items} label={dict.toc} ariaLabel={dict.tocAria} />}
-          <div lang="vi">
-            <PostContent html={toc.html} />
           </div>
-        </div>
+        </section>
 
-        {/* ===== FOOTER TAGS ===== */}
-        <div
-          style={{
-            padding: "28px 0 80px",
-            borderTop: `1px solid ${tokens.colors.borderHairline}`,
-          }}
-        >
-          <div
-            style={{
-              fontFamily: tokens.fonts.mono,
-              fontSize: 11,
-              letterSpacing: "0.1em",
-              color: tokens.colors.onDarkMuted,
-              marginBottom: 14,
-            }}
-          >
-            {dict.tagged}
+        {imageUrl && (
+          <div className="wrap">
+            <figure className="post-figure">
+              <div className="post-figure-inner">
+                <div className="post-figure-img">
+                  <Image
+                    src={imageUrl}
+                    alt={post.featured_image_alt ?? post.title}
+                    fill
+                    priority
+                    sizes="(max-width: 1280px) 100vw, 1168px"
+                  />
+                </div>
+              </div>
+            </figure>
           </div>
-          <div lang="vi" style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 34 }}>
-            {post.tags.map((tag) => (
-              <TagPill key={tag.id} tag={tag} />
-            ))}
+        )}
+        {post.excerpt && (
+          <div className="wrap post-grid post-caption-row">
+            <span className="post-spacer" />
+            <p className="post-caption" lang="vi">
+              {post.excerpt}
+            </p>
           </div>
-          <div
-            style={{
-              fontFamily: tokens.fonts.mono,
-              fontSize: 11,
-              letterSpacing: "0.1em",
-              color: tokens.colors.onDarkMuted,
-              marginBottom: 14,
-            }}
-          >
-            {dict.share}
-          </div>
-          <ShareBar
-            url={`https://lequoctrung.vn/blog/${post.slug}`}
-            title={post.title}
-            labels={{ share: dict.shareButton, copyLink: dict.copyLink, copied: dict.copied }}
-          />
-          <div style={{ marginTop: 34 }} />
-          <PostNav
-            slug={post.slug}
-            locale={lang}
-            labels={{ prev: dict.prev, next: dict.next, ariaLabel: dict.postNavAria }}
-          />
-          <Link
-            href={localePath(lang, "/blog")}
-            className="pill"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 10,
-              fontFamily: tokens.fonts.mono,
-              fontSize: 13,
-              color: tokens.colors.text,
-              border: `1.5px solid ${tokens.colors.border}`,
-              padding: "11px 20px",
-              textDecoration: "none",
-              letterSpacing: "0.03em",
-            }}
-          >
-            {dict.readMore}
-          </Link>
-        </div>
-      </div>
+        )}
 
-      {/* ===== RELATED (max 1080px, same grid as the homepage blog section) ===== */}
-      <div className="pad-x" style={{ maxWidth: 1080, margin: "0 auto", padding: "0 32px" }}>
+        <section className="wrap post-main">
+          <div className="post-grid">
+            {showToc ? (
+              <TableOfContents items={toc.items} label={dict.toc} ariaLabel={dict.tocAria} />
+            ) : (
+              <span className="post-spacer" />
+            )}
+            <article className="post-article">
+              <div lang="vi">
+                <PostContent html={toc.html} />
+              </div>
+
+              <div className="post-foot">
+                <div className="post-foot-tags">
+                  <span className="post-foot-label">{dict.tagged}</span>
+                  <Tags tags={post.tags} />
+                </div>
+                <ShareBar
+                  url={`https://lequoctrung.vn/blog/${post.slug}`}
+                  title={post.title}
+                  labels={{ share: dict.shareButton, copyLink: dict.copyLink, copied: dict.copied }}
+                />
+              </div>
+              <PostNav
+                slug={post.slug}
+                locale={lang}
+                labels={{ prev: dict.prev, next: dict.next, ariaLabel: dict.postNavAria }}
+              />
+              <Link href={localePath(lang, "/blog")} className="cta-link">
+                {dict.readMore}
+              </Link>
+            </article>
+          </div>
+        </section>
+
         <RelatedPosts slug={post.slug} locale={lang} label={dict.related} />
-      </div>
+      </main>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -273,5 +193,17 @@ export default async function PostPage({ params }: PageProps) {
         }}
       />
     </>
+  );
+}
+
+function Tags({ tags }: { tags: Tag[] }) {
+  return (
+    <div className="tags" lang="vi">
+      {tags.map((tag) => (
+        <span key={tag.id} className="tag">
+          {tag.name}
+        </span>
+      ))}
+    </div>
   );
 }

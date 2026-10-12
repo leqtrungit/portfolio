@@ -1,61 +1,79 @@
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import type { Dictionary } from "@/lib/i18n/getDictionary";
-import { tokens } from "@/lib/tokens";
 
 export interface TransformationsSectionProps {
   dict: Dictionary["transformations"];
 }
 
-export function TransformationsSection({ dict }: TransformationsSectionProps) {
+type Item = Dictionary["transformations"]["items"][number];
+
+// Fishbone (Ishikawa) layout from the design, in px within the 1166×620 diagram.
+// Items 0/2 hang above the spine, 1/3 below it.
+const BONES = [
+  { dir: "up", bone: 300, cause: 95, tag: { left: 210, top: 322 } },
+  { dir: "down", bone: 500, cause: 295, tag: { left: 410, top: 265 } },
+  { dir: "up", bone: 700, cause: 495, tag: { left: 610, top: 322 } },
+  { dir: "down", bone: 860, cause: 655, tag: { left: 755, top: 265 } },
+] as const;
+
+function Cause({ item }: { item: Item }) {
   return (
-    <section style={{ background: tokens.colors.dark, color: tokens.colors.onDark }}>
-      <div className="tf-inner" style={{ maxWidth: 1080, margin: "0 auto", padding: "64px 32px 70px" }}>
-        <div
-          style={{
-            fontFamily: tokens.fonts.mono,
-            fontSize: 12,
-            letterSpacing: "0.14em",
-            color: tokens.colors.onDarkAccent,
-            marginBottom: 34,
-          }}
-        >
-          {dict.label}
-        </div>
-        {dict.items.map((t) => (
-          <div
-            key={t.tag}
-            className="trow tf-row"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 86px 1fr 150px",
-              gap: 26,
-              alignItems: "center",
-              padding: "26px 12px",
-              borderBottom: `1px solid ${tokens.colors.onDarkBorder}`,
-              margin: "0 -12px",
-            }}
-          >
-            <span className="tf-from" style={{ fontSize: 24, color: tokens.colors.onDarkMuted, fontWeight: 500 }}>
-              {t.from}
-            </span>
-            <span className="tf-arrow" style={{ fontSize: 34, color: tokens.accent, textAlign: "center" }}>
-              →
-            </span>
-            <span className="tf-to" style={{ fontSize: 26, fontWeight: 700, letterSpacing: "-0.01em" }}>
-              {t.to}
-            </span>
-            <span
-              className="tf-tag"
-              style={{
-                fontFamily: tokens.fonts.mono,
-                fontSize: 12,
-                textAlign: "right",
-                color: tokens.colors.onDarkMuted,
-              }}
-            >
-              {t.tag}
-            </span>
+    <>
+      <span className="tf-from">{item.from}</span>
+      <span className="tf-arrow" aria-hidden="true" />
+      <span className="tf-to">{item.to}</span>
+    </>
+  );
+}
+
+export function TransformationsSection({ dict }: TransformationsSectionProps) {
+  const items = dict.items.slice(0, BONES.length);
+
+  return (
+    <section className="tf-band">
+      <div className="wrap tf-frame" style={{ paddingLeft: 16, paddingRight: 16 }}>
+        <div className="tf-box">
+          <SectionHeading number="02" tone="dark">
+            {dict.label}
+          </SectionHeading>
+
+          {/* Desktop: fishbone diagram (decorative layout of the list below). */}
+          <div className="fish" aria-hidden="true">
+            <div className="fish-spine" />
+            {items.map((item, i) => {
+              const b = BONES[i];
+              return (
+                <div key={item.tag}>
+                  <div className={`fish-bone ${b.dir}`} style={{ left: b.bone }} />
+                  <div className={`fish-cause ${b.dir}`} style={{ left: b.cause }}>
+                    <Cause item={item} />
+                  </div>
+                  <div className="fish-tag" style={b.tag}>
+                    <span className="tf-tag">{item.tag}</span>
+                  </div>
+                </div>
+              );
+            })}
+            <div className="fish-effect">
+              <span className="effect-label">{dict.effectLabel}</span>
+              <span className="effect-text">{dict.effectText}</span>
+            </div>
           </div>
-        ))}
+
+          {/* Narrow screens (and screen readers): the same content as a list. */}
+          <ul className="tf-list" style={{ listStyle: "none", margin: 0, padding: 0 }}>
+            {items.map((item) => (
+              <li key={item.tag} className="tf-item">
+                <span className="tf-tag">{item.tag}</span>
+                <Cause item={item} />
+              </li>
+            ))}
+            <li className="tf-effect">
+              <span className="effect-label">{dict.effectLabel}</span>
+              <span className="effect-text">{dict.effectText}</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
   );

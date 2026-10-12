@@ -3,19 +3,21 @@
 import { useState } from "react";
 import { PostRow } from "@/components/blog/PostRow";
 import { loadMorePosts } from "@/app/actions/blog";
-import { tokens } from "@/lib/tokens";
 import type { PostSummary } from "@/lib/blog";
-import type { Locale } from "@/lib/i18n/config";
+import { fill, type Locale } from "@/lib/i18n/config";
 
 interface PostListWithLoadMoreProps {
   initialPosts: PostSummary[];
   total: number;
+  pageSize: number;
+  /** Posts already rendered above the list (the lead post) — counted, not repeated. */
+  skip?: number;
   tag?: string;
   locale: Locale;
-  labels: { loadMore: string; loading: string };
+  labels: { loadMore: string; loading: string; shownOf: string };
 }
 
-export function PostListWithLoadMore({ initialPosts, total, tag, locale, labels }: PostListWithLoadMoreProps) {
+export function PostListWithLoadMore({ initialPosts, total, pageSize, skip = 0, tag, locale, labels }: PostListWithLoadMoreProps) {
   const [posts, setPosts] = useState<PostSummary[]>(initialPosts);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -26,7 +28,7 @@ export function PostListWithLoadMore({ initialPosts, total, tag, locale, labels 
     if (loading || !hasMore) return;
     setLoading(true);
     try {
-      const { posts: newPosts } = await loadMorePosts({ page: page + 1, limit: 10, tag });
+      const { posts: newPosts } = await loadMorePosts({ page: page + 1, limit: pageSize, tag });
       setPosts((prev) => [...prev, ...newPosts]);
       setPage((p) => p + 1);
     } finally {
@@ -34,32 +36,29 @@ export function PostListWithLoadMore({ initialPosts, total, tag, locale, labels 
     }
   };
 
+  const shown = Math.min(posts.length, total);
+
   return (
     <>
-      {posts.map((post) => (
+      {posts.slice(skip).map((post) => (
         <PostRow key={post.id} post={post} locale={locale} />
       ))}
+      {!hasMore && <div style={{ height: 72 }} />}
       {hasMore && (
-        <div style={{ marginTop: 48, display: "flex", justifyContent: "center" }}>
-          <button
-            type="button"
-            onClick={handleLoadMore}
-            disabled={loading}
-            style={{
-              fontFamily: tokens.fonts.mono,
-              fontSize: 13,
-              border: `1.5px solid ${tokens.colors.border}`,
-              padding: "11px 20px",
-              letterSpacing: "0.04em",
-              textDecoration: "none",
-              display: "inline-block",
-              color: loading ? tokens.colors.textMuted : tokens.colors.text,
-              background: "transparent",
-              cursor: loading ? "default" : "pointer",
-              touchAction: "manipulation",
-            }}
-          >
-            {loading ? labels.loading : labels.loadMore}
+        <div className="load-more-wrap">
+          <button type="button" className="load-more" onClick={handleLoadMore} disabled={loading}>
+            <span className="load-more-count">
+              {shown} <span>{fill(labels.shownOf, { total })}</span>
+            </span>
+            <span className="load-more-track" aria-hidden="true">
+              <span className="load-more-fill" style={{ width: `${(shown / total) * 100}%` }} />
+            </span>
+            <span className="load-more-label">
+              {loading ? labels.loading : labels.loadMore}
+              <span className="load-more-icon" aria-hidden="true">
+                ↓
+              </span>
+            </span>
           </button>
         </div>
       )}

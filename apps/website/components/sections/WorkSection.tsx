@@ -1,9 +1,7 @@
 import type { Work } from "@new-portfolio/profile-schema";
-import { SectionLabel } from "@/components/ui/SectionLabel";
-import { Pill } from "@/components/ui/Pill";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/getDictionary";
-import { tokens } from "@/lib/tokens";
 import { formatPeriod } from "@/lib/formatDate";
 
 export interface WorkSectionProps {
@@ -16,103 +14,46 @@ export function WorkSection({ work, locale, dict }: WorkSectionProps) {
   if (work.length === 0) return null;
 
   return (
-    <section id="work" className="sect-pad" style={{ padding: "88px 0 24px" }}>
-      <SectionLabel>{dict.experience}</SectionLabel>
+    <section id="work" className="wrap work">
+      <SectionHeading number="01">{dict.experience}</SectionHeading>
       {work.map((job) => {
+        // highlights[0] is a one-line role narrative, the rest are bullets (see profile.json _note).
         const [narrative, ...highlights] = job.highlights;
         return (
-          <div
-            key={`${job.name}-${job.startDate}`}
-            className="work-row"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "230px 1fr",
-              gap: 30,
-              padding: "34px 0",
-              borderTop: `1px solid ${tokens.colors.borderHairline}`,
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  fontFamily: tokens.fonts.mono,
-                  fontSize: 12,
-                  color: tokens.colors.textFaint,
-                  letterSpacing: "0.04em",
-                }}
-              >
-                {formatPeriod(job.startDate, job.endDate, locale)}
-              </div>
-              {job.summary && (
-                <div
-                  style={{
-                    fontFamily: tokens.fonts.mono,
-                    fontSize: 12,
-                    color: tokens.accent,
-                    marginTop: 8,
-                    letterSpacing: "0.04em",
-                  }}
-                >
-                  {job.summary.toUpperCase()}
-                </div>
-              )}
+          <article key={`${job.name}-${job.startDate}`} className="job">
+            <div className="job-when">
+              <span className="job-period">{formatPeriod(job.startDate, job.endDate, locale)}</span>
+              {job.summary && <span className="job-mode">{job.summary}</span>}
             </div>
-            <div>
-              <div style={{ fontSize: 25, fontWeight: 700, letterSpacing: "-0.01em" }}>{job.position}</div>
-              <div style={{ fontSize: 16, color: tokens.colors.textMuted, marginTop: 3, fontWeight: 500 }}>
-                {job.name}
+            <div className="job-rail" aria-hidden="true" />
+            <div className="job-body">
+              <div className="job-head">
+                <h3 className="job-title">{job.position}</h3>
               </div>
-              {narrative && (
-                <p
-                  style={{
-                    fontSize: 16,
-                    lineHeight: 1.55,
-                    color: tokens.colors.textMuted,
-                    margin: "16px 0 0",
-                    maxWidth: 620,
-                  }}
-                >
-                  {narrative}
-                </p>
-              )}
+              <div>
+                <div className="job-company">{job.name}</div>
+                {narrative && <p className="job-narrative">{narrative}</p>}
+                {job.tags.length > 0 && (
+                  <div className="tags">
+                    {job.tags.map((tag) => (
+                      <span key={tag} className="tag tag-sm">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
               {highlights.length > 0 && (
-                <ul
-                  style={{
-                    margin: "18px 0 0",
-                    padding: 0,
-                    listStyle: "none",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 11,
-                  }}
-                >
+                <ul className="job-bullets">
                   {highlights.map((highlight, idx) => (
-                    <li
-                      key={idx}
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "18px 1fr",
-                        gap: 10,
-                        fontSize: 15.5,
-                        lineHeight: 1.5,
-                        color: tokens.colors.textStrong,
-                      }}
-                    >
-                      <span style={{ color: tokens.accent }}>→</span>
+                    <li key={idx}>
                       <span>{highlight}</span>
                     </li>
                   ))}
                 </ul>
               )}
-              {job.tags.length > 0 && (
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 20 }}>
-                  {job.tags.map((tag) => (
-                    <Pill key={tag}>{tag}</Pill>
-                  ))}
-                </div>
-              )}
             </div>
-          </div>
+          </article>
         );
       })}
     </section>

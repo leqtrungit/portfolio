@@ -46,7 +46,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
           height: "100%",
           display: "flex",
           alignItems: "center",
-          background: tokens.colors.bg,
+          background: tokens.colors.paper,
           color: tokens.colors.text,
           fontFamily: "Bricolage Grotesque",
         }}
@@ -96,7 +96,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
               display: "flex",
               flexDirection: "column",
               gap: 16,
-              borderTop: `2px solid ${tokens.colors.border}`,
+              borderTop: `2px solid ${tokens.colors.ink}`,
               paddingTop: 22,
               fontFamily: "JetBrains Mono",
             }}
@@ -110,7 +110,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
                       display: "flex",
                       fontSize: 16,
                       color: TAG_TEXT,
-                      border: `1.5px solid ${tokens.colors.border}`,
+                      border: `1.5px solid ${tokens.colors.ink}`,
                       padding: "6px 13px",
                       letterSpacing: 0.3,
                     }}
@@ -123,7 +123,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
             {post && (
               <div style={{ display: "flex", fontSize: 17, color: tokens.colors.textFaint, letterSpacing: 0.7 }}>
                 {formatPostDate(post.created_at)}
-                <span style={{ color: tokens.colors.borderMuted, margin: "0 10px" }}>/</span>
+                <span style={{ color: tokens.colors.rule, margin: "0 10px" }}>/</span>
                 {estimateReadTime(post.content, lang)}
               </div>
             )}
@@ -137,9 +137,9 @@ export default async function Image({ params }: { params: Promise<{ lang: string
             width: IMAGE_BOX,
             height: IMAGE_BOX,
             marginRight: 56,
-            border: `2px solid ${tokens.colors.border}`,
+            border: `2px solid ${tokens.colors.ink}`,
             boxShadow: `-12px 12px 0 ${tokens.accent}`,
-            background: tokens.colors.borderMuted,
+            background: tokens.colors.rule,
             overflow: "hidden",
           }}
         >

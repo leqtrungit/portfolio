@@ -1,22 +1,11 @@
-import { Bricolage_Grotesque, JetBrains_Mono, Newsreader } from "next/font/google";
+import { Bricolage_Grotesque } from "next/font/google";
 
+// Variable font with the width axis — the design leans on condensed (font-stretch 75–85%)
+// labels next to full-width headings.
 export const bricolage = Bricolage_Grotesque({
   subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600", "700", "800"],
+  axes: ["opsz", "wdth"],
   variable: "--font-bricolage",
 });
 
-export const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600"],
-  variable: "--font-jetbrains-mono",
-});
-
-export const newsreader = Newsreader({
-  subsets: ["latin", "vietnamese"],
-  style: ["normal", "italic"],
-  weight: ["400"],
-  variable: "--font-newsreader",
-});
-
-export const fontVariables = `${bricolage.variable} ${jetbrainsMono.variable} ${newsreader.variable}`;
+export const fontVariables = bricolage.variable;

@@ -1,9 +1,9 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import type { Metadata, Viewport } from "next";
-import { tokens } from "@/lib/tokens";
+import { tokenCss, tokens } from "@/lib/tokens";
 import { fontVariables } from "@/lib/fonts";
 import { getProfile } from "@/lib/profile";
 import { truncateForMeta } from "@/lib/seo";
@@ -14,7 +14,8 @@ import { AnalyticsTracker } from "@/components/ui/AnalyticsTracker";
 
 // Inlined (not `import "./globals.css"`) so this ~2KB stylesheet ships in the
 // initial HTML instead of as a separate render-blocking request.
-const globalCss = readFileSync(path.join(process.cwd(), "app/globals.css"), "utf8");
+const readGlobalCss = () => tokenCss + readFileSync(path.join(process.cwd(), "app/globals.css"), "utf8");
+const globalCss = readGlobalCss();
 
 const siteUrl = getProfile().basics.url ?? "https://lequoctrung.vn";
 
@@ -58,7 +59,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 }
 
 export const viewport: Viewport = {
-  themeColor: tokens.accent,
+  themeColor: tokens.colors.ink,
 };
 
 function buildSiteJsonLd(locale: Locale) {
@@ -125,13 +126,12 @@ export default async function RootLayout({
   if (!isLocale(lang)) notFound();
 
   return (
-    <html
-      lang={htmlLang[lang]}
-      className={fontVariables}
-      style={{ "--ac": tokens.accent } as CSSProperties}
-    >
-      <body style={{ fontFamily: tokens.fonts.display, margin: 0 }}>
-        <style dangerouslySetInnerHTML={{ __html: globalCss }} />
+    <html lang={htmlLang[lang]} className={fontVariables}>
+      <body>
+        {/* Re-read per request in dev so stylesheet edits show up without a server restart. */}
+        <style
+          dangerouslySetInnerHTML={{ __html: process.env.NODE_ENV === "development" ? readGlobalCss() : globalCss }}
+        />
         <AnalyticsTracker />
         {children}
         <script

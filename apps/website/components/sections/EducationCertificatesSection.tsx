@@ -1,8 +1,6 @@
 import type { Certificate, Education } from "@new-portfolio/profile-schema";
-import { SectionLabel } from "@/components/ui/SectionLabel";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/getDictionary";
-import { tokens } from "@/lib/tokens";
 import { formatDate, formatPeriod } from "@/lib/formatDate";
 
 export interface EducationCertificatesSectionProps {
@@ -17,67 +15,39 @@ export function EducationCertificatesSection({ education, certificates, locale, 
   if (!primaryEducation && certificates.length === 0) return null;
 
   return (
-    <section style={{ padding: "64px 0 24px" }}>
-      <div className="edu-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56 }}>
-        {primaryEducation && (
-          <div>
-            <SectionLabel>{dict.education}</SectionLabel>
-            <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.01em" }}>
-              {primaryEducation.institution}
-            </div>
-            <div style={{ fontSize: 15.5, color: tokens.colors.textMuted, marginTop: 6 }}>
-              {[primaryEducation.studyType, primaryEducation.area].filter(Boolean).join(" — ")}
-            </div>
-            {primaryEducation.startDate && (
-              <div
-                style={{
-                  fontFamily: tokens.fonts.mono,
-                  fontSize: 12,
-                  color: tokens.colors.textFaint,
-                  marginTop: 10,
-                  letterSpacing: "0.04em",
-                }}
-              >
-                {formatPeriod(primaryEducation.startDate, primaryEducation.endDate, locale)}
-              </div>
-            )}
+    <section className="wrap edu">
+      {primaryEducation && (
+        <div>
+          <h2 className="mini-head" style={{ margin: 0 }}>
+            <span className="red">05</span> · {dict.education}
+          </h2>
+          <div className="edu-school">{primaryEducation.institution}</div>
+          <div className="edu-degree">
+            {[primaryEducation.studyType, primaryEducation.area].filter(Boolean).join(" — ")}
           </div>
-        )}
-        {certificates.length > 0 && (
-          <div>
-            <SectionLabel>{dict.certificates}</SectionLabel>
-            {certificates.map((cert) => (
-              <div
-                key={cert.name}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  gap: 16,
-                  padding: "13px 0",
-                  borderBottom: `1px solid ${tokens.colors.borderHairline}`,
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: 15.5, fontWeight: 600, lineHeight: 1.3 }}>{cert.name}</div>
-                  {cert.issuer && <div style={{ fontSize: 13, color: tokens.colors.textFaint }}>{cert.issuer}</div>}
-                </div>
-                {cert.date && (
-                  <div
-                    style={{
-                      fontFamily: tokens.fonts.mono,
-                      fontSize: 12,
-                      color: tokens.colors.textFaint,
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {formatDate(cert.date, locale)}
-                  </div>
-                )}
+          {primaryEducation.startDate && (
+            <div className="edu-period">
+              {formatPeriod(primaryEducation.startDate, primaryEducation.endDate, locale)}
+            </div>
+          )}
+        </div>
+      )}
+      {certificates.length > 0 && (
+        <div>
+          <h2 className="mini-head" style={{ margin: 0 }}>
+            <span className="red">06</span> · {dict.certificates}
+          </h2>
+          {certificates.map((cert) => (
+            <div key={cert.name} className="cert">
+              <div>
+                <div className="cert-name">{cert.name}</div>
+                {cert.issuer && <div className="cert-issuer">{cert.issuer}</div>}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+              {cert.date && <span className="cert-date">{formatDate(cert.date, locale)}</span>}
+            </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

@@ -31,7 +31,7 @@ export async function GET() {
       <title>${esc(p.title)}</title>
       <link>${siteUrl}/blog/${p.slug}</link>
       <guid isPermaLink="true">${siteUrl}/blog/${p.slug}</guid>
-      <pubDate>${new Date(p.created_at).toUTCString()}</pubDate>
+      <pubDate>${new Date(p.published_at).toUTCString()}</pubDate>
       <description>${esc(p.excerpt ?? "")}</description>
     </item>`
     )

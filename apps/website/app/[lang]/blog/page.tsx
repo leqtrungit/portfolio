@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { buildImageUrl, fetchPosts, formatPostDate } from "@/lib/blog";
+import { coverUrl, fetchPosts, formatPostDate } from "@/lib/blog";
 import { PostListWithLoadMore } from "@/components/blog/PostListWithLoadMore";
 import { SubpageHeader } from "@/components/sections/SubpageHeader";
 import { Cover } from "@/components/ui/Cover";
@@ -66,13 +66,13 @@ export default async function BlogListPage({ params }: { params: Promise<{ lang:
           <>
             <section className="wrap blog-lead-wrap">
               <Link href={localePath(lang, `/blog/${lead.slug}`)} className="blog-lead post-link" lang="vi">
-                <Cover src={buildImageUrl(lead.featured_image_key)} alt={lead.featured_image_alt ?? lead.title} sizes="(max-width: 860px) 100vw, 660px" priority />
+                <Cover src={coverUrl(lead)} alt={lead.featured_image_alt ?? lead.title} sizes="(max-width: 860px) 100vw, 660px" priority />
                 <div className="blog-lead-body">
                   <div className="meta meta-row">
                     <span className="latest-label" lang={lang}>
                       {dict.latest}
                     </span>
-                    <span className="red">{formatPostDate(lead.created_at)}</span>
+                    <span className="red">{formatPostDate(lead.published_at)}</span>
                   </div>
                   <h2 className="blog-lead-title post-link-title">{lead.title}</h2>
                   {lead.excerpt && <p className="blog-lead-excerpt">{lead.excerpt}</p>}

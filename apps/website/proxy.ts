@@ -36,7 +36,7 @@ export function proxy(request: NextRequest) {
     "connect-src 'self' https://blog-api.lequoctrung.id.vn",
     `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data:",
+    "img-src 'self' data: https://blog-api.lequoctrung.id.vn",
     "font-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",

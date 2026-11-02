@@ -3,7 +3,7 @@ import { getDictionary } from "@/lib/i18n/getDictionary";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
-import { fetchPost, fetchPosts, buildImageUrl, estimateReadTime, formatPostDate, type Tag } from "@/lib/blog";
+import { fetchPost, fetchPosts, coverUrl, estimateReadTime, formatPostDate, type Tag } from "@/lib/blog";
 import { buildToc } from "@/lib/toc";
 import { PostContent } from "@/components/blog/PostContent";
 import { TableOfContents } from "@/components/blog/TableOfContents";
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url: `/blog/${slug}`,
       type: "article",
       locale: "vi_VN",
-      publishedTime: post.created_at,
+      publishedTime: post.published_at,
       modifiedTime: post.updated_at,
     },
     twitter: {
@@ -69,7 +69,7 @@ export default async function PostPage({ params }: PageProps) {
   if (!post) notFound();
   const dict = (await getDictionary(lang)).blog;
 
-  const imageUrl = buildImageUrl(post.featured_image_key);
+  const imageUrl = coverUrl(post);
   const readTime = estimateReadTime(post.content, lang);
   const toc = buildToc(post.html);
   // A contents list only pays off once there are a few sections to jump between.
@@ -90,7 +90,7 @@ export default async function PostPage({ params }: PageProps) {
             <span className="post-spacer" />
             <div className="post-head-main">
               <div className="meta post-meta">
-                <span className="red">{formatPostDate(post.created_at)}</span>
+                <span className="red">{formatPostDate(post.published_at)}</span>
                 <span style={{ color: "var(--slash)" }} aria-hidden="true">
                   /
                 </span>
@@ -176,7 +176,7 @@ export default async function PostPage({ params }: PageProps) {
             headline: post.title,
             inLanguage: "vi",
             description: post.excerpt ?? post.title,
-            datePublished: post.created_at,
+            datePublished: post.published_at,
             dateModified: post.updated_at,
             author: {
               "@type": "Person",

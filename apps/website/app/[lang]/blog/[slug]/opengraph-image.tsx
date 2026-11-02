@@ -34,7 +34,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
   const tags = post?.tags.slice(0, MAX_TAGS).map((t) => t.name) ?? [];
   const [fonts, cover] = await Promise.all([
     loadOgFonts(),
-    loadOgCoverImage(post?.featured_image_key ?? null, { size: IMAGE_BOX * 2 }),
+    loadOgCoverImage(post?.featured_image_url ?? null, { size: IMAGE_BOX * 2 }),
   ]);
   const fontSize = titleSize(title);
 
@@ -122,7 +122,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
             )}
             {post && (
               <div style={{ display: "flex", fontSize: 17, color: tokens.colors.textFaint, letterSpacing: 0.7 }}>
-                {formatPostDate(post.created_at)}
+                {formatPostDate(post.published_at)}
                 <span style={{ color: tokens.colors.rule, margin: "0 10px" }}>/</span>
                 {estimateReadTime(post.content, lang)}
               </div>

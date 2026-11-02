@@ -12,6 +12,11 @@ export interface PostSummary {
   title: string;
   slug: string;
   excerpt: string | null;
+  published_at: string;
+  locale: string;
+  reading_minutes: number;
+  translations: { locale: string; slug: string }[];
+  featured_image_url: string;
   featured_image_key: string | null;
   featured_image_alt: string | null;
   status: string;
@@ -32,9 +37,8 @@ export interface PaginationMeta {
   total_pages: number;
 }
 
-export function buildImageUrl(key: string | null): string | null {
-  if (!key) return null;
-  return `/media/${key}`;
+export function coverUrl(post: { featured_image_url?: string | null }): string | null {
+  return post.featured_image_url || null;
 }
 
 export function estimateReadTime(content: string, locale: Locale = "en"): string {

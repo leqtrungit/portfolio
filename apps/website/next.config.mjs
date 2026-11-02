@@ -1,11 +1,13 @@
-const MEDIA_BASE_URL =
-  process.env.MEDIA_BASE_URL ?? "http://localhost:9000/blog-media";
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Root layout lives under the [lang] dynamic segment, so unmatched URLs and
   // notFound() need a global 404 (app/global-not-found.tsx).
   experimental: { globalNotFound: true },
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "blog-api.lequoctrung.id.vn", pathname: "/media/**" },
+    ],
+  },
   transpilePackages: ["@new-portfolio/profile-schema"],
   // The per-post OG image route (app/[lang]/blog/[slug]/opengraph-image.tsx)
   // reads its fonts from disk at request time, and file tracing picks up
@@ -20,14 +22,6 @@ const nextConfig = {
   },
   turbopack: {
     root: new URL("../..", import.meta.url).pathname,
-  },
-  async rewrites() {
-    return [
-      {
-        source: "/media/:path*",
-        destination: `${MEDIA_BASE_URL}/:path*`,
-      },
-    ];
   },
   async redirects() {
     return [

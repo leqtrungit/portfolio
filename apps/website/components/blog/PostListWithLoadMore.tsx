@@ -28,7 +28,7 @@ export function PostListWithLoadMore({ initialPosts, total, pageSize, skip = 0, 
     if (loading || !hasMore) return;
     setLoading(true);
     try {
-      const { posts: newPosts } = await loadMorePosts({ page: page + 1, limit: pageSize, tag });
+      const { posts: newPosts } = await loadMorePosts({ locale, page: page + 1, limit: pageSize, tag });
       setPosts((prev) => [...prev, ...newPosts]);
       setPage((p) => p + 1);
     } finally {

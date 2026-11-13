@@ -4,8 +4,11 @@ const nextConfig = {
   // notFound() need a global 404 (app/global-not-found.tsx).
   experimental: { globalNotFound: true },
   images: {
+    // next/image times out on the 5–9 MiB staging covers during `next dev`.
+    unoptimized: process.env.NODE_ENV !== "production",
     remotePatterns: [
       { protocol: "https", hostname: "blog-api.lequoctrung.id.vn", pathname: "/media/**" },
+      { protocol: "https", hostname: "blog-api-staging.lequoctrung.id.vn", pathname: "/media/**" },
     ],
   },
   transpilePackages: ["@new-portfolio/profile-schema"],

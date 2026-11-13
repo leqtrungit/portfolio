@@ -12,10 +12,11 @@ export interface SubpageNavProps {
   /** Highlights the BLOG nav link on blog pages. */
   inBlog?: boolean;
   currentLang?: string;
+  languagePaths?: Partial<Record<Locale, string>>;
 }
 
 /** Header + breadcrumb bar shared by the blog, post, privacy and 404 pages. */
-export function SubpageNav({ locale, name, dict, crumbs, inBlog, currentLang }: SubpageNavProps) {
+export function SubpageNav({ locale, name, dict, crumbs, inBlog, currentLang, languagePaths }: SubpageNavProps) {
   const home = localePath(locale, "/");
   return (
     <>
@@ -23,6 +24,7 @@ export function SubpageNav({ locale, name, dict, crumbs, inBlog, currentLang }: 
         homeHref={home}
         homeLabel={fill(dict.homeAria, { name })}
         languageLabel={dict.language}
+        languagePaths={languagePaths}
         links={[
           { href: home, label: dict.portfolio },
           { href: localePath(locale, "/blog"), label: dict.blog, current: inBlog },

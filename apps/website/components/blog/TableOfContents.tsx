@@ -7,12 +7,13 @@ interface TableOfContentsProps {
   items: TocItem[];
   label: string;
   ariaLabel: string;
+  lang: string;
 }
 
-function TocList({ items, active }: { items: TocItem[]; active?: string }) {
+function TocList({ items, active, lang }: { items: TocItem[]; active?: string; lang: string }) {
   let n = 0;
   return (
-    <ol className="toc-list" lang="vi">
+    <ol className="toc-list" lang={lang}>
       {items.map((item) => {
         // h2s are numbered to match the badges the article CSS puts on each h2.
         const num = item.level === 2 ? String(++n).padStart(2, "0") : "";
@@ -33,7 +34,7 @@ function TocList({ items, active }: { items: TocItem[]; active?: string }) {
  * Sticky left rail on wide screens, a collapsible block above the article on narrow ones
  * (CSS picks one). The rail highlights the section currently being read.
  */
-export function TableOfContents({ items, label, ariaLabel }: TableOfContentsProps) {
+export function TableOfContents({ items, label, ariaLabel, lang }: TableOfContentsProps) {
   const [active, setActive] = useState<string | undefined>(items[0]?.id);
 
   useEffect(() => {
@@ -69,12 +70,12 @@ export function TableOfContents({ items, label, ariaLabel }: TableOfContentsProp
     <>
       <aside className="toc" aria-label={ariaLabel}>
         <div className="toc-head">{label}</div>
-        <TocList items={items} active={active} />
+        <TocList items={items} active={active} lang={lang} />
       </aside>
       <details className="toc-inline">
         <summary>{label}</summary>
         <nav aria-label={ariaLabel}>
-          <TocList items={items} />
+          <TocList items={items} lang={lang} />
         </nav>
       </details>
     </>

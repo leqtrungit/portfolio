@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Locale } from "@/lib/i18n/config";
 import { ChipLogo } from "@/components/ui/ChipLogo";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 
@@ -15,10 +16,11 @@ export interface SiteHeaderProps {
   homeLabel: string;
   links: SiteHeaderLink[];
   languageLabel: string;
+  languagePaths?: Partial<Record<Locale, string>>;
 }
 
 /** Dark bar with the chip emblem hanging off its left edge. */
-export function SiteHeader({ homeHref, homeLabel, links, languageLabel }: SiteHeaderProps) {
+export function SiteHeader({ homeHref, homeLabel, links, languageLabel, languagePaths }: SiteHeaderProps) {
   return (
     <header className="site-header">
       <div className="wrap site-header-inner">
@@ -36,7 +38,7 @@ export function SiteHeader({ homeHref, homeLabel, links, languageLabel }: SiteHe
               {link.label}
             </Link>
           ))}
-          <LanguageSwitcher label={languageLabel} />
+          <LanguageSwitcher label={languageLabel} paths={languagePaths} />
         </nav>
       </div>
     </header>

@@ -1,4 +1,5 @@
 import { fetchAllPosts, fetchPost } from "@/lib/blog";
+import { isLocale } from "@/lib/i18n/config";
 import { getProfile } from "@/lib/profile";
 
 export const revalidate = 3600;
@@ -15,9 +16,9 @@ export async function GET() {
   ];
 
   try {
-    const posts = await fetchAllPosts(3600);
+    const posts = await fetchAllPosts("en", 3600);
     for (const summary of posts) {
-      const post = await fetchPost(summary.slug, { revalidate: 3600 });
+      const post = await fetchPost(summary.slug, isLocale(summary.locale) ? summary.locale : "vi", { revalidate: 3600 });
       if (!post) continue;
       sections.push(
         `## ${post.title}`,

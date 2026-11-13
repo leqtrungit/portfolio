@@ -14,7 +14,7 @@ export async function LatestBlogSection({ locale, dict }: LatestBlogSectionProps
   let posts: PostSummary[] = [];
   let total = 0;
   try {
-    const res = await fetchPosts({ limit: 3, revalidate: 3600 });
+    const res = await fetchPosts({ locale, limit: 3, revalidate: 3600 });
     posts = res.posts;
     total = res.meta.total;
   } catch {
@@ -39,7 +39,7 @@ export async function LatestBlogSection({ locale, dict }: LatestBlogSectionProps
         {dict.latestBlog}
       </SectionHeading>
       <div className="latest-grid">
-        <Link href={href(lead)} className="latest-lead post-link" lang="vi">
+        <Link href={href(lead)} className="latest-lead post-link" lang={lead.locale}>
           <Cover src={coverUrl(lead)} alt={lead.featured_image_alt ?? lead.title} sizes="(max-width: 860px) 100vw, 640px" />
           <div className="meta meta-row">
             <span className="latest-label" lang={locale}>
@@ -53,7 +53,7 @@ export async function LatestBlogSection({ locale, dict }: LatestBlogSectionProps
         </Link>
         <div style={{ display: "flex", flexDirection: "column" }}>
           {side.map((post) => (
-            <Link key={post.id} href={href(post)} className="side-post post-link" lang="vi">
+            <Link key={post.id} href={href(post)} className="side-post post-link" lang={post.locale}>
               <Cover src={coverUrl(post)} alt={post.featured_image_alt ?? post.title} sizes="150px" />
               <div className="side-post-body">
                 <span className="meta red">{formatPostDate(post.published_at)}</span>

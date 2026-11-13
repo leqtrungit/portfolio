@@ -9,7 +9,7 @@ export async function GET() {
 
   let posts: PostSummary[] = [];
   try {
-    posts = await fetchAllPosts(3600);
+    posts = await fetchAllPosts("en", 3600);
   } catch {}
 
   const lines = [

@@ -31,7 +31,7 @@ export default async function BlogListPage({ params }: { params: Promise<{ lang:
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
   const dict = getDictionary(lang).blog;
-  const { posts, meta } = await fetchPosts({ limit: PAGE_SIZE });
+  const { posts, meta } = await fetchPosts({ locale: lang, limit: PAGE_SIZE });
   const lead = posts[0];
 
   const updated = new Date()
@@ -65,7 +65,7 @@ export default async function BlogListPage({ params }: { params: Promise<{ lang:
         {lead ? (
           <>
             <section className="wrap blog-lead-wrap">
-              <Link href={localePath(lang, `/blog/${lead.slug}`)} className="blog-lead post-link" lang="vi">
+              <Link href={localePath(lang, `/blog/${lead.slug}`)} className="blog-lead post-link" lang={lead.locale}>
                 <Cover src={coverUrl(lead)} alt={lead.featured_image_alt ?? lead.title} sizes="(max-width: 860px) 100vw, 660px" priority />
                 <div className="blog-lead-body">
                   <div className="meta meta-row">

@@ -13,7 +13,7 @@ interface RelatedPostsProps {
 export async function RelatedPosts({ slug, locale, label }: RelatedPostsProps) {
   let related: PostSummary[] = [];
   try {
-    related = await fetchRelatedPosts(slug, { limit: 3, revalidate: 3600 });
+    related = await fetchRelatedPosts(slug, locale, { limit: 3, revalidate: 3600 });
   } catch {
     // Related posts are optional — never fail the article over them.
     return null;
@@ -25,7 +25,7 @@ export async function RelatedPosts({ slug, locale, label }: RelatedPostsProps) {
       <SectionHeading number="→">{label}</SectionHeading>
       <div className="related-grid">
         {related.map((p) => (
-          <Link key={p.id} href={localePath(locale, `/blog/${p.slug}`)} className="related-card post-link" lang="vi">
+          <Link key={p.id} href={localePath(locale, `/blog/${p.slug}`)} className="related-card post-link" lang={p.locale}>
             <Cover src={coverUrl(p)} alt={p.featured_image_alt ?? p.title} sizes="(max-width: 860px) 100vw, 380px" />
             <span className="meta red">{formatPostDate(p.published_at)}</span>
             <h3 className="related-title post-link-title">{p.title}</h3>

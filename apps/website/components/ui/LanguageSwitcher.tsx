@@ -2,14 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { localePath, locales, stripLocale } from "@/lib/i18n/config";
+import { localePath, locales, stripLocale, type Locale } from "@/lib/i18n/config";
 
 export interface LanguageSwitcherProps {
   label: string;
+  paths?: Partial<Record<Locale, string>>;
 }
 
 // Normalizes with stripLocale so it works whether Next reports the visible or the rewritten path.
-export function LanguageSwitcher({ label }: LanguageSwitcherProps) {
+export function LanguageSwitcher({ label, paths }: LanguageSwitcherProps) {
   const { locale, path } = stripLocale(usePathname());
 
   return (
@@ -24,7 +25,7 @@ export function LanguageSwitcher({ label }: LanguageSwitcherProps) {
           ) : (
             // No prefetch: switching language is rare, and prefetching the other locale of a
             // 404 URL leaves a request hanging on the global not-found page.
-            <Link href={localePath(target, path)} hrefLang={target} lang={target} prefetch={false}>
+            <Link href={paths?.[target] ?? localePath(target, path)} hrefLang={target} lang={target} prefetch={false}>
               {target.toUpperCase()}
             </Link>
           )}

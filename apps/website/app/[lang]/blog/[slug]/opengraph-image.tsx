@@ -28,7 +28,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
   const { lang, slug } = await params;
   if (!isLocale(lang)) notFound();
   const profile = getProfile(lang);
-  const post = await fetchPost(slug, { revalidate }).catch(() => null);
+  const post = await fetchPost(slug, lang, { revalidate }).catch(() => null);
 
   const title = post?.title ?? "Blog";
   const tags = post?.tags.slice(0, MAX_TAGS).map((t) => t.name) ?? [];

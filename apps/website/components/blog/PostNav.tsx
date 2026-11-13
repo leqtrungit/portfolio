@@ -12,7 +12,7 @@ function PostNavLink({ post, label, dir, locale }: { post: PostSummary; label: s
   return (
     <Link href={localePath(locale, `/blog/${post.slug}`)} className={`post-nav-link ${dir}`}>
       <span className="post-nav-label">{label}</span>
-      <span className="post-nav-title" lang="vi">
+      <span className="post-nav-title" lang={post.locale}>
         {post.title}
       </span>
     </Link>
@@ -22,7 +22,7 @@ function PostNavLink({ post, label, dir, locale }: { post: PostSummary; label: s
 export async function PostNav({ slug, locale, labels }: PostNavProps) {
   let adjacent: AdjacentPosts;
   try {
-    adjacent = await fetchAdjacentPosts(slug, { revalidate: 3600 });
+    adjacent = await fetchAdjacentPosts(slug, locale, { revalidate: 3600 });
   } catch {
     // Prev/next is optional — never fail the article over it.
     return null;

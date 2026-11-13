@@ -31,3 +31,11 @@ export function localizedOpenGraph(
     alternateLocale: [ogLocale[other]],
   };
 }
+
+export function postAlternates(pageLocale: Locale, hrefs: Record<Locale, string>, bothPublished: boolean) {
+  if (!bothPublished) return { canonical: hrefs.en };
+  return {
+    canonical: hrefs[pageLocale],
+    languages: { en: hrefs.en, vi: hrefs.vi, "x-default": hrefs.en },
+  };
+}

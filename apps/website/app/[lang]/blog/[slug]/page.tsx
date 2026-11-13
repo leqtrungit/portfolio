@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { getDictionary } from "@/lib/i18n/getDictionary";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
-import { fetchPost, fetchPosts, coverUrl, estimateReadTime, formatPostDate, type Tag } from "@/lib/blog";
+import { resolvePost, fetchAllPosts, translationSlug, coverUrl, estimateReadTime, formatPostDate, type Tag } from "@/lib/blog";
 import { buildToc } from "@/lib/toc";
 import { PostContent } from "@/components/blog/PostContent";
 import { TableOfContents } from "@/components/blog/TableOfContents";
@@ -13,7 +13,8 @@ import { PostNav } from "@/components/blog/PostNav";
 import { SubpageHeader } from "@/components/sections/SubpageHeader";
 import { ShareBar } from "@/components/blog/ShareBar";
 import { truncateForMeta } from "@/lib/seo";
-import { isLocale, localePath, locales } from "@/lib/i18n/config";
+import { isLocale, localePath, locales, ogLocale } from "@/lib/i18n/config";
+import { postAlternates } from "@/lib/i18n/seo";
 
 interface PageProps {
   params: Promise<{ lang: string; slug: string }>;
@@ -22,14 +23,17 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang, slug } = await params;
   const locale = isLocale(lang) ? lang : "en";
-  const post = await fetchPost(slug);
-  if (!post) return { title: (await getDictionary(locale)).blog.notFound };
+  const resolved = await resolvePost(slug, locale);
+  if (!resolved) return { title: getDictionary(locale).blog.notFound };
+  const { post, redirectTo, hrefs } = resolved;
+  if (redirectTo) permanentRedirect(redirectTo);
+  const bothPublished = translationSlug(post, "en") != null && translationSlug(post, "vi") != null;
   const description = post.excerpt ? truncateForMeta(post.excerpt) : truncateForMeta(post.title);
   return {
     title: post.title,
     description,
     alternates: {
-      canonical: `/blog/${slug}`,
+      ...postAlternates(locale, hrefs, bothPublished),
       types: { "application/rss+xml": "/feed.xml" },
     },
 
@@ -37,9 +41,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: post.title,
       description,
-      url: `/blog/${slug}`,
+      url: localePath(locale, `/blog/${post.slug}`),
       type: "article",
-      locale: "vi_VN",
+      locale: ogLocale[isLocale(post.locale) ? post.locale : "vi"],
       publishedTime: post.published_at,
       modifiedTime: post.updated_at,
     },
@@ -53,24 +57,35 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export async function generateStaticParams() {
   try {
-    const { posts } = await fetchPosts({ limit: 100 });
-    return locales.flatMap((lang) => posts.map((p) => ({ lang, slug: p.slug })));
+    const posts = (await Promise.all([fetchAllPosts("vi"), fetchAllPosts("en")])).flat();
+    const params = new Map<string, { lang: string; slug: string }>();
+    for (const post of posts) {
+      // Cross product so the wrong-locale slug still hits this page and 308s.
+      for (const lang of locales) {
+        params.set(`${lang}:${post.slug}`, { lang, slug: post.slug });
+      }
+    }
+    return [...params.values()];
   } catch {
     return [];
   }
 }
 
+export const dynamicParams = true;
 export const revalidate = 3600;
 
 export default async function PostPage({ params }: PageProps) {
   const { lang, slug } = await params;
   if (!isLocale(lang)) notFound();
-  const post = await fetchPost(slug);
-  if (!post) notFound();
+  const resolved = await resolvePost(slug, lang);
+  if (!resolved) notFound();
+  const { post, redirectTo, hrefs } = resolved;
+  if (redirectTo) permanentRedirect(redirectTo);
+  const pageUrl = `https://lequoctrung.vn${localePath(lang, `/blog/${post.slug}`)}`;
   const dict = (await getDictionary(lang)).blog;
 
   const imageUrl = coverUrl(post);
-  const readTime = estimateReadTime(post.content, lang);
+  const readTime = estimateReadTime(post.content, isLocale(post.locale) ? post.locale : "vi");
   const toc = buildToc(post.html);
   // A contents list only pays off once there are a few sections to jump between.
   const showToc = toc.items.length >= 3;
@@ -82,7 +97,8 @@ export default async function PostPage({ params }: PageProps) {
         locale={lang}
         crumbs={[{ label: "Blog", href: localePath(lang, "/blog") }, { label: post.title }]}
         inBlog
-        currentLang="vi"
+        currentLang={post.locale}
+        languagePaths={hrefs}
       />
       <main>
         <section className="wrap post-head">
@@ -96,10 +112,10 @@ export default async function PostPage({ params }: PageProps) {
                 </span>
                 <span style={{ color: "var(--text-muted)", textTransform: "uppercase" }}>{readTime}</span>
               </div>
-              <h1 className="post-title" lang="vi">
+              <h1 className="post-title" lang={post.locale}>
                 {post.title}
               </h1>
-              {post.tags.length > 0 && <Tags tags={post.tags} />}
+              {post.tags.length > 0 && <Tags tags={post.tags} lang={post.locale} />}
             </div>
           </div>
         </section>
@@ -124,7 +140,7 @@ export default async function PostPage({ params }: PageProps) {
         {post.excerpt && (
           <div className="wrap post-grid post-caption-row">
             <span className="post-spacer" />
-            <p className="post-caption" lang="vi">
+            <p className="post-caption" lang={post.locale}>
               {post.excerpt}
             </p>
           </div>
@@ -133,22 +149,22 @@ export default async function PostPage({ params }: PageProps) {
         <section className="wrap post-main">
           <div className="post-grid">
             {showToc ? (
-              <TableOfContents items={toc.items} label={dict.toc} ariaLabel={dict.tocAria} />
+              <TableOfContents lang={post.locale} items={toc.items} label={dict.toc} ariaLabel={dict.tocAria} />
             ) : (
               <span className="post-spacer" />
             )}
             <article className="post-article">
-              <div lang="vi">
+              <div lang={post.locale}>
                 <PostContent html={toc.html} />
               </div>
 
               <div className="post-foot">
                 <div className="post-foot-tags">
                   <span className="post-foot-label">{dict.tagged}</span>
-                  <Tags tags={post.tags} />
+                  <Tags tags={post.tags} lang={post.locale} />
                 </div>
                 <ShareBar
-                  url={`https://lequoctrung.vn/blog/${post.slug}`}
+                  url={pageUrl}
                   title={post.title}
                   labels={{ share: dict.shareButton, copyLink: dict.copyLink, copied: dict.copied }}
                 />
@@ -174,7 +190,7 @@ export default async function PostPage({ params }: PageProps) {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             headline: post.title,
-            inLanguage: "vi",
+            inLanguage: lang,
             description: post.excerpt ?? post.title,
             datePublished: post.published_at,
             dateModified: post.updated_at,
@@ -186,9 +202,9 @@ export default async function PostPage({ params }: PageProps) {
             ...(imageUrl ? { image: `https://lequoctrung.vn${imageUrl}` } : {}),
             mainEntityOfPage: {
               "@type": "WebPage",
-              "@id": `https://lequoctrung.vn/blog/${post.slug}`,
+              "@id": pageUrl,
             },
-            url: `https://lequoctrung.vn/blog/${post.slug}`,
+            url: pageUrl,
           }),
         }}
       />
@@ -196,9 +212,9 @@ export default async function PostPage({ params }: PageProps) {
   );
 }
 
-function Tags({ tags }: { tags: Tag[] }) {
+function Tags({ tags, lang }: { tags: Tag[]; lang: string }) {
   return (
-    <div className="tags" lang="vi">
+    <div className="tags" lang={lang}>
       {tags.map((tag) => (
         <span key={tag.id} className="tag">
           {tag.name}

@@ -33,10 +33,10 @@ export function proxy(request: NextRequest) {
 
   const csp = [
     "default-src 'self'",
-    "connect-src 'self' https://blog-api.lequoctrung.id.vn",
+    "connect-src 'self' https://blog-api.lequoctrung.id.vn https://blog-api-staging.lequoctrung.id.vn",
     `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: https://blog-api.lequoctrung.id.vn",
+    "img-src 'self' data: https://blog-api.lequoctrung.id.vn https://blog-api-staging.lequoctrung.id.vn",
     "font-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",

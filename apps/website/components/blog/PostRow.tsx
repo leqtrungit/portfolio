@@ -13,7 +13,7 @@ export function PostRow({ post, locale }: PostRowProps) {
   const [y, m, d] = formatPostDate(post.published_at).split(" · ");
 
   return (
-    <Link href={localePath(locale, `/blog/${post.slug}`)} className="post-row post-link" lang="vi">
+    <Link href={localePath(locale, `/blog/${post.slug}`)} className="post-row post-link" lang={post.locale}>
       <div className="post-row-date">
         <span className="post-row-day">{d}</span>
         <span className="post-row-ym">

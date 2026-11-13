@@ -1,4 +1,4 @@
-import type { Locale } from "./i18n/config";
+import { localePath, type Locale } from "./i18n/config";
 const API_BASE = process.env.BLOG_API_BASE_URL ?? "http://localhost:8080/api/v1";
 
 export interface Tag {
@@ -38,7 +38,17 @@ export interface PaginationMeta {
 }
 
 export function coverUrl(post: { featured_image_url?: string | null }): string | null {
-  return post.featured_image_url || null;
+  const url = post.featured_image_url || null;
+  if (!url) return null;
+  const bust = process.env.BLOG_MEDIA_CACHE_BUST;
+  if (!bust) return url;
+  try {
+    const parsed = new URL(url);
+    parsed.searchParams.set("v", bust);
+    return parsed.toString();
+  } catch {
+    return url;
+  }
 }
 
 export function estimateReadTime(content: string, locale: Locale = "en"): string {
@@ -50,39 +60,50 @@ export function estimateReadTime(content: string, locale: Locale = "en"): string
   return `${mins} min read`;
 }
 
+export function postsQuery(params: { locale: Locale; tag?: string; page?: number; limit?: number }): string {
+  const query = new URLSearchParams({ locale: params.locale });
+  if (params.tag) query.set("tag", params.tag);
+  if (params.page != null) query.set("page", String(params.page));
+  if (params.limit != null) query.set("limit", String(params.limit));
+  return `?${query}`;
+}
+
+export function translationSlug(
+  post: { translations: { locale: string; slug: string }[] },
+  locale: Locale
+): string | null {
+  return post.translations.find(translation => translation.locale === locale)?.slug ?? null;
+}
+
+async function fetchWithLocale(url: URL, revalidate?: number): Promise<Response> {
+  const options = revalidate != null
+    ? { next: { revalidate } }
+    : { cache: "no-store" as const };
+  const response = await fetch(url.toString(), options);
+  if (response.status !== 400) return response;
+  url.searchParams.set("locale", "vi");
+  return fetch(url.toString(), options);
+}
+
 export async function fetchPosts(
-  params: { tag?: string; page?: number; limit?: number; revalidate?: number } = {}
+  params: { locale: Locale; tag?: string; page?: number; limit?: number; revalidate?: number }
 ): Promise<{ posts: PostSummary[]; meta: PaginationMeta }> {
-  const url = new URL(`${API_BASE}/posts`);
-  if (params.tag) url.searchParams.set("tag", params.tag);
-  if (params.page) url.searchParams.set("page", String(params.page));
-  if (params.limit) url.searchParams.set("limit", String(params.limit));
-
-  const res = await fetch(
-    url.toString(),
-    params.revalidate != null
-      ? { next: { revalidate: params.revalidate } }
-      : { cache: "no-store" }
-  );
+  const res = await fetchWithLocale(new URL(`${API_BASE}/posts${postsQuery(params)}`), params.revalidate);
   if (!res.ok) throw new Error(`Failed to fetch posts: ${res.status}`);
-
   const json = (await res.json()) as { data: PostSummary[]; meta: PaginationMeta };
   return { posts: json.data, meta: json.meta };
 }
 
 export async function fetchPost(
   slug: string,
+  locale: Locale,
   opts: { revalidate?: number } = {}
 ): Promise<PostDetail | null> {
-  const res = await fetch(
-    `${API_BASE}/posts/${slug}`,
-    opts.revalidate != null
-      ? { next: { revalidate: opts.revalidate } }
-      : { cache: "no-store" }
+  const res = await fetchWithLocale(
+    new URL(`${API_BASE}/posts/${encodeURIComponent(slug)}${postsQuery({ locale })}`), opts.revalidate
   );
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`Failed to fetch post: ${res.status}`);
-
   const json = (await res.json()) as { data: PostDetail };
   return json.data;
 }
@@ -96,16 +117,13 @@ export interface AdjacentPosts {
 // fewer than `limit` share a tag.
 export async function fetchRelatedPosts(
   slug: string,
+  locale: Locale,
   opts: { limit?: number; revalidate?: number } = {}
 ): Promise<PostSummary[]> {
-  const url = new URL(`${API_BASE}/posts/${slug}/related`);
-  if (opts.limit) url.searchParams.set("limit", String(opts.limit));
-  const res = await fetch(
-    url.toString(),
-    opts.revalidate != null ? { next: { revalidate: opts.revalidate } } : { cache: "no-store" }
+  const res = await fetchWithLocale(
+    new URL(`${API_BASE}/posts/${encodeURIComponent(slug)}/related${postsQuery({ locale, limit: opts.limit })}`), opts.revalidate
   );
   if (!res.ok) throw new Error(`Failed to fetch related posts: ${res.status}`);
-
   const json = (await res.json()) as { data: PostSummary[] };
   return json.data;
 }
@@ -113,16 +131,35 @@ export async function fetchRelatedPosts(
 // prev = nearest older published post, next = nearest newer one.
 export async function fetchAdjacentPosts(
   slug: string,
+  locale: Locale,
   opts: { revalidate?: number } = {}
 ): Promise<AdjacentPosts> {
-  const res = await fetch(
-    `${API_BASE}/posts/${slug}/adjacent`,
-    opts.revalidate != null ? { next: { revalidate: opts.revalidate } } : { cache: "no-store" }
+  const res = await fetchWithLocale(
+    new URL(`${API_BASE}/posts/${encodeURIComponent(slug)}/adjacent${postsQuery({ locale })}`), opts.revalidate
   );
   if (!res.ok) throw new Error(`Failed to fetch adjacent posts: ${res.status}`);
-
   const json = (await res.json()) as { data: AdjacentPosts };
   return json.data;
+}
+
+export async function resolvePost(
+  slug: string,
+  pageLocale: Locale,
+  opts: { revalidate?: number } = {}
+): Promise<{ post: PostDetail; redirectTo: string | null; hrefs: Record<Locale, string> } | null> {
+  const post = await fetchPost(slug, pageLocale, opts)
+    ?? await fetchPost(slug, pageLocale === "en" ? "vi" : "en", opts);
+  if (!post) return null;
+  const translatedSlug = translationSlug(post, pageLocale);
+  return {
+    post,
+    redirectTo: translatedSlug !== null && translatedSlug !== slug
+      ? localePath(pageLocale, `/blog/${translatedSlug}`) : null,
+    hrefs: {
+      en: localePath("en", `/blog/${translationSlug(post, "en") ?? slug}`),
+      vi: localePath("vi", `/blog/${translationSlug(post, "vi") ?? slug}`),
+    },
+  };
 }
 
 export function formatPostDate(iso: string): string {
@@ -134,12 +171,12 @@ export function formatPostDate(iso: string): string {
 }
 
 // Handoff §3: paginate until a page returns fewer than `limit`.
-export async function fetchAllPosts(revalidate?: number): Promise<PostSummary[]> {
+export async function fetchAllPosts(locale: Locale, revalidate?: number): Promise<PostSummary[]> {
   const limit = 100;
   const all: PostSummary[] = [];
   let page = 1;
   for (;;) {
-    const { posts } = await fetchPosts({ limit, page, revalidate });
+    const { posts } = await fetchPosts({ locale, limit, page, revalidate });
     all.push(...posts);
     if (posts.length < limit) return all;
     page += 1;

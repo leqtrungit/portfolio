@@ -20,7 +20,7 @@ export async function GET() {
 
   let posts: PostSummary[] = [];
   try {
-    posts = await fetchAllPosts(3600);
+    posts = await fetchAllPosts("en", 3600);
   } catch {
     // API unavailable — serve a valid, empty channel rather than a 500
   }
@@ -43,7 +43,7 @@ export async function GET() {
     <title>${esc(title)}</title>
     <link>${siteUrl}</link>
     <description>${esc(description)}</description>
-    <language>vi</language>
+    <language>en</language>
     <atom:link href="${siteUrl}/feed.xml" rel="self" type="application/rss+xml" />
 ${items}
   </channel>

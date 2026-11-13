@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getDictionary } from "@/lib/i18n/getDictionary";
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { resolvePost, fetchAllPosts, translationSlug, coverUrl, estimateReadTime, formatPostDate, type Tag } from "@/lib/blog";
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const resolved = await resolvePost(slug, locale);
   if (!resolved) return { title: getDictionary(locale).blog.notFound };
   const { post, redirectTo, hrefs } = resolved;
-  if (redirectTo) redirect(redirectTo);
+  if (redirectTo) permanentRedirect(redirectTo);
   const bothPublished = translationSlug(post, "en") != null && translationSlug(post, "vi") != null;
   const description = post.excerpt ? truncateForMeta(post.excerpt) : truncateForMeta(post.title);
   return {
@@ -76,7 +76,7 @@ export default async function PostPage({ params }: PageProps) {
   const resolved = await resolvePost(slug, lang);
   if (!resolved) notFound();
   const { post, redirectTo, hrefs } = resolved;
-  if (redirectTo) redirect(redirectTo);
+  if (redirectTo) permanentRedirect(redirectTo);
   const pageUrl = `https://lequoctrung.vn${localePath(lang, `/blog/${post.slug}`)}`;
   const dict = (await getDictionary(lang)).blog;
 

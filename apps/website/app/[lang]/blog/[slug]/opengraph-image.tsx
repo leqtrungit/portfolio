@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { fetchPost, estimateReadTime, formatPostDate } from "@/lib/blog";
+import { resolvePost, estimateReadTime, formatPostDate } from "@/lib/blog";
 import { loadOgCoverImage, loadOgFonts } from "@/lib/ogImage";
 import { getProfile } from "@/lib/profile";
 import { notFound } from "next/navigation";
@@ -28,7 +28,8 @@ export default async function Image({ params }: { params: Promise<{ lang: string
   const { lang, slug } = await params;
   if (!isLocale(lang)) notFound();
   const profile = getProfile(lang);
-  const post = await fetchPost(slug, lang, { revalidate }).catch(() => null);
+  const resolved = await resolvePost(slug, lang, { revalidate }).catch(() => null);
+  const post = resolved?.post ?? null;
 
   const title = post?.title ?? "Blog";
   const tags = post?.tags.slice(0, MAX_TAGS).map((t) => t.name) ?? [];
@@ -124,7 +125,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
               <div style={{ display: "flex", fontSize: 17, color: tokens.colors.textFaint, letterSpacing: 0.7 }}>
                 {formatPostDate(post.published_at)}
                 <span style={{ color: tokens.colors.rule, margin: "0 10px" }}>/</span>
-                {estimateReadTime(post.content, lang)}
+                {estimateReadTime(post.content, isLocale(post.locale) ? post.locale : "vi")}
               </div>
             )}
           </div>

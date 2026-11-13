@@ -6,6 +6,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "blog-api.lequoctrung.id.vn", pathname: "/media/**" },
+      { protocol: "https", hostname: "blog-api-staging.lequoctrung.id.vn", pathname: "/media/**" },
     ],
   },
   transpilePackages: ["@new-portfolio/profile-schema"],

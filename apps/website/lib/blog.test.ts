@@ -7,6 +7,21 @@ test("coverUrl returns an absolute URL as-is", () => {
   assert.equal(coverUrl({ featured_image_url: url }), url);
 });
 
+test("coverUrl appends BLOG_MEDIA_CACHE_BUST when set", () => {
+  const prev = process.env.BLOG_MEDIA_CACHE_BUST;
+  process.env.BLOG_MEDIA_CACHE_BUST = "clone1";
+  try {
+    const url = "https://blog-api-staging.lequoctrung.id.vn/media/uuid/cover.jpg";
+    assert.equal(
+      coverUrl({ featured_image_url: url }),
+      "https://blog-api-staging.lequoctrung.id.vn/media/uuid/cover.jpg?v=clone1",
+    );
+  } finally {
+    if (prev === undefined) delete process.env.BLOG_MEDIA_CACHE_BUST;
+    else process.env.BLOG_MEDIA_CACHE_BUST = prev;
+  }
+});
+
 test("coverUrl returns null for an empty URL", () => {
   assert.equal(coverUrl({ featured_image_url: "" }), null);
 });

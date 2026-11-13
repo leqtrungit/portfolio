@@ -38,7 +38,17 @@ export interface PaginationMeta {
 }
 
 export function coverUrl(post: { featured_image_url?: string | null }): string | null {
-  return post.featured_image_url || null;
+  const url = post.featured_image_url || null;
+  if (!url) return null;
+  const bust = process.env.BLOG_MEDIA_CACHE_BUST;
+  if (!bust) return url;
+  try {
+    const parsed = new URL(url);
+    parsed.searchParams.set("v", bust);
+    return parsed.toString();
+  } catch {
+    return url;
+  }
 }
 
 export function estimateReadTime(content: string, locale: Locale = "en"): string {

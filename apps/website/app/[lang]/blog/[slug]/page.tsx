@@ -145,7 +145,7 @@ export default async function PostPage({ params }: PageProps) {
         <section className="wrap post-main">
           <div className="post-grid">
             {showToc ? (
-              <TableOfContents items={toc.items} label={dict.toc} ariaLabel={dict.tocAria} />
+              <TableOfContents lang={post.locale} items={toc.items} label={dict.toc} ariaLabel={dict.tocAria} />
             ) : (
               <span className="post-spacer" />
             )}

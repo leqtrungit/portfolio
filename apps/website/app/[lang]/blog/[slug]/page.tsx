@@ -13,7 +13,7 @@ import { PostNav } from "@/components/blog/PostNav";
 import { SubpageHeader } from "@/components/sections/SubpageHeader";
 import { ShareBar } from "@/components/blog/ShareBar";
 import { truncateForMeta } from "@/lib/seo";
-import { isLocale, localePath, ogLocale } from "@/lib/i18n/config";
+import { isLocale, localePath, locales, ogLocale } from "@/lib/i18n/config";
 import { postAlternates } from "@/lib/i18n/seo";
 
 interface PageProps {
@@ -60,7 +60,10 @@ export async function generateStaticParams() {
     const posts = (await Promise.all([fetchAllPosts("vi"), fetchAllPosts("en")])).flat();
     const params = new Map<string, { lang: string; slug: string }>();
     for (const post of posts) {
-      params.set(`${post.locale}:${post.slug}`, { lang: post.locale, slug: post.slug });
+      // Cross product so the wrong-locale slug still hits this page and 308s.
+      for (const lang of locales) {
+        params.set(`${lang}:${post.slug}`, { lang, slug: post.slug });
+      }
     }
     return [...params.values()];
   } catch {
@@ -68,6 +71,7 @@ export async function generateStaticParams() {
   }
 }
 
+export const dynamicParams = true;
 export const revalidate = 3600;
 
 export default async function PostPage({ params }: PageProps) {
